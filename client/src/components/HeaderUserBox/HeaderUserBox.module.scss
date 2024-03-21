@@ -10,7 +10,7 @@
         gap: 20px;
         cursor: pointer;
         padding: 8px 20px;
-        border: 1px solid $border-color;
+        border: 1px solid $border-color-white;
         border-radius: 50px;
         svg {
             width: 21px;
@@ -37,8 +37,8 @@
         padding: 20px 30px;
         background: #fff;
         border: 1px solid $border-color;
-        border-radius: 20px;
-        box-shadow: 0 0 5px 2px $shadow-color;
+        border-radius: 16px;
+        box-shadow: 0 0 5px 1px $shadow-color;
     }
     &__dropdown_active {
         display: block;
