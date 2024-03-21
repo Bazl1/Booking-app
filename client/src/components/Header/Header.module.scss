@@ -1,0 +1,40 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.header {
+    background: $bg-second-color;
+    box-shadow: 0 0 10px 2px $bg-second-color;
+    &__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+    &__logo_img {
+        max-width: 90px;
+        max-height: 90px;
+        width: 100%;
+        height: 100vh;
+        object-fit: cover;
+    }
+    &__menu {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    &__list {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin: 0 auto;
+    }
+    &__item_link {
+        font-size: 16px;
+        text-decoration: none;
+        color: #fff;
+        transition: color 0.3s;
+        &:hover {
+            color: rgba(#fff, 0.8);
+        }
+    }
+}
