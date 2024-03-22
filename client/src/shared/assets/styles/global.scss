@@ -64,3 +64,19 @@ body {
 .main .loader {
     height: auto;
 }
+
+.swiper-button-disabled {
+    background: rgba($bg-color, 0.5) !important;
+}
+
+.swiper-pagination-bullet {
+    background: rgba(#fff, 0.6) !important;
+    opacity: 1 !important;
+    width: 6px !important;
+    height: 6px !important;
+    margin: 0 3px !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: #fff !important;
+}
