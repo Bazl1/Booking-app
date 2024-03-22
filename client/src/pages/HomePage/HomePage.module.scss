@@ -9,7 +9,7 @@
     }
 }
 .catalog {
-    margin: 30px 0;
+    margin: 30px 0 50px;
     &__top {
         display: flex;
         justify-content: space-between;
@@ -17,48 +17,15 @@
         gap: 30px;
         margin-bottom: 30px;
     }
-    &__categories {
-        display: flex;
-        align-items: center;
-        gap: 50px;
-    }
-    &__category {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        align-items: center;
-    }
-    &__category_active {
-        position: relative;
-        &::after {
-            position: absolute;
-            content: "";
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: $bg-color;
-            border-radius: 100px;
-        }
-    }
-    &__category_img {
-        max-width: 28px;
-        width: 100%;
-        max-height: 28px;
-        height: 100vh;
-        object-fit: cover;
-    }
-    &__category_title {
-        font-size: 12px;
-        font-weight: 500;
-    }
     &__filtres {
+        outline: none;
         display: flex;
         gap: 10px;
         align-items: center;
         font-size: 14px;
         font-weight: 500;
         padding: 14px 20px;
+        background: transparent;
         border: 1px solid $border-color;
         border-radius: 50px;
         cursor: pointer;
@@ -69,120 +36,21 @@
     }
     &__items {
         display: grid;
-        grid-template-columns: repeat(4, 320px);
+        grid-template-columns: repeat(4, 275px);
         grid-gap: 30px;
+        margin-bottom: 50px;
     }
-    &__item {
-        max-width: 320px;
-        width: 100%;
-        position: relative;
-    }
-    &__item_like {
-        position: absolute;
+    &__more {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 24px;
-        height: 24px;
-        top: 20px;
-        right: 20px;
-        z-index: 3;
-        cursor: pointer;
-        svg {
-            color: rgba(#fff, 0.6);
-            width: 24px;
-            height: 24px;
-        }
-    }
-    &__slider {
-        max-width: 320px;
-        width: 100%;
-        max-height: 320px;
-        height: 100vh;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        &:hover {
-            .catalog__item_arrow {
-                opacity: 1;
-            }
-        }
-    }
-    &__slide {
-        img {
-            max-width: 320px;
-            width: 100%;
-            max-height: 320px;
-            height: 100vh;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-    }
-    &__item_columns {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 10px;
-    }
-    &__item_title {
-        width: 100%;
-        font-weight: 500;
-        font-size: 16px;
-    }
-    &__rating {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        span {
-            font-weight: 500;
-            font-size: 16px;
-        }
-        svg {
-            width: 14px;
-            height: 14px;
-        }
-    }
-    &__price {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 15px;
-        span {
-            font-weight: 700;
-        }
-    }
-    &__item_arrow {
-        opacity: 0;
         outline: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 30px;
-        height: 30px;
-        background: #fff;
-        border: 1px solid $border-color;
-        border-radius: 100px;
+        background: $bg-second-color;
+        font-size: 16px;
+        font-weight: 500;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 14px 32px;
         cursor: pointer;
-        transition: opacity 0.2s;
-        z-index: 2;
-        svg {
-            width: 16px;
-            height: 16px;
-            color: $text-color;
-        }
-        &_left {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 10px;
-            margin: auto 0;
-        }
-        &_right {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 10px;
-            margin: auto 0;
-        }
+        margin: 0 auto;
     }
 }
