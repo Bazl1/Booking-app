@@ -1,0 +1,223 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.rooms {
+    margin: 80px 0;
+
+    &__gallery {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 10px;
+        margin-bottom: 30px;
+        position: relative;
+    }
+    &__gallery_item {
+        max-height: 250px;
+        height: 100vh;
+        overflow: hidden;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        &:nth-child(1) {
+            max-height: 510px;
+            grid-row-start: 1;
+            grid-row-end: 3;
+            grid-column-start: 1;
+            grid-column-end: 3;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+        &:nth-child(3) {
+            border-top-right-radius: 12px;
+        }
+        &:nth-child(5) {
+            border-bottom-right-radius: 12px;
+        }
+    }
+    &__imgs_btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        outline: none;
+        background: #fff;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 0 5px 2px $shadow-color;
+        cursor: pointer;
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    &__line {
+        width: 100%;
+        height: 1px;
+        background: $border-color;
+        margin: 30px 0;
+    }
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 50px;
+    }
+    &__columns {
+        width: 100%;
+        &:nth-child(2) {
+            max-width: 320px;
+        }
+    }
+    &__title {
+        font-size: 21px;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    &__rating {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        span {
+            font-weight: 500;
+            font-size: 16px;
+        }
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+    &__user {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    &__user_img {
+        max-width: 45px;
+        width: 100%;
+        max-height: 45px;
+        height: 100vh;
+        border: 1px solid $border-color;
+        border-radius: 100px;
+        object-fit: cover;
+    }
+    &__user_name {
+        font-weight: 500;
+    }
+    &__description {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    &__description_text {
+        display: -webkit-box;
+        max-height: 100px;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+    }
+    &__description_text_active {
+        display: block;
+        max-height: 100%;
+    }
+
+    &__description_more {
+        outline: none;
+        background: transparent;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+
+    &__subtitle {
+        font-size: 21px;
+        font-weight: 500;
+        margin-bottom: 30px;
+    }
+
+    &__amenities_items {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 16px;
+    }
+    &__amenities_item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        svg {
+            width: 21px;
+            height: 21px;
+            color: $bg-color;
+        }
+    }
+    &__amenities_item_title {
+        font-size: 18px;
+        color: $text-color;
+    }
+    &__amenities_item_title_disable {
+        text-decoration: line-through;
+    }
+
+    &__reviews_items {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 30px;
+    }
+    &__reviews_item {
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        padding: 20px;
+    }
+    &__reviews_item_top {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    &__reviews_item_img {
+        max-width: 35px;
+        width: 100%;
+        max-height: 35px;
+        height: 100vh;
+        object-fit: cover;
+        border-radius: 100px;
+        border: 1px solid $border-color;
+    }
+    &__reviews_item_name {
+        font-size: 14px;
+        font-weight: 500;
+    }
+    &__reviews_stars {
+        display: flex;
+        gap: 3px;
+        align-items: center;
+        margin-bottom: 5px;
+        svg {
+            width: 10px;
+            height: 10px;
+            color: $bg-color;
+        }
+    }
+    &__reviews_text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}

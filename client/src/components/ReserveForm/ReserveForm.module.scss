@@ -1,0 +1,55 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.form {
+    background: #fff;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    box-shadow: 0 0 5px 1px $shadow-color;
+    padding: 30px 20px;
+    &__title {
+        font-size: 21px;
+        margin-bottom: 20px;
+    }
+    &__columns {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    &__date_input + &__date_input {
+        border-left: 1px solid $border-color;
+    }
+    &__date_input {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 3px;
+        font-size: 14px;
+        font-weight: 400;
+        color: $text-gray;
+        padding: 10px 16px;
+        span {
+            font-size: 12px;
+            font-weight: 500;
+            color: $text-color;
+        }
+    }
+    &__btn {
+        width: 100%;
+        outline: none;
+        border: none;
+        border-radius: 8px;
+        background: $bg-second-color;
+        font-size: 16px;
+        color: #fff;
+        padding: 12px 30px;
+        cursor: pointer;
+        transition: background 0.2s;
+        &:hover {
+            background: rgba($bg-second-color, 0.9);
+        }
+    }
+}
