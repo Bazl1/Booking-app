@@ -8,6 +8,7 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<User, UserDto>();
+        CreateMap<User, UserDto>()
+            .ForMember(dest => dest.Initials, opt => opt.MapFrom(src => src.Name.Substring(0, 2)));
     }
 }
