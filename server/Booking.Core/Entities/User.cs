@@ -10,6 +10,9 @@ public class User : EntityBase
     public string PhoneNumber { get; set; }
     public string? Token { get; set; }
     public DateTime ExpiryIn { get; set; }
+    public List<Advert> Adverts { get; set; }
+    public List<Advert> Likes { get; set; }
+    public List<Review> Reviews { get; set; }
 
     public User(string name, string email, string passwordHash, string phoneNumber) : base(Guid.NewGuid().ToString())
     {
