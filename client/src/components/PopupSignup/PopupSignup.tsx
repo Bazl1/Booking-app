@@ -4,6 +4,8 @@ import InputMask from "react-input-mask";
 import { useForm } from "react-hook-form";
 import TextInput from "../TextInput/TextInput";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { useUserStore } from "@/store";
 
 interface PopupSignupProps {
     setOpen: (value: boolean) => void;
@@ -17,13 +19,22 @@ const PopupSignup = ({ setOpen }: PopupSignupProps) => {
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
 
+    const registration = useUserStore((state) => state.registration);
+
     const {
         handleSubmit,
         register,
         formState: { errors },
     } = useForm({ mode: "onBlur" });
 
-    const Submit = () => {};
+    const Submit = async () => {
+        if (password === confirmPassword) {
+            const fullname = fistName.concat(" ", lastName);
+            await registration({ name: fullname, email, phoneNumber: phone, password });
+        } else {
+            toast.error("Password mismatch");
+        }
+    };
     return (
         <div className={s.popup}>
             <div className={s.popup__inner}>

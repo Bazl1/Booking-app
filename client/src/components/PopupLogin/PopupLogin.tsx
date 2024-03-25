@@ -3,6 +3,7 @@ import TextInput from "../TextInput/TextInput";
 import s from "./PopupLogin.module.scss";
 import { IoClose } from "react-icons/io5";
 import { useForm } from "react-hook-form";
+import { useUserStore } from "@/store";
 
 interface PopupLoginProps {
     setOpen: (value: boolean) => void;
@@ -12,6 +13,8 @@ const PopupLogin = ({ setOpen }: PopupLoginProps) => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
+    const login = useUserStore((state) => state.login);
+
     const {
         handleSubmit,
         register,
@@ -20,7 +23,9 @@ const PopupLogin = ({ setOpen }: PopupLoginProps) => {
         mode: "onBlur",
     });
 
-    const Submit = () => {};
+    const Submit = async () => {
+        await login({ email, password });
+    };
     return (
         <div className={s.popup}>
             <div className={s.popup__inner}>
