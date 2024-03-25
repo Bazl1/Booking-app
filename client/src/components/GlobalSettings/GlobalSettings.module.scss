@@ -1,0 +1,62 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.settings {
+    &__form {
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+    }
+    &__avatar {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+    &__avatar_img {
+        max-width: 120px;
+        width: 100%;
+        max-height: 120px;
+        height: 100vh;
+        border: 5px solid $border-color;
+        border-radius: 100px;
+        object-fit: cover;
+    }
+    &__avatar_input {
+        max-width: 320px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 30px;
+        border: 2px dashed $border-color;
+        border-radius: 8px;
+        position: relative;
+        cursor: pointer;
+        span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    }
+    &__avatar_text {
+        font-size: 12px;
+        text-align: center;
+    }
+    &__avatar_title {
+        font-size: 14px;
+        font-weight: 500;
+    }
+    &__file {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        scale: 0;
+    }
+}
