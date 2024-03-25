@@ -2,7 +2,7 @@ import $Api from "@/shared/utils/axios";
 import { AuthResponse } from "@/types/response/AuthResponse";
 import { AxiosResponse } from "axios";
 
-export class AuthService {
+export default class AuthService {
     static registration(
         name: string,
         email: string,

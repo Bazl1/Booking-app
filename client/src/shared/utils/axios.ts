@@ -1,3 +1,4 @@
+import AuthService from "@/services/AuthService";
 import axios from "axios";
 
 const $Api = axios.create({
@@ -21,6 +22,9 @@ $Api.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response.status == 401 && originalRequest._isRetry === false) {
             originalRequest._isRetry = true;
+            const response = await AuthService.refresh();
+            localStorage.setItem("token", response.data.acccessToken);
+            return $Api.request(originalRequest);
         }
         return Promise.reject(error);
     },

@@ -7,9 +7,7 @@ const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const SinglePage = lazy(() => import("./pages/SinglePage/SinglePage"));
 
 function App() {
-    useEffect(() => {
-        console.log(import.meta.env.VITE_API_URL);
-    }, []);
+    useEffect(() => {}, []);
     return (
         <Router>
             <Routes>
