@@ -54,4 +54,13 @@ public class AccountsController(
     {
         return Ok(await mediator.Send(new AccountsQueries.GetById.Request(id)));
     }
+
+    [HttpGet("change-password")]
+    public async Task<IActionResult> UpdatePassword(
+        [FromRoute] AccountsCommands.UpdatePassword.Request request
+    )
+    {
+        await mediator.Send(request);
+        return Ok();
+    }
 }
