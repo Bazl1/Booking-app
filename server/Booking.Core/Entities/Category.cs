@@ -8,9 +8,12 @@ public class Category : EntityBase
     public string Icon { get; set; }
     public List<Advert> Adverts { get; set; } = new();
 
-    public Category(string name, string icon) : base(Guid.NewGuid().ToString())
+    public static Category Create(string name, string icon)
     {
-        Name = name;
-        Icon = icon;
+        return new Category
+        {
+            Name = name,
+            Icon = icon
+        };
     }
 }

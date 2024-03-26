@@ -1,7 +1,7 @@
 using System.Text;
 using Booking.Core.Common;
 using Booking.Core.Repositories;
-using Booking.Core.Services;
+using Booking.Application.Services;
 using Booking.Infrastructure.Options;
 using Booking.Infrastructure.Persistence;
 using Booking.Infrastructure.Persistence.Repositories;
@@ -21,9 +21,16 @@ public static class DependencyInjection
         services
             .AddJwtAuth(configuration)
             .AddDatabase(configuration)
+
             .AddTransient<IUserRepository, UserRepository>()
+            .AddTransient<IAdvertRepository, AdvertRepository>()
+            .AddTransient<ICategoryRepository, CategoryRepository>()
+            .AddTransient<IReviewRepository, ReviewRepository>()
+            .AddTransient<IReservationRepository, ReservationRepository>()
             .AddTransient<IUnitOfWork, UnitOfWork>()
+
             .AddTransient<IPasswordHasher, PasswordHasher>()
+            .AddTransient<IImageService, ImageService>()
             .AddTransient<ITokenGenerator, TokenGenerator>();
         return services;
     }

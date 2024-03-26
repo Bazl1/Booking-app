@@ -9,11 +9,14 @@ public class Review : EntityBase
     public string AuthorId { get; set; }
     public User? Author { get; set; }
 
-    public Review(string description, int stars, User author) : base(Guid.NewGuid().ToString())
+    public static Review Create(string description, int stars, User author)
     {
-        Description = description;
-        Stars = stars;
-        AuthorId = author.Id;
-        Author = author;
+        return new Review
+        {
+            Description = description,
+            Stars = stars,
+            AuthorId = author.Id,
+            Author = author
+        };
     }
 }

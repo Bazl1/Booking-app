@@ -8,13 +8,29 @@ public class UnitOfWork : IUnitOfWork
     private readonly BookingDbContext _bookingDbContext;
     public IUserRepository Users { get; private set; }
 
+    public IAdvertRepository Adverts { get; private set; }
+
+    public ICategoryRepository Categories { get; private set; }
+
+    public IReservationRepository Reservations { get; private set; }
+
+    public IReviewRepository Reviews { get; private set; }
+
     public UnitOfWork(
         BookingDbContext bookingDbContext,
-        IUserRepository userRepository
+        IUserRepository userRepository,
+        IAdvertRepository advertRepository,
+        ICategoryRepository categoryRepository,
+        IReservationRepository reservationRepository,
+        IReviewRepository reviewRepository
     )
     {
         _bookingDbContext = bookingDbContext;
         Users = userRepository;
+        Adverts = advertRepository;
+        Categories = categoryRepository;
+        Reservations = reservationRepository;
+        Reviews = reviewRepository;
     }
 
     public int SaveChanges()

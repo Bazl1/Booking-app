@@ -1,11 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Booking.Core.Common;
 
 public abstract class EntityBase
 {
-    public string Id { get; private set; }
-
-    public EntityBase(string id)
-    {
-        Id = id;
-    }
+    [Key]
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 }

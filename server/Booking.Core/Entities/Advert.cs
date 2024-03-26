@@ -23,27 +23,30 @@ public class Advert : EntityBase
     public List<string> Photos { get; set; } = new();
     public List<Category> Categories { get; set; } = new();
 
-    public Advert(
+    public static Advert Create(
         string name, string description, User owner, decimal pricePerNight,
         int numberOfRooms, int numberOfSingleBeds, int numberOfDoubleBeds,
         bool wifi, bool petsAllowed, bool tv, bool refrigerator, bool kitchen, bool washer, bool heating, bool dryer
-        ) : base(Guid.NewGuid().ToString())
+        )
     {
-        Name = name;
-        Description = description;
-        OwnerId = owner.Id;
-        Owner = owner;
-        PricePerNight = pricePerNight;
-        NumberOfRooms = numberOfRooms;
-        NumberOfSingleBeds = numberOfSingleBeds;
-        NumberOfDoubleBeds = numberOfDoubleBeds;
-        Wifi = wifi;
-        PetsAllowed = petsAllowed;
-        TV = tv;
-        Refrigerator = refrigerator;
-        Kitchen = kitchen;
-        Washer = washer;
-        Heating = heating;
-        Dryer = dryer;
+        return new Advert
+        {
+            Name = name,
+            Description = description,
+            OwnerId = owner.Id,
+            Owner = owner,
+            PricePerNight = pricePerNight,
+            NumberOfRooms = numberOfRooms,
+            NumberOfSingleBeds = numberOfSingleBeds,
+            NumberOfDoubleBeds = numberOfDoubleBeds,
+            Wifi = wifi,
+            PetsAllowed = petsAllowed,
+            TV = tv,
+            Refrigerator = refrigerator,
+            Kitchen = kitchen,
+            Washer = washer,
+            Heating = heating,
+            Dryer = dryer
+        };
     }
 }

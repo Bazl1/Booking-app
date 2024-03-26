@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AuthCommands = Booking.Application.Actions.Auth.Commands;
 
@@ -27,6 +28,7 @@ public class AuthController(
     }
 
     [HttpPost("logout")]
+    [Authorize]
     public async Task<IActionResult> Logout(
         [FromBody] AuthCommands.Logout.Request request
     )

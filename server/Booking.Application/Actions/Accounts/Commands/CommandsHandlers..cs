@@ -3,7 +3,7 @@ using AutoMapper;
 using Booking.Application.Dtos;
 using Booking.Application.Errors;
 using Booking.Core.Common;
-using Booking.Core.Services;
+using Booking.Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
@@ -13,10 +13,12 @@ public class CommandsHandlers(
     IUnitOfWork unitOfWork,
     IHttpContextAccessor httpContextAccessor,
     IMapper mapper,
+    IImageService imageService,
     IPasswordHasher passwordHasher
 ) : IRequestHandler<Delete.Request>,
     IRequestHandler<Update.Request, Update.Response>,
     IRequestHandler<UpdateAll.Request, UpdateAll.Response>,
+    IRequestHandler<UpdateAvatar.Request, UpdateAvatar.Response>,
     IRequestHandler<UpdatePassword.Request>
 {
     private HttpContext? Context => httpContextAccessor.HttpContext;
@@ -47,6 +49,15 @@ public class CommandsHandlers(
         var user = unitOfWork.Users.GetById(userId);
         user.Name = request.Name;
         user.PhoneNumber = request.PhoneNumber;
+        unitOfWork.SaveChanges();
+        return new(mapper.Map<UserDto>(user));
+    }
+
+    public async Task<UpdateAvatar.Response> Handle(UpdateAvatar.Request request, CancellationToken cancellationToken)
+    {
+        var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = unitOfWork.Users.GetById(userId);
+        user.Avatar = imageService.Load(request.Avatar);
         unitOfWork.SaveChanges();
         return new(mapper.Map<UserDto>(user));
     }

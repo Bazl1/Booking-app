@@ -1,5 +1,5 @@
 using System.Security.Cryptography;
-using Booking.Core.Services;
+using Booking.Application.Services;
 
 namespace Booking.Infrastructure.Services;
 

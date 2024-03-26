@@ -6,12 +6,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.FullName);
+});
+
 
 // Add Layers
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
+
+builder.Services
+    .AddHttpContextAccessor()
+    .AddControllers();
 
 // Add cors
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy => policy

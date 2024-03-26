@@ -13,14 +13,17 @@ public class Reservation : EntityBase
     public int NumberOfGuests { get; set; }
 
 
-    public Reservation(User author, Advert advert, DateOnly startDate, DateOnly endDate, int numberOfGuests) : base(Guid.NewGuid().ToString())
+    public static Reservation Create(User author, Advert advert, DateOnly startDate, DateOnly endDate, int numberOfGuests)
     {
-        AuthorId = author.Id;
-        Author = author;
-        AdvertId = advert.Id;
-        Advert = advert;
-        StartDate = startDate;
-        EndDate = endDate;
-        NumberOfGuests = numberOfGuests;
+        return new Reservation
+        {
+            AuthorId = author.Id,
+            Author = author,
+            AdvertId = advert.Id,
+            Advert = advert,
+            StartDate = startDate,
+            EndDate = endDate,
+            NumberOfGuests = numberOfGuests
+        };
     }
 }

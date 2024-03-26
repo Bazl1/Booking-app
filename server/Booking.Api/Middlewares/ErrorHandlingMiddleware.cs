@@ -26,7 +26,7 @@ public class ErrorHandlingMiddleware(
         object response = exception switch
         {
             BookingError bookingError => new { Error = new { Type = bookingError.Type.ToString(), Message = bookingError.Message } },
-            _ => new { Error = new { Message = exception.Message } },
+            _ => new { Error = new { Message = "Internal server error" } },
         };
         await context.Response.WriteAsJsonAsync(response);
     }
