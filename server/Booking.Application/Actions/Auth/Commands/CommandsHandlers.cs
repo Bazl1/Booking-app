@@ -4,7 +4,7 @@ using Booking.Application.Dtos;
 using Booking.Application.Errors;
 using Booking.Core.Common;
 using Booking.Core.Entities;
-using Booking.Core.Services;
+using Booking.Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
@@ -30,7 +30,7 @@ public class CommandsHandlers(
                 BookingErrorType.VALIDATION_ERROR,
                 "User with given email is already exists"
             );
-        var user = new User(request.Name, request.Email, passwordHasher.Hash(request.Password), request.PhoneNumber);
+        var user = User.Create(request.Name, request.Email, passwordHasher.Hash(request.Password), request.PhoneNumber);
         var refreshToken = tokenGenerator.GenerateRefreshToken();
         user.SetToken(refreshToken, DateTime.UtcNow.AddMinutes(60));
         var accessToken = tokenGenerator.GenerateAccessToken(user);

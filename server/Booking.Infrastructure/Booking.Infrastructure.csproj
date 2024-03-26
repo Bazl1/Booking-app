@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Booking.Core\Booking.Core.csproj" />
+    <ProjectReference Include="..\Booking.Application\Booking.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

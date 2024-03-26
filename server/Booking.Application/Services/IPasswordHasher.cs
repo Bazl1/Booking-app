@@ -1,4 +1,4 @@
-namespace Booking.Core.Services;
+namespace Booking.Application.Services;
 
 public interface IPasswordHasher
 {

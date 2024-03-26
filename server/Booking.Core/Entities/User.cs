@@ -6,17 +6,24 @@ public class User : EntityBase
 {
     public string Name { get; set; }
     public string Email { get; set; }
+    public string? Avatar { get; set; }
     public string PasswordHash { get; set; }
     public string PhoneNumber { get; set; }
     public string? Token { get; set; }
     public DateTime ExpiryIn { get; set; }
+    public List<Advert> Adverts { get; set; } = new();
+    public List<Advert> Likes { get; set; } = new();
+    public List<Review> Reviews { get; set; } = new();
 
-    public User(string name, string email, string passwordHash, string phoneNumber) : base(Guid.NewGuid().ToString())
+    public static User Create(string name, string email, string passwordHash, string phoneNumber)
     {
-        Name = name;
-        Email = email;
-        PasswordHash = passwordHash;
-        PhoneNumber = phoneNumber;
+        return new User
+        {
+            Name = name,
+            Email = email,
+            PasswordHash = passwordHash,
+            PhoneNumber = phoneNumber
+        };
     }
 
     public void SetToken(string token, DateTime expiryIn)
