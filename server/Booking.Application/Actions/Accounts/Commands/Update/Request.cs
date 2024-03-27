@@ -1,3 +1,4 @@
+using Booking.Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
@@ -7,7 +8,7 @@ public record Request(
     string? Name = null,
     string? PhoneNumber = null,
     IFormFile? Avatar = null
-) : IRequest<Response>
+) : IRequest<UserDto>
 {
     public string Id { get; init; }
 };
