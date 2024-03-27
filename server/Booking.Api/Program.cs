@@ -11,7 +11,6 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => type.FullName);
 });
 
-
 // Add Layers
 builder.Services
     .AddApplication()
@@ -23,7 +22,8 @@ builder.Services
 
 // Add cors
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy => policy
-    .AllowAnyOrigin()
+    .WithOrigins("http://localhost:5173")
+    .AllowCredentials()
     .AllowAnyHeader()
     .AllowAnyMethod()));
 

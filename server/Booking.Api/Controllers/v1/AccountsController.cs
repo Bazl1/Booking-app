@@ -24,7 +24,7 @@ public class AccountsController(
     [HttpPut]
     [Authorize]
     public async Task<IActionResult> UpdateAll(
-        [FromBody] AccountsCommands.UpdateAll.Request request
+        [FromForm] AccountsCommands.UpdateAll.Request request
     )
     {
         return Ok(await mediator.Send(request));
