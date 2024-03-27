@@ -12,19 +12,6 @@ const Header = () => {
                         <img className={s.header__logo_img} src={logo} alt="logo" />
                     </Link>
                     <nav className={s.header__menu}>
-                        <ul className={s.header__list}>
-                            <li className={s.header__list_item}>
-                                <Link className={s.header__item_link} to={"/"}>
-                                    Home
-                                </Link>
-                            </li>
-                            <li className={s.header__list_item}>
-                                <Link className={s.header__item_link} to={"#"}>
-                                    Catalog
-                                </Link>
-                            </li>
-                        </ul>
-
                         <HeaderUserBox />
                     </nav>
                 </div>
