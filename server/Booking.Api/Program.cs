@@ -1,3 +1,4 @@
+using System;
 using Booking.Api.Middlewares;
 using Booking.Application;
 using Booking.Infrastructure;
@@ -37,6 +38,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseStaticFiles();
 app.MapControllers();
 
