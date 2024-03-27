@@ -16,8 +16,8 @@ public class CommandsHandlers(
     IImageService imageService,
     IPasswordHasher passwordHasher
 ) : IRequestHandler<Delete.Request>,
-    IRequestHandler<Update.Request, Update.Response>,
-    IRequestHandler<UpdateAll.Request, UpdateAll.Response>,
+    IRequestHandler<Update.Request, UserDto>,
+    IRequestHandler<UpdateAll.Request, UserDto>,
     IRequestHandler<UpdatePassword.Request>
 {
     private HttpContext? Context => httpContextAccessor.HttpContext;
@@ -30,7 +30,7 @@ public class CommandsHandlers(
         unitOfWork.SaveChanges();
     }
 
-    public async Task<Update.Response> Handle(Update.Request request, CancellationToken cancellationToken)
+    public async Task<UserDto> Handle(Update.Request request, CancellationToken cancellationToken)
     {
         var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = unitOfWork.Users.GetById(userId);
@@ -45,10 +45,10 @@ public class CommandsHandlers(
             user.Avatar = imageService.Load(request.Avatar);
         }
         unitOfWork.SaveChanges();
-        return new(mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"));
+        return mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}");
     }
 
-    public async Task<UpdateAll.Response> Handle(UpdateAll.Request request, CancellationToken cancellationToken)
+    public async Task<UserDto> Handle(UpdateAll.Request request, CancellationToken cancellationToken)
     {
         var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = unitOfWork.Users.GetById(userId);
@@ -61,7 +61,7 @@ public class CommandsHandlers(
             user.Avatar = imageService.Load(request.Avatar);
         }
         unitOfWork.SaveChanges();
-        return new(mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"));
+        return mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}");
     }
 
     public async Task Handle(UpdatePassword.Request request, CancellationToken cancellationToken)
