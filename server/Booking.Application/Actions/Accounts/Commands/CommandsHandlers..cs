@@ -18,7 +18,6 @@ public class CommandsHandlers(
 ) : IRequestHandler<Delete.Request>,
     IRequestHandler<Update.Request, Update.Response>,
     IRequestHandler<UpdateAll.Request, UpdateAll.Response>,
-    IRequestHandler<UpdateAvatar.Request, UpdateAvatar.Response>,
     IRequestHandler<UpdatePassword.Request>
 {
     private HttpContext? Context => httpContextAccessor.HttpContext;
@@ -39,8 +38,14 @@ public class CommandsHandlers(
             user.Name = request.Name;
         if (request.PhoneNumber != null)
             user.PhoneNumber = request.PhoneNumber;
+        if (request.Avatar != null)
+        {
+            if (user.Avatar != null)
+                imageService.Remove(user.Avatar);
+            user.Avatar = imageService.Load(request.Avatar);
+        }
         unitOfWork.SaveChanges();
-        return new(mapper.Map<UserDto>(user));
+        return new(mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"));
     }
 
     public async Task<UpdateAll.Response> Handle(UpdateAll.Request request, CancellationToken cancellationToken)
@@ -49,17 +54,11 @@ public class CommandsHandlers(
         var user = unitOfWork.Users.GetById(userId);
         user.Name = request.Name;
         user.PhoneNumber = request.PhoneNumber;
-        unitOfWork.SaveChanges();
-        return new(mapper.Map<UserDto>(user));
-    }
-
-    public async Task<UpdateAvatar.Response> Handle(UpdateAvatar.Request request, CancellationToken cancellationToken)
-    {
-        var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var user = unitOfWork.Users.GetById(userId);
+        if (user.Avatar != null)
+            imageService.Remove(user.Avatar);
         user.Avatar = imageService.Load(request.Avatar);
         unitOfWork.SaveChanges();
-        return new(mapper.Map<UserDto>(user));
+        return new(mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"));
     }
 
     public async Task Handle(UpdatePassword.Request request, CancellationToken cancellationToken)
