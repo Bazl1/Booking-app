@@ -31,7 +31,7 @@ export const useUserStore = create<IUseUserStore>((set) => ({
             localStorage.setItem("token", response.data.acccessToken);
             set((state) => ({ ...state, isAuth: true, user: response.data.user }));
         } catch (error: any) {
-            toast.error(error.message);
+            toast.error(error.response.data.error.message);
         }
     },
     login: async ({ email, password }: loginProps) => {
@@ -40,7 +40,7 @@ export const useUserStore = create<IUseUserStore>((set) => ({
             localStorage.setItem("token", response.data.acccessToken);
             set((state) => ({ ...state, isAuth: true, user: response.data.user }));
         } catch (error: any) {
-            toast.error(error.message);
+            toast.error(error.response.data.error.message);
         }
     },
     refresh: async () => {
@@ -48,8 +48,8 @@ export const useUserStore = create<IUseUserStore>((set) => ({
             const response = await AuthService.refresh();
             localStorage.setItem("token", response.data.acccessToken);
             set((state) => ({ ...state, isAuth: true, user: response.data.user }));
-        } catch (error: any) {
-            toast.error(error.message);
+        } catch (error) {
+            console.log(error);
         }
     },
     logout: async () => {

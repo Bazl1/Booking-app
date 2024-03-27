@@ -31,6 +31,7 @@ const PopupSignup = ({ setOpen }: PopupSignupProps) => {
         if (password === confirmPassword) {
             const fullname = fistName.concat(" ", lastName);
             await registration({ name: fullname, email, phoneNumber: phone, password });
+            setOpen(false);
         } else {
             toast.error("Password mismatch");
         }
