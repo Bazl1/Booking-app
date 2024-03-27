@@ -38,10 +38,8 @@ public class AuthController(
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh(
-        [FromBody] AuthCommands.Refresh.Request request
-    )
+    public async Task<IActionResult> Refresh()
     {
-        return Ok(await mediator.Send(request));
+        return Ok(await mediator.Send(new AuthCommands.Refresh.Request()));
     }
 }
