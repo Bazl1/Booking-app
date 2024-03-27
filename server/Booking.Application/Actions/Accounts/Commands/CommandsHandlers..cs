@@ -54,9 +54,12 @@ public class CommandsHandlers(
         var user = unitOfWork.Users.GetById(userId);
         user.Name = request.Name;
         user.PhoneNumber = request.PhoneNumber;
-        if (user.Avatar != null)
-            imageService.Remove(user.Avatar);
-        user.Avatar = imageService.Load(request.Avatar);
+        if (request.Avatar != null)
+        {
+            if (user.Avatar != null)
+                imageService.Remove(user.Avatar);
+            user.Avatar = imageService.Load(request.Avatar);
+        }
         unitOfWork.SaveChanges();
         return new(mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"));
     }
