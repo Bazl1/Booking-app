@@ -10,6 +10,7 @@ interface IUseUserStore {
     login: (props: loginProps) => Promise<void>;
     refresh: () => Promise<void>;
     logout: () => Promise<void>;
+    setUser: (user: IUser) => void;
 }
 
 interface loginProps {
@@ -25,6 +26,9 @@ interface registrationProps extends loginProps {
 export const useUserStore = create<IUseUserStore>((set) => ({
     user: {} as IUser,
     isAuth: false,
+    setUser: (user: IUser) => {
+        set((state) => ({ ...state, user: user }));
+    },
     registration: async ({ name, email, phoneNumber, password }: registrationProps) => {
         try {
             const response = await AuthService.registration(name, email, phoneNumber, password);

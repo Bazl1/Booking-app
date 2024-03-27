@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import s from "./SettingsPage.module.scss";
 import { MdOutlineSecurity } from "react-icons/md";
 import { RiGlobalLine } from "react-icons/ri";
 import GlobalSettings from "@/components/GlobalSettings/GlobalSettings";
+import Loader from "@/components/Loader/Loader";
+
+const SecuritySettings = lazy(() => import("@/components/SecuritySettings/SecuritySettings"));
 
 const SettingsPage = () => {
     const [activeTab, setActiveTab] = useState<number>(1);
@@ -14,11 +17,22 @@ const SettingsPage = () => {
                     <div className={s.settings__btns}>
                         <button
                             onClick={() => setActiveTab(1)}
-                            className={`${s.settings__btn} ${s.settings__btn_active}`}
+                            className={
+                                activeTab === 1
+                                    ? `${s.settings__btn} ${s.settings__btn_active}`
+                                    : `${s.settings__btn}`
+                            }
                         >
                             <RiGlobalLine /> Global settings
                         </button>
-                        <button onClick={() => setActiveTab(2)} className={s.settings__btn}>
+                        <button
+                            onClick={() => setActiveTab(2)}
+                            className={
+                                activeTab === 2
+                                    ? `${s.settings__btn} ${s.settings__btn_active}`
+                                    : `${s.settings__btn}`
+                            }
+                        >
                             <MdOutlineSecurity /> Security settings
                         </button>
                     </div>
@@ -30,7 +44,9 @@ const SettingsPage = () => {
                         )}
                         {activeTab === 2 && (
                             <div className={s.settings__tab}>
-                                <GlobalSettings />
+                                <Suspense fallback={<Loader />}>
+                                    <SecuritySettings />
+                                </Suspense>
                             </div>
                         )}
                     </div>
