@@ -8,6 +8,7 @@ import Loader from "./components/Loader/Loader";
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const SinglePage = lazy(() => import("./pages/SinglePage/SinglePage"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage/SettingsPage"));
+const CreateProductPage = lazy(() => import("./pages/CreateProductPage/CreateProductPage"));
 
 function App() {
     const refresh = useUserStore((state) => state.refresh);
@@ -21,11 +22,12 @@ function App() {
         <Router>
             <Suspense fallback={<Loader />}>
                 <Routes>
+                    {/* auth */}
                     <Route
-                        path="/"
+                        path="/create-product"
                         element={
                             <MainLayout>
-                                <HomePage />
+                                <CreateProductPage />
                             </MainLayout>
                         }
                     />
@@ -34,6 +36,15 @@ function App() {
                         element={
                             <MainLayout>
                                 <SettingsPage />
+                            </MainLayout>
+                        }
+                    />
+                    {/* All */}
+                    <Route
+                        path="/"
+                        element={
+                            <MainLayout>
+                                <HomePage />
                             </MainLayout>
                         }
                     />

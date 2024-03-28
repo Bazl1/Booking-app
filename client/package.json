@@ -22,6 +22,7 @@
     "reset-css": "^5.0.2",
     "sass": "^1.71.1",
     "swiper": "^11.0.7",
+    "yet-another-react-lightbox": "^3.17.1",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
