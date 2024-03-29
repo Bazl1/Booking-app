@@ -10,5 +10,5 @@ public record Request(
     IFormFile? Avatar = null
 ) : IRequest<UserDto>
 {
-    public string Id { get; init; }
+    public string? Id { get; set; } = null;
 };

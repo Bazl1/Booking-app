@@ -1,6 +1,7 @@
 # Build files & directories
 bin/
 obj/
+node_modules/
 
 # Others
 notes/
