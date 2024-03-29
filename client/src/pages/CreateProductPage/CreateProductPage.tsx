@@ -17,6 +17,7 @@ const CreateProductPage = () => {
         formState: { errors },
     } = useForm({
         mode: "onBlur",
+        reValidateMode: "onChange",
     });
 
     const Submit = () => {};

@@ -25,6 +25,7 @@ const PopupLogin = ({ setOpen }: PopupLoginProps) => {
 
     const Submit = async () => {
         await login({ email, password });
+        setOpen(false);
     };
     return (
         <div className={s.popup}>

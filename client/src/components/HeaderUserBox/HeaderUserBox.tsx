@@ -1,5 +1,5 @@
 import { FiMenu } from "react-icons/fi";
-import user from "../../shared/assets/img/user.png";
+import userImg from "../../shared/assets/img/user.png";
 import s from "./HeaderUserBox.module.scss";
 import { useState } from "react";
 import { createPortal } from "react-dom";
@@ -13,6 +13,7 @@ const HeaderUserBox = () => {
     const [openSignup, setOpenSignup] = useState<boolean>(false);
     const [openLogin, setOpenLogin] = useState<boolean>(false);
 
+    const user = useUserStore((state) => state.user);
     const isAuth = useUserStore((state) => state.isAuth);
     const logout = useUserStore((state) => state.logout);
 
@@ -21,7 +22,11 @@ const HeaderUserBox = () => {
             <div className={s.user}>
                 <button onClick={() => setMenu(!menu)} className={s.user__box}>
                     <FiMenu />
-                    <img className={s.user__img} src={user} alt="user" />
+                    {user.avatar !== undefined && user.avatar !== null && user.avatar !== "" ? (
+                        <img className={s.user__img} src={user.avatar} alt="user" />
+                    ) : (
+                        <img className={s.user__img} src={userImg} alt="user" />
+                    )}
                 </button>
                 <div
                     className={

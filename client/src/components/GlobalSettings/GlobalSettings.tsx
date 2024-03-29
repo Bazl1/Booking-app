@@ -22,6 +22,7 @@ const GlobalSettings = () => {
     const {
         handleSubmit,
         register,
+        setValue,
         formState: { errors },
     } = useForm({
         mode: "onBlur",
@@ -66,6 +67,11 @@ const GlobalSettings = () => {
         setFirstName(first);
         setLastName(last);
         setPhone(user.phoneNumber);
+        setImgUrl(user.avatar);
+
+        setValue("firstname", first);
+        setValue("lastname", last);
+        setValue("phone", user.phoneNumber);
     }, []);
 
     return (
