@@ -1,4 +1,3 @@
-using System;
 using Booking.Api.Middlewares;
 using Booking.Application;
 using Booking.Infrastructure;
