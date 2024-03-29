@@ -1,3 +1,4 @@
+using Booking.Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
@@ -20,4 +21,4 @@ public record Request(
     bool Dryer,
     IFormFileCollection Photos,
     IEnumerable<string> Categories
-) : IRequest<Response>;
+) : IRequest<AdvertDto>;
