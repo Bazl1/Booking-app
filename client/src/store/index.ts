@@ -32,7 +32,7 @@ export const useUserStore = create<IUseUserStore>((set) => ({
     registration: async ({ name, email, phoneNumber, password }: registrationProps) => {
         try {
             const response = await AuthService.registration(name, email, phoneNumber, password);
-            localStorage.setItem("token", response.data.acccessToken);
+            localStorage.setItem("token", response.data.accessToken);
             set((state) => ({ ...state, isAuth: true, user: response.data.user }));
         } catch (error: any) {
             toast.error(error.response.data.error.message);
@@ -41,7 +41,7 @@ export const useUserStore = create<IUseUserStore>((set) => ({
     login: async ({ email, password }: loginProps) => {
         try {
             const response = await AuthService.login(email, password);
-            localStorage.setItem("token", response.data.acccessToken);
+            localStorage.setItem("token", response.data.accessToken);
             set((state) => ({ ...state, isAuth: true, user: response.data.user }));
         } catch (error: any) {
             toast.error(error.response.data.error.message);
@@ -50,7 +50,7 @@ export const useUserStore = create<IUseUserStore>((set) => ({
     refresh: async () => {
         try {
             const response = await AuthService.refresh();
-            localStorage.setItem("token", response.data.acccessToken);
+            localStorage.setItem("token", response.data.accessToken);
             set((state) => ({ ...state, isAuth: true, user: response.data.user }));
         } catch (error) {
             console.log(error);
