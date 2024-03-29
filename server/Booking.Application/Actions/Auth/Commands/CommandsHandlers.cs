@@ -37,7 +37,11 @@ public class CommandsHandlers(
         unitOfWork.Users.Create(user);
         unitOfWork.SaveChanges();
         Context?.Response.Cookies.Append("Booking.Auth", refreshToken);
-        return new(mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"), accessToken, refreshToken);
+        return new(
+            mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"),
+            accessToken,
+            refreshToken
+        );
     }
 
     public async Task<Login.Response> Handle(Login.Request request, CancellationToken cancellationToken)
@@ -57,7 +61,11 @@ public class CommandsHandlers(
         unitOfWork.SaveChanges();
         var accessToken = tokenGenerator.GenerateAccessToken(user);
         Context?.Response.Cookies.Append("Booking.Auth", refreshToken);
-        return new(mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"), accessToken, refreshToken);
+        return new(
+            mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"),
+            accessToken,
+            refreshToken
+        );
     }
 
     public async Task Handle(Logout.Request request, CancellationToken cancellationToken)
@@ -87,6 +95,10 @@ public class CommandsHandlers(
         unitOfWork.SaveChanges();
         var accessToken = tokenGenerator.GenerateAccessToken(user);
         Context?.Response.Cookies.Append("Booking.Auth", refreshToken);
-        return new(mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"), accessToken, refreshToken);
+        return new(
+            mapper.Map<UserDto>(user, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"),
+            accessToken,
+            refreshToken
+        );
     }
 }
