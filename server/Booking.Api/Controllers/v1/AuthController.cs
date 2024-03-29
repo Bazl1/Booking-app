@@ -29,12 +29,10 @@ public class AuthController(
 
     [HttpPost("logout")]
     [Authorize]
-    public async Task<IActionResult> Logout(
-        [FromBody] AuthCommands.Logout.Request request
-    )
+    public async Task<IActionResult> Logout()
     {
-        await mediator.Send(request);
-        return Ok("OK");
+        await mediator.Send(new AuthCommands.Logout.Request());
+        return Ok();
     }
 
     [HttpPost("refresh")]
