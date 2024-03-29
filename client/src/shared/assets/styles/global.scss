@@ -104,3 +104,16 @@ input {
         object-fit: cover;
     }
 }
+.tox-statusbar__branding {
+    display: none;
+}
+.tox-tinymce {
+    border: 1px solid $border-color !important;
+}
+.tox-edit-focus {
+    outline: none !important;
+}
+.tox .tox-edit-area::before {
+    border: 2px solid $bg-second-color !important;
+    border-radius: 0 !important;
+}
