@@ -33,17 +33,31 @@ const HeaderUserBox = () => {
                     {isAuth ? (
                         <ul className={s.user__list}>
                             <li className={s.user__list_item}>
-                                <Link to={"/"} className={s.user__item_link}>
+                                <Link
+                                    to={"/"}
+                                    className={s.user__item_link}
+                                    onClick={() => setMenu(false)}
+                                >
                                     My apartments
                                 </Link>
                             </li>
                             <li className={s.user__list_item}>
-                                <Link to={"/settings"} className={s.user__item_link}>
+                                <Link
+                                    to={"/settings"}
+                                    className={s.user__item_link}
+                                    onClick={() => setMenu(false)}
+                                >
                                     Settings
                                 </Link>
                             </li>
                             <li className={s.user__list_item}>
-                                <button className={s.user__item_link} onClick={() => logout()}>
+                                <button
+                                    className={s.user__item_link}
+                                    onClick={() => {
+                                        logout();
+                                        setMenu(false);
+                                    }}
+                                >
                                     Logout
                                 </button>
                             </li>
@@ -53,7 +67,10 @@ const HeaderUserBox = () => {
                             <li className={s.user__list_item}>
                                 <button
                                     className={s.user__item_link}
-                                    onClick={() => setOpenSignup(true)}
+                                    onClick={() => {
+                                        setOpenSignup(true);
+                                        setMenu(false);
+                                    }}
                                 >
                                     Sign up
                                 </button>
@@ -61,7 +78,10 @@ const HeaderUserBox = () => {
                             <li className={s.user__list_item}>
                                 <button
                                     className={s.user__item_link}
-                                    onClick={() => setOpenLogin(true)}
+                                    onClick={() => {
+                                        setOpenLogin(true);
+                                        setMenu(false);
+                                    }}
                                 >
                                     Log in
                                 </button>

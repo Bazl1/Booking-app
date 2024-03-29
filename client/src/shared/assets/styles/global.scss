@@ -86,3 +86,21 @@ input {
 .swiper-pagination-bullet-active {
     background: #fff !important;
 }
+
+.yarl__thumbnails_container,
+.yarl__container {
+    background: $bg-second-color !important;
+}
+.yarl__thumbnails_vignette {
+    opacity: 0 !important;
+}
+.yarl__flex_center .yarl__thumbnails_thumbnail {
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 2px solid rgba(#fff, 0.5) !important;
+    border-radius: 8px !important;
+    img {
+        width: 100% !important;
+        object-fit: cover;
+    }
+}

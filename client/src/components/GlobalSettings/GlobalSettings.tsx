@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "@/store";
 import { MdAttachFile } from "react-icons/md";
 import { toast } from "react-hot-toast";
@@ -7,6 +7,7 @@ import s from "./GlobalSettings.module.scss";
 import TextInput from "../TextInput/TextInput";
 import InputMask from "react-input-mask";
 import { useForm } from "react-hook-form";
+import SettingsService from "@/services/SettingsService";
 
 const GlobalSettings = () => {
     const [firstName, setFirstName] = useState<string>("");
@@ -16,6 +17,7 @@ const GlobalSettings = () => {
     const refImg = useRef<HTMLImageElement | null>(null);
 
     const user = useUserStore((state) => state.user);
+    const setUser = useUserStore((state) => state.setUser);
 
     const {
         handleSubmit,
@@ -44,7 +46,27 @@ const GlobalSettings = () => {
         }
     };
 
-    const Submit = () => {};
+    const Submit = async () => {
+        const data = new FormData();
+
+        data.append("name", firstName.concat(" ", lastName));
+        data.append("phoneNumber", phone);
+        data.append("avatar", imgUrl);
+        try {
+            const response = await SettingsService.globalSettings(data);
+            setUser(response.data);
+            toast.success("Settings changed");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        const [first, last] = user.name.split(" ");
+        setFirstName(first);
+        setLastName(last);
+        setPhone(user.phoneNumber);
+    }, []);
 
     return (
         <form className={s.settings__form} onSubmit={handleSubmit(Submit)}>
@@ -59,7 +81,12 @@ const GlobalSettings = () => {
                         alt="avatar"
                     />
                 ) : (
-                    <img className={s.settings__avatar_img} src={userAvatar} alt="avatar" />
+                    <img
+                        ref={refImg}
+                        className={s.settings__avatar_img}
+                        src={userAvatar}
+                        alt="avatar"
+                    />
                 )}
                 <label className={s.settings__avatar_input}>
                     <p className={s.settings__avatar_text}>
@@ -127,7 +154,9 @@ const GlobalSettings = () => {
                     <p className={s.settings__error}>{errors["phone"]?.message?.toString()}</p>
                 )}
             </label>
-            <button className={s.settings__btn}>Save changes</button>
+            <button className={s.settings__btn} type="submit">
+                Save changes
+            </button>
         </form>
     );
 };

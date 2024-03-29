@@ -1,0 +1,36 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.settings {
+    &__form {
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+    }
+    &__title {
+        font-weight: 500;
+        font-size: 18px;
+        margin-top: 20px;
+        &:nth-child(1) {
+            margin-top: 0;
+        }
+    }
+    &__line {
+        width: 100%;
+        height: 1px;
+        background: $border-color;
+    }
+    &__btn {
+        max-width: 210px;
+        width: 100%;
+        outline: none;
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        color: #fff;
+        background: $bg-second-color;
+        border: none;
+        border-radius: 4px;
+        padding: 12px 30px;
+        cursor: pointer;
+    }
+}
