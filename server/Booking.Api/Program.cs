@@ -1,6 +1,7 @@
 using Booking.Api.Middlewares;
 using Booking.Application;
 using Booking.Infrastructure;
+using Booking.Infrastructure.Persistence.Seeds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,10 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    // Seeds
+    using var scope = app.Services.CreateScope();
+    CategorySeed.Seed(scope.ServiceProvider);
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
