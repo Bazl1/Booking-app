@@ -1,7 +1,7 @@
 import s from "./TextInput.module.scss";
 
 interface TextInputProps {
-    value: string;
+    value: any;
     setValue: (value: any) => void;
     placeholder: string;
     type: string;

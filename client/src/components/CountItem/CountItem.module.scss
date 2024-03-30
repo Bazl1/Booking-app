@@ -1,0 +1,54 @@
+@import "../../shared/assets/styles/vars.scss";
+.count {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    &__img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+    &__columns {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+    &__input {
+        max-width: 120px;
+        width: 100%;
+        outline: none;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 400;
+        text-align: center;
+        color: $text-color;
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+    }
+    &__btn {
+        outline: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        box-shadow: 0 0 3px 1px $shadow-color;
+        border-radius: 100px;
+        background: #fff;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+    }
+}

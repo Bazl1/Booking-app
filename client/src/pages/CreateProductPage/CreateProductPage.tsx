@@ -1,5 +1,5 @@
 import s from "./CreateProductPage.module.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 import TextInput from "@/components/TextInput/TextInput";
@@ -15,6 +15,8 @@ import { BiSolidDryer, BiSolidWasher } from "react-icons/bi";
 import { PiTelevisionSimpleBold } from "react-icons/pi";
 import { FaThermometerThreeQuarters } from "react-icons/fa";
 import { LuRefrigerator } from "react-icons/lu";
+import { LuBedSingle } from "react-icons/lu";
+import CountItem from "@/components/CountItem/CountItem";
 
 interface IAmenities {
     icon: React.ReactNode;
@@ -67,9 +69,13 @@ const amenitiesState: IAmenities[] = [
 
 const CreateProductPage = () => {
     const [gallery, setGallery] = useState<string[]>([]);
-    const [content, setContent] = useState<string>("");
     const [productTitle, setProductTitle] = useState<string>("");
+    const [content, setContent] = useState<string>("");
+    const [price, setPrice] = useState<number | undefined>(undefined);
     const [categories, setCategories] = useState<ICategory[]>([]);
+    const [activeCategory, setActiveCategory] = useState<string>("");
+    const [countBed, setCountBed] = useState<number>(0);
+    const [countBedDouble, setCountBedDouble] = useState<number>(0);
     const [amenities, setAmenities] = useState<IAmenities[]>(amenitiesState);
 
     const {
@@ -84,7 +90,8 @@ const CreateProductPage = () => {
         setContent(content);
     };
 
-    const handleToggleCheck = (name: string) => {
+    const handleToggleCheck = (e: any, name: string) => {
+        e.preventDefault();
         const updateAmenities = amenitiesState.map((item: IAmenities) => {
             if (item.name === name) {
                 item.value = !item.value;
@@ -106,6 +113,9 @@ const CreateProductPage = () => {
                 <div className={s.product__inner}>
                     <h2 className={s.product__title}>Create a new announcement</h2>
                     <div className={s.product__line}></div>
+                    <h3 className={s.product__subtitle}>
+                        Enter the name and description of your apartment
+                    </h3>
                     <form className={s.product__form} onSubmit={handleSubmit(Submit)}>
                         <TextInput
                             type="text"
@@ -114,7 +124,7 @@ const CreateProductPage = () => {
                             register={register}
                             registerName={"productTitle"}
                             errors={errors}
-                            placeholder="Product titlte"
+                            placeholder="Titlte"
                             validationOptions={{
                                 required: "Required field",
                             }}
@@ -130,48 +140,95 @@ const CreateProductPage = () => {
                             }}
                             onEditorChange={handleEditorChange}
                         />
+                        <div className={s.product__line}></div>
+                        <h3 className={s.product__subtitle}>
+                            Enter the daily rate and the number of rooms in your apartment
+                        </h3>
+
+                        <label className={s.product__input_width}>
+                            <TextInput
+                                type="number"
+                                value={price}
+                                setValue={setPrice}
+                                register={register}
+                                registerName={"price"}
+                                errors={errors}
+                                placeholder="Daily rate"
+                                validationOptions={{
+                                    required: "Required field",
+                                }}
+                            />
+                        </label>
+                        <div className={s.product__columns}>
+                            <CountItem
+                                value={countBed}
+                                setValue={setCountBed}
+                                img={<LuBedSingle />}
+                                text={"Number of single beds"}
+                            />
+                            <CountItem
+                                value={countBedDouble}
+                                setValue={setCountBedDouble}
+                                img={<LuBedSingle />}
+                                text={"Number of single beds"}
+                            />
+                        </div>
+                        <div className={s.product__line}></div>
+                        <h3 className={s.product__subtitle}>What category is your apartment ?</h3>
+                        <div className={s.product__categories}>
+                            {categories &&
+                                categories.map((category: ICategory) => {
+                                    return (
+                                        <div
+                                            key={category.id}
+                                            className={
+                                                activeCategory !== category.id
+                                                    ? `${s.product__category}`
+                                                    : `${s.product__category} ${s.product__category_active}`
+                                            }
+                                            onClick={() => setActiveCategory(category.id)}
+                                        >
+                                            <img
+                                                className={s.product__category_img}
+                                                src={category.icon}
+                                                alt="icon"
+                                            />
+                                            <h3 className={s.product__category_title}>
+                                                {category.name}
+                                            </h3>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                        <div className={s.product__line}></div>
+                        <h3 className={s.product__subtitle}>What amenities do you have ?</h3>
+                        <div className={s.product__amenities}>
+                            {amenities &&
+                                amenities.map((item: IAmenities, index) => {
+                                    console.log("render");
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={(e) => handleToggleCheck(e, item.name)}
+                                            className={
+                                                item.value
+                                                    ? `${s.product__amenities_item} ${s.product__amenities_item_active}`
+                                                    : `${s.product__amenities_item}`
+                                            }
+                                        >
+                                            {item.icon}
+                                            {item.name}
+                                        </button>
+                                    );
+                                })}
+                        </div>
+                        <div className={s.product__line}></div>
+                        <h3 className={s.product__subtitle}>Add images to the gallery</h3>
+                        <GridGallery gallery={gallery} setGallery={setGallery} />
+                        <button className={s.product__btn} type="submit">
+                            Create
+                        </button>
                     </form>
-                    <div className={s.product__line}></div>
-                    <div className={s.product__amenities}>
-                        {amenities &&
-                            amenities.map((item: IAmenities, index) => {
-                                return (
-                                    <button
-                                        key={index}
-                                        onClick={() => handleToggleCheck(item.name)}
-                                        className={
-                                            item.value
-                                                ? `${s.product__amenities_item} ${s.product__amenities_item_active}`
-                                                : `${s.product__amenities_item}`
-                                        }
-                                    >
-                                        {item.icon}
-                                        {item.name}
-                                    </button>
-                                );
-                            })}
-                    </div>
-                    <div className={s.product__line}></div>
-                    <div className={s.product__categories}>
-                        {categories &&
-                            categories.map((category: ICategory) => {
-                                return (
-                                    <div key={category.id} className={s.product__category}>
-                                        <img
-                                            className={s.product__category_img}
-                                            src={category.icon}
-                                            alt="icon"
-                                        />
-                                        <h3 className={s.product__category_title}>
-                                            {category.name}
-                                        </h3>
-                                    </div>
-                                );
-                            })}
-                    </div>
-                    <div className={s.product__line}></div>
-                    <h3 className={s.product__subtitle}>Add images to the gallery</h3>
-                    <GridGallery gallery={gallery} setGallery={setGallery} />
                 </div>
             </div>
         </section>
