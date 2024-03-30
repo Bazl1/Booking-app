@@ -94,8 +94,9 @@
     }
     &__columns {
         display: flex;
-        gap: 30px;
+        gap: 50px;
         align-items: center;
+        margin-bottom: 20px;
     }
     &__input_width {
         display: block;
@@ -120,6 +121,29 @@
             &::-webkit-inner-spin-button {
                 -webkit-appearance: none;
             }
+        }
+    }
+    &__total_people {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 400;
+        span {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            line-height: 16px;
+            font-weight: 700;
+            border-radius: 100px;
+            border: 1px solid $border-color;
+        }
+        svg {
+            width: 24px;
+            height: 24px;
         }
     }
 }

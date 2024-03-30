@@ -8,64 +8,13 @@ import GridGallery from "@/components/GridGallery/GridGallery";
 import { Editor } from "@tinymce/tinymce-react";
 import CategoriesService from "@/services/CategoriesService";
 import { ICategory } from "@/types/ICategory";
-import { FaWifi } from "react-icons/fa";
-import { TbToolsKitchen3 } from "react-icons/tb";
-import { MdOutlinePets } from "react-icons/md";
-import { BiSolidDryer, BiSolidWasher } from "react-icons/bi";
-import { PiTelevisionSimpleBold } from "react-icons/pi";
-import { FaThermometerThreeQuarters } from "react-icons/fa";
-import { LuRefrigerator } from "react-icons/lu";
 import { LuBedSingle } from "react-icons/lu";
+import { LuBedDouble } from "react-icons/lu";
+import { BiSolidBath } from "react-icons/bi";
+import { IoPeopleSharp } from "react-icons/io5";
 import CountItem from "@/components/CountItem/CountItem";
-
-interface IAmenities {
-    icon: React.ReactNode;
-    name: string;
-    value: boolean;
-}
-
-const amenitiesState: IAmenities[] = [
-    {
-        icon: <FaWifi />,
-        name: "Wifi",
-        value: false,
-    },
-    {
-        icon: <MdOutlinePets />,
-        name: "PetsAllowed",
-        value: false,
-    },
-    {
-        icon: <PiTelevisionSimpleBold />,
-        name: "TV",
-        value: false,
-    },
-    {
-        icon: <LuRefrigerator />,
-        name: "Refrigerator",
-        value: false,
-    },
-    {
-        icon: <TbToolsKitchen3 />,
-        name: "Kitchen",
-        value: false,
-    },
-    {
-        icon: <BiSolidWasher />,
-        name: "Washer",
-        value: false,
-    },
-    {
-        icon: <FaThermometerThreeQuarters />,
-        name: "Heating",
-        value: false,
-    },
-    {
-        icon: <BiSolidDryer />,
-        name: "Dryer",
-        value: false,
-    },
-];
+import { IAmenities, amenitiesState } from "@/shared/utils/amenitiesState";
+import getMaximumCapacity from "@/shared/utils/getMaximumCapacity";
 
 const CreateProductPage = () => {
     const [gallery, setGallery] = useState<string[]>([]);
@@ -76,6 +25,7 @@ const CreateProductPage = () => {
     const [activeCategory, setActiveCategory] = useState<string>("");
     const [countBed, setCountBed] = useState<number>(0);
     const [countBedDouble, setCountBedDouble] = useState<number>(0);
+    const [countBathrooms, setCountBathrooms] = useState<number>(0);
     const [amenities, setAmenities] = useState<IAmenities[]>(amenitiesState);
 
     const {
@@ -102,6 +52,10 @@ const CreateProductPage = () => {
     };
 
     const Submit = () => {};
+
+    const peopleCount = useMemo(() => {
+        return getMaximumCapacity(countBed, countBedDouble);
+    }, [countBed, countBedDouble]);
 
     useEffect(() => {
         CategoriesService.getCategories().then((res) => setCategories(res.data));
@@ -161,17 +115,26 @@ const CreateProductPage = () => {
                         </label>
                         <div className={s.product__columns}>
                             <CountItem
+                                value={countBedDouble}
+                                setValue={setCountBedDouble}
+                                img={<LuBedDouble />}
+                                text={"Number of double beds"}
+                            />
+                            <CountItem
                                 value={countBed}
                                 setValue={setCountBed}
                                 img={<LuBedSingle />}
                                 text={"Number of single beds"}
                             />
                             <CountItem
-                                value={countBedDouble}
-                                setValue={setCountBedDouble}
-                                img={<LuBedSingle />}
-                                text={"Number of single beds"}
+                                value={countBathrooms}
+                                setValue={setCountBathrooms}
+                                img={<BiSolidBath />}
+                                text={"Number of bathrooms"}
                             />
+                        </div>
+                        <div className={s.product__total_people}>
+                            <IoPeopleSharp /> Maximum people: <span>{peopleCount}</span>
                         </div>
                         <div className={s.product__line}></div>
                         <h3 className={s.product__subtitle}>What category is your apartment ?</h3>
@@ -205,7 +168,6 @@ const CreateProductPage = () => {
                         <div className={s.product__amenities}>
                             {amenities &&
                                 amenities.map((item: IAmenities, index) => {
-                                    console.log("render");
                                     return (
                                         <button
                                             key={index}

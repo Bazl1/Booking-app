@@ -11,7 +11,7 @@ interface CountItemProps {
 const CountItem = ({ value, setValue, img, text = null }: CountItemProps) => {
     const handlePlus = (e: any) => {
         e.preventDefault();
-        if (value >= 0) {
+        if (value >= 0 && value < 100) {
             setValue((current: number) => current + 1);
         }
     };
@@ -31,12 +31,7 @@ const CountItem = ({ value, setValue, img, text = null }: CountItemProps) => {
                 <button onClick={(e) => handlePlus(e)} className={s.count__btn}>
                     <FaPlus />
                 </button>
-                <input
-                    className={s.count__input}
-                    type="number"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                />
+                <div className={s.count__input}>{value}</div>
                 <button onClick={(e) => handleMinus(e)} className={s.count__btn}>
                     <FaMinus />
                 </button>
