@@ -15,6 +15,8 @@ import { IoPeopleSharp } from "react-icons/io5";
 import CountItem from "@/components/CountItem/CountItem";
 import { IAmenities, amenitiesState } from "@/shared/utils/amenitiesState";
 import getMaximumCapacity from "@/shared/utils/getMaximumCapacity";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const CreateProductPage = () => {
     const [gallery, setGallery] = useState<string[]>([]);
@@ -36,6 +38,8 @@ const CreateProductPage = () => {
         mode: "onBlur",
     });
 
+    const queryClient = useQueryClient();
+
     const handleEditorChange = (content: any) => {
         setContent(content);
     };
@@ -51,7 +55,38 @@ const CreateProductPage = () => {
         setAmenities(updateAmenities);
     };
 
-    const Submit = () => {};
+    const Submit = () => {
+        if (gallery.length >= 4) {
+            if (activeCategory !== "") {
+                if (countBed > 0 || countBedDouble > 0) {
+                    const data = new FormData();
+
+                    data.append("title", productTitle);
+                    data.append("description", content);
+                    data.append("price", price?.toString() || "0");
+                    data.append("soloBeds", countBed.toString());
+                    data.append("doubleBeds", countBedDouble.toString());
+                    data.append("bathrooms", countBathrooms.toString());
+                    data.append("maxPeople", peopleCount.toString());
+                    data.append("category", activeCategory);
+                    amenities.forEach((item: IAmenities) => {
+                        return data.append(item.name, item.value.toString());
+                    });
+                    gallery.forEach((image: string) => {
+                        return data.append("images", image);
+                    });
+
+                    queryClient.invalidateQueries({ queryKey: ["products"] });
+                } else {
+                    toast.error("Specify the maximum number of people");
+                }
+            } else {
+                toast.error("Select a category");
+            }
+        } else {
+            toast.error("Minimum number of images 5");
+        }
+    };
 
     const peopleCount = useMemo(() => {
         return getMaximumCapacity(countBed, countBedDouble);
