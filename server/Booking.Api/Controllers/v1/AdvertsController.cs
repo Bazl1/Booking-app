@@ -39,10 +39,18 @@ public class AdvertsController(
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] int page,
-        [FromQuery] int limit
+        [FromQuery] int limit,
+        [FromQuery] string? query = null,
+        [FromQuery] string? user = null,
+        [FromQuery] string? category = null
     )
     {
-        return Ok(await mediator.Send(new AdvertsQueries.GetAll.Request(page, limit)));
+        return Ok(await mediator.Send(new AdvertsQueries.GetAll.Request(page, limit)
+        {
+            Query = query,
+            UserId = user,
+            CategoryId = category
+        }));
     }
 
     [HttpGet("{id}")]

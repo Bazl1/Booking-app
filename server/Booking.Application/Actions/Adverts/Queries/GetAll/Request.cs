@@ -8,4 +8,7 @@ public record Request(
 ) : IRequest<Response>
 {
     public string? Query { get; set; } = null;
+    public string? UserId { get; set; } = null;
+    public string? CategoryId { get; set; } = null;
+
 };

@@ -22,7 +22,7 @@ public class QueriesHandler(
 
     public async Task<GetAll.Response> Handle(GetAll.Request request, CancellationToken cancellationToken)
     {
-        var adverts = unitOfWork.Adverts.GetAll();
+        var adverts = unitOfWork.Adverts.Search(request.Query, request.UserId);
         return new(
             mapper.Map<IEnumerable<AdvertDto>>(adverts
                 .Skip(request.Limit * request.Page)
