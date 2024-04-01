@@ -22,7 +22,7 @@ public class AdvertRepository(
     {
         return bookingDbContext.Adverts
             .Include(a => a.Owner)
-            .Include(a => a.Categories)
+            .Include(a => a.Category)
             .Include(a => a.Photos);
     }
 
@@ -30,7 +30,7 @@ public class AdvertRepository(
     {
         return bookingDbContext.Adverts
             .Include(a => a.Owner)
-            .Include(a => a.Categories)
+            .Include(a => a.Category)
             .Include(a => a.Photos)
             .SingleOrDefault(a => a.Id == id);
     }

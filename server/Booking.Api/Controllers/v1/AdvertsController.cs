@@ -4,7 +4,7 @@ using AdvertsCommands = Booking.Application.Actions.Adverts.Commands;
 using AdvertsQueries = Booking.Application.Actions.Adverts.Queries;
 
 [ApiController]
-[Route("api/v1/accounts")]
+[Route("api/v1/adverts")]
 public class AdvertsController(
     IMediator mediator
 ) : ControllerBase

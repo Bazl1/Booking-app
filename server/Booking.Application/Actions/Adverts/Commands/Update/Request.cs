@@ -8,9 +8,10 @@ public record Request(
     string Name,
     string Description,
     float PricePerNight,
-    int NumberOfRooms,
+    int NumberOfBathrooms,
     int NumberOfSingleBeds,
     int NumberOfDoubleBeds,
+    int MaxPeople,
     bool Wifi,
     bool PetsAllowed,
     bool TV,
@@ -19,7 +20,7 @@ public record Request(
     bool Washer,
     bool Heating,
     bool Dryer,
-    IEnumerable<string> Categories,
+    string Category,
     IEnumerable<string> Urls,
     IFormFileCollection? Photos = null
 ) : IRequest<AdvertDto>
