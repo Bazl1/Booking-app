@@ -49,6 +49,7 @@ const GridGallery = ({ gallery, setGallery }: GridGalleryProps) => {
 
     const handleDeleteImages = (e: any, id: number) => {
         e.stopPropagation();
+        e.preventDefault();
         setGallery((gallery) => {
             return gallery.filter((_, index) => index !== id);
         });
