@@ -8,15 +8,17 @@ import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 
 interface GridGalleryProps {
-    gallery: string[];
-    setGallery: (value: string[]) => void;
+    gallery: File[];
+    setGallery: (value: File[]) => void;
 }
 
 const GridGallery = ({ gallery, setGallery }: GridGalleryProps) => {
     const [open, setOpen] = useState<boolean>(false);
+    const [strGallery, setStrGallery] = useState<string[]>([]);
 
     const handleAddImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const input = e.target;
+
         if (input.files && input.files[0]) {
             const maxSize = 2 * 1024 * 1024;
             if (input.files.length + gallery.length > 15) {
@@ -35,7 +37,11 @@ const GridGallery = ({ gallery, setGallery }: GridGalleryProps) => {
                                 toast.error("The maximum number of images is 15");
                                 resolve(null);
                             } else {
-                                setGallery((gallery) => [...gallery, e.target?.result as string]);
+                                setGallery((current) => [...current, file]);
+                                setStrGallery((current) => [
+                                    ...current,
+                                    e.target?.result as string,
+                                ]);
                                 resolve(null);
                             }
                         };
@@ -50,15 +56,16 @@ const GridGallery = ({ gallery, setGallery }: GridGalleryProps) => {
     const handleDeleteImages = (e: any, id: number) => {
         e.stopPropagation();
         e.preventDefault();
-        setGallery((gallery) => {
-            return gallery.filter((_, index) => index !== id);
-        });
+        const newGallery = gallery.filter((_: File, index: number) => index !== id);
+        const newStrGallery = strGallery.filter((_: string, index: number) => index !== id);
+        setGallery(newGallery);
+        setStrGallery(newStrGallery);
     };
 
     return (
         <div className={s.product__gallery}>
-            {gallery.length > 0 &&
-                gallery.map((item, index) => {
+            {strGallery.length > 0 &&
+                strGallery.map((item, index) => {
                     return (
                         <div
                             key={index}
@@ -93,7 +100,7 @@ const GridGallery = ({ gallery, setGallery }: GridGalleryProps) => {
                 open={open}
                 plugins={[Thumbnails, Zoom]}
                 close={() => setOpen(false)}
-                slides={gallery.map((item) => {
+                slides={strGallery.map((item) => {
                     return { src: item };
                 })}
             />

@@ -15,14 +15,15 @@ import { IoPeopleSharp } from "react-icons/io5";
 import CountItem from "@/components/CountItem/CountItem";
 import { IAmenities, amenitiesState } from "@/shared/utils/amenitiesState";
 import getMaximumCapacity from "@/shared/utils/getMaximumCapacity";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import ProductsService from "@/services/ProductsService";
 
 const CreateProductPage = () => {
-    const [gallery, setGallery] = useState<string[]>([]);
+    const [gallery, setGallery] = useState<File[]>([]);
     const [productTitle, setProductTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
-    const [price, setPrice] = useState<number | undefined>(undefined);
+    const [price, setPrice] = useState<number>(0);
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [activeCategory, setActiveCategory] = useState<string>("");
     const [countBed, setCountBed] = useState<number>(0);
@@ -39,6 +40,11 @@ const CreateProductPage = () => {
     });
 
     const queryClient = useQueryClient();
+    const mutation = useMutation((data: FormData) => ProductsService.createProduct(data), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["products"]);
+        },
+    });
 
     const handleEditorChange = (content: any) => {
         setContent(content);
@@ -61,22 +67,22 @@ const CreateProductPage = () => {
                 if (countBed > 0 || countBedDouble > 0) {
                     const data = new FormData();
 
-                    data.append("title", productTitle);
-                    data.append("description", content);
-                    data.append("price", price?.toString() || "0");
-                    data.append("soloBeds", countBed.toString());
-                    data.append("doubleBeds", countBedDouble.toString());
-                    data.append("bathrooms", countBathrooms.toString());
-                    data.append("maxPeople", peopleCount.toString());
-                    data.append("category", activeCategory);
+                    data.append("Name", productTitle);
+                    data.append("Description", content);
+                    data.append("PricePerNight", price?.toString() || "0");
+                    data.append("NumberOfSingleBeds", countBed.toString());
+                    data.append("NumberOfDoubleBeds", countBedDouble.toString());
+                    data.append("NumberOfBathrooms", countBathrooms.toString());
+                    data.append("MaxPeople", peopleCount.toString());
+                    data.append("Category", activeCategory);
                     amenities.forEach((item: IAmenities) => {
                         return data.append(item.name, item.value.toString());
                     });
-                    gallery.forEach((image: string) => {
-                        return data.append("images", image);
+                    gallery.forEach((image: File) => {
+                        return data.append("Photos", image);
                     });
 
-                    queryClient.invalidateQueries({ queryKey: ["products"] });
+                    mutation.mutate(data);
                 } else {
                     toast.error("Specify the maximum number of people");
                 }

@@ -28,12 +28,12 @@ const CountItem = ({ value, setValue, img, text = null }: CountItemProps) => {
                 {text && <h3 className={s.count__title}>{text}</h3>}
             </div>
             <div className={s.count__columns}>
-                <button onClick={(e) => handlePlus(e)} className={s.count__btn}>
-                    <FaPlus />
-                </button>
-                <div className={s.count__input}>{value}</div>
                 <button onClick={(e) => handleMinus(e)} className={s.count__btn}>
                     <FaMinus />
+                </button>
+                <div className={s.count__input}>{value}</div>
+                <button onClick={(e) => handlePlus(e)} className={s.count__btn}>
+                    <FaPlus />
                 </button>
             </div>
         </div>
