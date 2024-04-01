@@ -41,12 +41,12 @@ public class CommandsHandler(
         );
 
         foreach (var photo in request.Photos)
-            advert.Photos.Add(imageService.LoadFromBase64(photo));
+            advert.Photos.Add(imageService.Load(photo));
 
         unitOfWork.Adverts.Create(advert);
         unitOfWork.SaveChanges();
 
-        return mapper.Map<AdvertDto>(advert);
+        return mapper.Map<AdvertDto>(advert, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}");
     }
 
     public async Task Handle(Delete.Request request, CancellationToken cancellationToken)
@@ -124,6 +124,6 @@ public class CommandsHandler(
 
         unitOfWork.SaveChanges();
 
-        return mapper.Map<AdvertDto>(advert);
+        return mapper.Map<AdvertDto>(advert, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}");
     }
 }
