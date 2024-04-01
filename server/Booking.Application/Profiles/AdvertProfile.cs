@@ -8,6 +8,7 @@ public class AdvertProfile : Profile
 {
     public AdvertProfile()
     {
-        CreateMap<Advert, AdvertDto>();
+        CreateMap<Advert, AdvertDto>()
+        .ForMember(dest => dest.Photos, opt => opt.MapFrom((src, dest, destMember, context) => src.Photos.Select(photo => $"{context.Items["BASE_URL"]}/{photo}")));
     }
 }

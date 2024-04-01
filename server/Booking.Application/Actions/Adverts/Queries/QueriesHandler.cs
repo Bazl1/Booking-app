@@ -17,7 +17,10 @@ public class QueriesHandler(
 
     public async Task<AdvertDto> Handle(GetById.Request request, CancellationToken cancellationToken)
     {
-        return mapper.Map<AdvertDto>(unitOfWork.Adverts.GetById(request.Id));
+        return mapper.Map<AdvertDto>(
+            unitOfWork.Adverts.GetById(request.Id),
+            opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"
+        );
     }
 
     public async Task<GetAll.Response> Handle(GetAll.Request request, CancellationToken cancellationToken)
@@ -26,7 +29,8 @@ public class QueriesHandler(
         return new(
             mapper.Map<IEnumerable<AdvertDto>>(adverts
                 .Skip(request.Limit * request.Page)
-                .Take(request.Limit)
+                .Take(request.Limit),
+                opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"
             ),
             (int)Math.Ceiling((double)(adverts.Count() / request.Limit))
         );
