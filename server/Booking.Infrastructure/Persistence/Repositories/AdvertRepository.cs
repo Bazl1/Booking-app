@@ -34,4 +34,16 @@ public class AdvertRepository(
             .Include(a => a.Photos)
             .SingleOrDefault(a => a.Id == id);
     }
+
+    public IEnumerable<Advert> Search(string? query = null, string? user = null)
+    {
+        return bookingDbContext.Adverts
+            .Include(a => a.Owner)
+            .Include(a => a.Category)
+            .Include(a => a.Photos)
+            .Where(a =>
+                (user == null || a.OwnerId == user) &&
+                (query == null || a.Name.ToUpper().Contains(query.ToUpper()))
+            );
+    }
 }
