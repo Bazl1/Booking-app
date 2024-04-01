@@ -20,6 +20,6 @@ public record Request(
     bool Washer,
     bool Heating,
     bool Dryer,
-    IEnumerable<string> Photos,
+    IFormFileCollection Photos,
     string Category
 ) : IRequest<AdvertDto>;

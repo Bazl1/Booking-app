@@ -41,7 +41,9 @@ public class CommandsHandler(
         );
 
         foreach (var photo in request.Photos)
-            advert.Photos.Add(imageService.LoadFromBase64(photo));
+        {
+            advert.Photos.Add(imageService.Load(photo));
+        }
 
         unitOfWork.Adverts.Create(advert);
         unitOfWork.SaveChanges();
