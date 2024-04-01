@@ -26,22 +26,19 @@ public class CommandsHandler(
         var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = unitOfWork.Users.GetById(userId);
 
+        if (unitOfWork.Categories.GetById(request.Category) is not Category category)
+            throw new BookingError(
+                BookingErrorType.NOT_FOUND,
+                $"Category with this id {request.Category} is not found"
+            );
+
         var advert = Advert.Create(
             request.Name, request.Description, user,
-            (decimal)request.PricePerNight, request.NumberOfRooms, request.NumberOfSingleBeds, request.NumberOfDoubleBeds,
+            (decimal)request.PricePerNight, request.NumberOfBathrooms, request.NumberOfSingleBeds, request.NumberOfDoubleBeds, request.MaxPeople,
             request.Wifi, request.PetsAllowed, request.TV, request.Refrigerator, request.Kitchen,
-            request.Washer, request.Heating, request.Dryer
+            request.Washer, request.Heating, request.Dryer,
+            category
         );
-
-        foreach (var categoryId in request.Categories)
-        {
-            if (unitOfWork.Categories.GetById(categoryId) is not Category category)
-                throw new BookingError(
-                    BookingErrorType.NOT_FOUND,
-                    $"Category with this id {categoryId} is not found"
-                );
-            advert.Categories.Add(category);
-        }
 
         foreach (var photo in request.Photos)
         {
@@ -93,9 +90,10 @@ public class CommandsHandler(
         advert.Name = request.Name;
         advert.Description = request.Description;
         advert.PricePerNight = (decimal)request.PricePerNight;
-        advert.NumberOfRooms = request.NumberOfRooms;
+        advert.NumberOfBathrooms = request.NumberOfBathrooms;
         advert.NumberOfSingleBeds = request.NumberOfSingleBeds;
         advert.NumberOfDoubleBeds = request.NumberOfDoubleBeds;
+        advert.MaxPeople = request.MaxPeople;
         advert.Wifi = request.Wifi;
         advert.PetsAllowed = request.PetsAllowed;
         advert.TV = request.TV;
@@ -104,16 +102,12 @@ public class CommandsHandler(
         advert.Washer = request.Washer;
         advert.Heating = request.Heating;
         advert.Dryer = request.Dryer;
-        advert.Categories.Clear();
-        foreach (var categoryId in request.Categories)
-        {
-            if (unitOfWork.Categories.GetById(categoryId) is not Category category)
-                throw new BookingError(
-                    BookingErrorType.NOT_FOUND,
-                    $"Category with this id {categoryId} is not found"
-                );
-            advert.Categories.Add(category);
-        }
+        if (unitOfWork.Categories.GetById(request.Category) is not Category category)
+            throw new BookingError(
+                BookingErrorType.NOT_FOUND,
+                $"Category with this id {request.Category} is not found"
+            );
+        advert.Category = category;
         if (request.Urls != null)
         {
             foreach (var photo in request.Urls)

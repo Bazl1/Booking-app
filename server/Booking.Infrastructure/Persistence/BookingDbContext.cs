@@ -20,6 +20,7 @@ public class BookingDbContext : DbContext
         modelBuilder.Entity<Advert>(e =>
         {
             e.HasOne(e => e.Owner).WithMany(e => e.Adverts);
+            e.HasOne(e => e.Category).WithMany(e => e.Adverts);
         });
 
         modelBuilder.Entity<User>(e =>
