@@ -14,9 +14,21 @@ import { FaThermometerThreeQuarters } from "react-icons/fa";
 import { LuRefrigerator } from "react-icons/lu";
 import { BiSolidDryer } from "react-icons/bi";
 import { useState } from "react";
+import { LuBedSingle } from "react-icons/lu";
+import { LuBedDouble } from "react-icons/lu";
+import { BiSolidBath } from "react-icons/bi";
+import { IoPeopleSharp } from "react-icons/io5";
+import Lightbox from "yet-another-react-lightbox";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import "yet-another-react-lightbox/styles.css";
+import { IoMdHeart } from "react-icons/io";
 
 const SinglePage = () => {
     const [showMore, setShowMore] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false);
+
     return (
         <div className={s.rooms}>
             <div className="container">
@@ -37,14 +49,30 @@ const SinglePage = () => {
                         <div className={s.rooms__gallery_item}>
                             <img className={s.rooms__gallery_img} src={img} alt="img" />
                         </div>
-                        <button className={s.rooms__imgs_btn}>
+                        <button className={s.rooms__imgs_btn} onClick={() => setOpen(true)}>
                             <CgMenuGridO />
                             Show all photos
                         </button>
+                        <Lightbox
+                            open={open}
+                            plugins={[Thumbnails, Zoom]}
+                            close={() => setOpen(false)}
+                            // slides={strGallery.map((item) => {
+                            //     return { src: item };
+                            // })}
+                            slides={[{ src: img }, { src: img }, { src: img }]}
+                        />
                     </div>
                     <div className={s.rooms__row}>
                         <div className={s.rooms__columns}>
-                            <h2 className={s.rooms__title}>Treehouse in Ģibuļi Parish, Latvia</h2>
+                            <div className={s.rooms__box}>
+                                <h2 className={s.rooms__title}>
+                                    Treehouse in Ģibuļi Parish, Latvia
+                                </h2>
+                                <button className={s.rooms__like}>
+                                    <IoMdHeart />
+                                </button>
+                            </div>
                             <div className={s.rooms__rating}>
                                 <IoStar /> <span>4.9</span>
                             </div>
@@ -83,6 +111,32 @@ const SinglePage = () => {
                                 >
                                     {!showMore ? "Show more" : "Show less"} <FaChevronRight />
                                 </button>
+                            </div>
+                            <div className={s.rooms__line}></div>
+                            <div className={s.rooms__amounts}>
+                                <h3 className={s.rooms__subtitle}>Places to sleep</h3>
+                                <div className={s.rooms__amounts_items}>
+                                    <div className={s.rooms__amounts_item}>
+                                        <LuBedSingle />
+                                        <span>:</span>
+                                        <p className={s.rooms__amounts_item_title}>1</p>
+                                    </div>
+                                    <div className={s.rooms__amounts_item}>
+                                        <LuBedDouble />
+                                        <span>:</span>
+                                        <p className={s.rooms__amounts_item_title}>1</p>
+                                    </div>
+                                    <div className={s.rooms__amounts_item}>
+                                        <BiSolidBath />
+                                        <span>:</span>
+                                        <p className={s.rooms__amounts_item_title}>1</p>
+                                    </div>
+                                    <div className={s.rooms__amounts_item}>
+                                        <IoPeopleSharp />
+                                        <span>:</span>
+                                        <p className={s.rooms__amounts_item_title}>3</p>
+                                    </div>
+                                </div>
                             </div>
                             <div className={s.rooms__line}></div>
                             <div className={s.rooms__amenities}>
@@ -218,7 +272,7 @@ const SinglePage = () => {
                             </div>
                         </div>
                         <div className={s.rooms__columns}>
-                            <ReserveForm />
+                            <ReserveForm price={100} />
                         </div>
                     </div>
                 </div>

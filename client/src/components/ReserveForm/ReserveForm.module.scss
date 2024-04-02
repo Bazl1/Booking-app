@@ -52,4 +52,14 @@
             background: rgba($bg-second-color, 0.9);
         }
     }
+    &__price {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        margin-left: 10px;
+        span {
+            font-size: 14px;
+            font-weight: 700;
+        }
+    }
 }

@@ -220,4 +220,40 @@
         font-size: 16px;
         line-height: 24px;
     }
+    &__amounts_items {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+    &__amounts_item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 16px;
+        font-weight: 500;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        padding: 30px;
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+    &__box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__like {
+        width: 24px;
+        height: 24px;
+        outline: none;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
 }

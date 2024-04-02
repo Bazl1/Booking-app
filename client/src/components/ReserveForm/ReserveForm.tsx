@@ -1,6 +1,10 @@
 import s from "./ReserveForm.module.scss";
 
-const ReserveForm = () => {
+interface ReserveFormProps {
+    price: number;
+}
+
+const ReserveForm = ({ price }: ReserveFormProps) => {
     const Submit = () => {};
     return (
         <form className={s.form} onSubmit={Submit}>
@@ -15,6 +19,10 @@ const ReserveForm = () => {
                     4/26/2024
                 </div>
             </label>
+            <p className={s.form__price}>
+                <span>$</span>
+                {price}
+            </p>
             <button className={s.form__btn} type="submit">
                 Reserve
             </button>
