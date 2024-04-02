@@ -6,9 +6,19 @@ import CategoriesList from "@/components/CategoriesList/CategoriesList";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import PopupFilter from "@/components/PopupFilter/PopupFilter";
+import ProductsService from "@/services/ProductsService";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "@/components/Loader/Loader";
+import { IProduct } from "@/types/IProduct";
+import Pagination from "@/components/Pagination/Pagination";
 
 const HomePage = () => {
+    const [activePage, setActivePage] = useState<number>(0);
     const [isFilter, setIsFilter] = useState<boolean>(false);
+
+    const { isLoading, data } = useQuery(["products"], () =>
+        ProductsService.getProducts(activePage, 16),
+    );
 
     return (
         <>
@@ -33,24 +43,21 @@ const HomePage = () => {
                             </button>
                         </div>
                         <div className={s.catalog__items}>
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
-                            <ProductItem />
+                            {isLoading ? (
+                                <Loader />
+                            ) : (
+                                data &&
+                                data?.data &&
+                                data?.data.map((product: IProduct) => {
+                                    return <ProductItem key={product.id} />;
+                                })
+                            )}
                         </div>
-                        <button className={s.catalog__more}>Show more</button>
+                        <Pagination
+                            pageCount={10}
+                            activePage={activePage}
+                            setActivePage={setActivePage}
+                        />
                     </div>
                 </div>
             </section>

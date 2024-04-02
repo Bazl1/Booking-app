@@ -65,24 +65,29 @@ const CreateProductPage = () => {
         if (gallery.length >= 4) {
             if (activeCategory !== "") {
                 if (countBed > 0 || countBedDouble > 0) {
-                    const data = new FormData();
+                    try {
+                        const data = new FormData();
 
-                    data.append("Name", productTitle);
-                    data.append("Description", content);
-                    data.append("PricePerNight", price?.toString() || "0");
-                    data.append("NumberOfSingleBeds", countBed.toString());
-                    data.append("NumberOfDoubleBeds", countBedDouble.toString());
-                    data.append("NumberOfBathrooms", countBathrooms.toString());
-                    data.append("MaxPeople", peopleCount.toString());
-                    data.append("Category", activeCategory);
-                    amenities.forEach((item: IAmenities) => {
-                        return data.append(item.name, item.value.toString());
-                    });
-                    gallery.forEach((image: File) => {
-                        return data.append("Photos", image);
-                    });
+                        data.append("Name", productTitle);
+                        data.append("Description", content);
+                        data.append("PricePerNight", price?.toString() || "0");
+                        data.append("NumberOfSingleBeds", countBed.toString());
+                        data.append("NumberOfDoubleBeds", countBedDouble.toString());
+                        data.append("NumberOfBathrooms", countBathrooms.toString());
+                        data.append("MaxPeople", peopleCount.toString());
+                        data.append("Category", activeCategory);
+                        amenities.forEach((item: IAmenities) => {
+                            return data.append(item.name, item.value.toString());
+                        });
+                        gallery.forEach((image: File) => {
+                            return data.append("Photos", image);
+                        });
 
-                    mutation.mutate(data);
+                        mutation.mutate(data);
+                        toast.success("Successfully created");
+                    } catch (error) {
+                        console.log(error);
+                    }
                 } else {
                     toast.error("Specify the maximum number of people");
                 }

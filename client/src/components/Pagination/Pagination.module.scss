@@ -1,0 +1,43 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    &__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid $border-color;
+        background: $bg-second-color;
+        cursor: pointer;
+        svg {
+            width: 14px;
+            height: 14px;
+            color: #fff;
+        }
+    }
+    &__items {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+    &__item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid $bg-color;
+        font-size: 16px;
+        line-height: 40px;
+        font-weight: 500;
+    }
+    &__item_active {
+        color: #fff;
+        background: $bg-second-color;
+    }
+}
