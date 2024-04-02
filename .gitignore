@@ -6,5 +6,6 @@ node_modules/
 # Others
 notes/
 *.note
+.vs/
 .vscode/
 wwwroot/

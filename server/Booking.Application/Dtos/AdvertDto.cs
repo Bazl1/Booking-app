@@ -2,6 +2,7 @@ namespace Booking.Application.Dtos;
 
 public class AdvertDto
 {
+    public string Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public UserDto? Owner { get; set; }
@@ -9,6 +10,13 @@ public class AdvertDto
     public int NumberOfRooms { get; set; }
     public int NumberOfSingleBeds { get; set; }
     public int NumberOfDoubleBeds { get; set; }
+    public Amenities Amenities { get; set; }
+    public List<string> Photos { get; set; } = new();
+    public CategoryDto Category { get; set; }
+}
+
+public class Amenities
+{
     public bool Wifi { get; set; }
     public bool PetsAllowed { get; set; }
     public bool TV { get; set; }
@@ -17,6 +25,4 @@ public class AdvertDto
     public bool Washer { get; set; }
     public bool Heating { get; set; }
     public bool Dryer { get; set; }
-    public List<string> Photos { get; set; } = new();
-    public List<CategoryDto> Categories { get; set; } = new();
 }
