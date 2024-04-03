@@ -22,7 +22,8 @@ public class AdvertRepository(
     {
         return bookingDbContext.Adverts
             .Include(a => a.Owner)
-            .Include(a => a.Category);
+            .Include(a => a.Category)
+            .Include(a => a.Reservations);
     }
 
     public Advert? GetById(string id)
@@ -30,6 +31,7 @@ public class AdvertRepository(
         return bookingDbContext.Adverts
             .Include(a => a.Owner)
             .Include(a => a.Category)
+            .Include(a => a.Reservations)
             .SingleOrDefault(a => a.Id == id);
     }
 
@@ -38,6 +40,7 @@ public class AdvertRepository(
         return bookingDbContext.Adverts
             .Include(a => a.Owner)
             .Include(a => a.Category)
+            .Include(a => a.Reservations)
             .Where(a =>
                 (user == null || a.OwnerId == user) &&
                 (query == null || a.Name.ToUpper().Contains(query.ToUpper()))

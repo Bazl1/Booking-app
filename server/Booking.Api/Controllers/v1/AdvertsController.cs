@@ -60,4 +60,16 @@ public class AdvertsController(
     {
         return Ok(await mediator.Send(new AdvertsQueries.GetById.Request(id)));
     }
+
+    [HttpGet("{id}/reservation-dates")]
+    public async Task<IActionResult> GetReservationDates(
+        [FromRoute] string id,
+        [FromQuery] string start,
+        [FromQuery] string end
+    )
+    {
+        return Ok(await mediator.Send(
+            new AdvertsQueries.GetReservationDates.Request(id, start, end))
+        );
+    }
 }

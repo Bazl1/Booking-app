@@ -10,9 +10,11 @@ public class AdvertDto
     public int NumberOfBathrooms { get; set; }
     public int NumberOfSingleBeds { get; set; }
     public int NumberOfDoubleBeds { get; set; }
+    public int MaxPeople { get; set; }
     public Amenities Amenities { get; set; }
     public List<string> Photos { get; set; } = new();
     public CategoryDto Category { get; set; }
+    public int Rating { get; set; } = 0;
 }
 
 public class Amenities
