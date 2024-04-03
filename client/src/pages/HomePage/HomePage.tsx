@@ -3,7 +3,7 @@ import s from "./HomePage.module.scss";
 import { BsSliders } from "react-icons/bs";
 import ProductItem from "@/components/ProductItem/ProductItem";
 import CategoriesList from "@/components/CategoriesList/CategoriesList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import PopupFilter from "@/components/PopupFilter/PopupFilter";
 import ProductsService from "@/services/ProductsService";
@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/Loader/Loader";
 import { IProduct } from "@/types/IProduct";
 import Pagination from "@/components/Pagination/Pagination";
+import { getMonth } from "@/shared/utils/getMonth";
 
 const HomePage = () => {
     const [activePage, setActivePage] = useState<number>(1);
@@ -19,6 +20,10 @@ const HomePage = () => {
     const { isLoading, data } = useQuery(["products", activePage], () =>
         ProductsService.getProducts(activePage, 16),
     );
+
+    useEffect(() => {
+        getMonth(4);
+    }, []);
 
     return (
         <>
