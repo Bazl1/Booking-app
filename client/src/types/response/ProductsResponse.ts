@@ -1,6 +1,6 @@
 import { IProduct } from "../IProduct";
 
 export interface ProductsResponse {
-    products: IProduct[];
+    adverts: IProduct[];
     pageCount: number;
 }

@@ -11,4 +11,8 @@ export default class ProductsService {
     static getProducts(page: number, limit: number): Promise<AxiosResponse<ProductsResponse>> {
         return $Api.get<ProductsResponse>(`/adverts?page=${page}&limit=${limit}`);
     }
+
+    static getProductById(id: string): Promise<AxiosResponse<IProduct>> {
+        return $Api.get<IProduct>(`/adverts/${id}`);
+    }
 }

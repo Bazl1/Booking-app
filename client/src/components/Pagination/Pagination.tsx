@@ -10,13 +10,13 @@ interface PaginationProps {
 
 const Pagination = ({ pageCount, activePage, setActivePage }: PaginationProps) => {
     const handlePrev = () => {
-        if (activePage > 0) {
+        if (activePage > 1) {
             setActivePage(activePage - 1);
         }
     };
 
     const handleNext = () => {
-        if (activePage < pageCount - 1) {
+        if (activePage < pageCount) {
             setActivePage(activePage + 1);
         }
     };
@@ -31,7 +31,7 @@ const Pagination = ({ pageCount, activePage, setActivePage }: PaginationProps) =
                     <div
                         key={index}
                         className={
-                            activePage == index
+                            activePage == index + 1
                                 ? `${s.pagination__item} ${s.pagination__item_active}`
                                 : `${s.pagination__item}`
                         }

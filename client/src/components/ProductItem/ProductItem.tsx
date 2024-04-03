@@ -6,11 +6,16 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { IoStar } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward, IoMdHeart } from "react-icons/io";
-import slide1 from "@/shared/assets/img/slide1.webp";
-import slide2 from "@/shared/assets/img/slide2.webp";
-import slide3 from "@/shared/assets/img/slide3.webp";
+import { Link } from "react-router-dom";
 
-const ProductItem = () => {
+interface ProductItemProps {
+    id: string;
+    images: string[];
+    title: string;
+    pricePerNight: number;
+}
+
+const ProductItem = ({ id, images, title, pricePerNight }: ProductItemProps) => {
     return (
         <div className={s.catalog__item}>
             <Swiper
@@ -24,15 +29,13 @@ const ProductItem = () => {
                 spaceBetween={20}
                 slidesPerView={1}
             >
-                <SwiperSlide className={s.catalog__slide}>
-                    <img className={s.catalog__slide_img} src={slide1} alt="slide" />
-                </SwiperSlide>
-                <SwiperSlide className={s.catalog__slide}>
-                    <img className={s.catalog__slide_img} src={slide2} alt="slide" />
-                </SwiperSlide>
-                <SwiperSlide className={s.catalog__slide}>
-                    <img className={s.catalog__slide_img} src={slide3} alt="slide" />
-                </SwiperSlide>
+                {images.map((image: string, index: number) => {
+                    return (
+                        <SwiperSlide key={index} className={s.catalog__slide}>
+                            <img className={s.catalog__slide_img} src={image} alt="slide" />
+                        </SwiperSlide>
+                    );
+                })}
                 <button
                     className={`${s.catalog__item_arrow} ${s.catalog__item_arrow_left} catalog-swiper-button-prev`}
                 >
@@ -47,15 +50,17 @@ const ProductItem = () => {
             <div className={s.catalog__item_like}>
                 <IoMdHeart />
             </div>
-            <div className={s.catalog__item_columns}>
-                <h3 className={s.catalog__item_title}>Moisei, Rumania</h3>
-                <div className={s.catalog__rating}>
-                    <IoStar /> <span>4.9</span>
+            <Link to={`/rooms/${id}`} className={s.catalog__item_link}>
+                <div className={s.catalog__item_columns}>
+                    <h3 className={s.catalog__item_title}>{title}</h3>
+                    <div className={s.catalog__rating}>
+                        <IoStar /> <span>4.9</span>
+                    </div>
                 </div>
-            </div>
-            <p className={s.catalog__price}>
-                <span>$100</span> night
-            </p>
+                <p className={s.catalog__price}>
+                    <span>${pricePerNight}</span> night
+                </p>
+            </Link>
         </div>
     );
 };
