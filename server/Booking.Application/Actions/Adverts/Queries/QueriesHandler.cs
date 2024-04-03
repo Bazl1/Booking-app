@@ -12,7 +12,8 @@ public class QueriesHandler(
     IMapper mapper,
     IHttpContextAccessor httpContextAccessor
 ) : IRequestHandler<GetById.Request, AdvertDto>,
-    IRequestHandler<GetAll.Request, GetAll.Response>
+    IRequestHandler<GetAll.Request, GetAll.Response>,
+    IRequestHandler<GetReservationDates.Request, GetReservationDates.Response>
 {
     public HttpContext? Context => httpContextAccessor.HttpContext;
 
@@ -26,18 +27,7 @@ public class QueriesHandler(
 
     public async Task<GetAll.Response> Handle(GetAll.Request request, CancellationToken cancellationToken)
     {
-        if (request.Page < 1)
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "Page должно быть больше 0"
-            );
-        if (request.Limit < 1)
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "Limit должно быть больше 0"
-            );
-
-        var adverts = unitOfWork.Adverts.Search(request.Query, request.UserId).ToList();
+        var adverts = unitOfWork.Adverts.Search(request.Query, request.UserId);
         return new(
             mapper.Map<IEnumerable<AdvertDto>>(
                 adverts
@@ -45,7 +35,7 @@ public class QueriesHandler(
                     .Take(request.Limit),
                 opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"
             ),
-            (int)Math.Ceiling((double)adverts.Count / (double)request.Limit)
+            (int)Math.Ceiling((double)(adverts.Count() / request.Limit))
         );
     }
 }

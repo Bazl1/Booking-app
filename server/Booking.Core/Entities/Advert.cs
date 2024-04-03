@@ -24,6 +24,7 @@ public class Advert : EntityBase
     public string CategoryId { get; set; }
     public Category Category { get; set; }
     public List<string> Photos { get; set; } = new();
+    public List<Reservation> Reservations { get; set; } = new();
 
     public static Advert Create(
         string name, string description, User owner, decimal pricePerNight,

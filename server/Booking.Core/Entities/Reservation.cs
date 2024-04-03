@@ -10,10 +10,11 @@ public class Reservation : EntityBase
     public Advert? Advert { get; set; }
     public DateOnly StartDate { get; set; }
     public DateOnly EndDate { get; set; }
-    public int NumberOfGuests { get; set; }
+    public int NumberOfAdults { get; set; }
+    public int NumberOfChildren { get; set; }
+    public bool Pets { get; set; }
 
-
-    public static Reservation Create(User author, Advert advert, DateOnly startDate, DateOnly endDate, int numberOfGuests)
+    public static Reservation Create(User author, Advert advert, DateOnly startDate, DateOnly endDate, int numberOfAdults, int numberOfChildren, bool pets)
     {
         return new Reservation
         {
@@ -23,7 +24,9 @@ public class Reservation : EntityBase
             Advert = advert,
             StartDate = startDate,
             EndDate = endDate,
-            NumberOfGuests = numberOfGuests
+            NumberOfAdults = numberOfAdults,
+            NumberOfChildren = numberOfChildren,
+            Pets = pets,
         };
     }
 }

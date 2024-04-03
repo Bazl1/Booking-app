@@ -21,6 +21,7 @@ public class BookingDbContext : DbContext
         {
             e.HasOne(e => e.Owner).WithMany(e => e.Adverts);
             e.HasOne(e => e.Category).WithMany(e => e.Adverts);
+            e.HasMany(e => e.Reservations).WithOne(e => e.Advert);
         });
 
         modelBuilder.Entity<User>(e =>
