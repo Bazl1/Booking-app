@@ -13,10 +13,10 @@ import { IProduct } from "@/types/IProduct";
 import Pagination from "@/components/Pagination/Pagination";
 
 const HomePage = () => {
-    const [activePage, setActivePage] = useState<number>(0);
+    const [activePage, setActivePage] = useState<number>(1);
     const [isFilter, setIsFilter] = useState<boolean>(false);
 
-    const { isLoading, data } = useQuery(["products"], () =>
+    const { isLoading, data } = useQuery(["products", activePage], () =>
         ProductsService.getProducts(activePage, 16),
     );
 
@@ -46,18 +46,28 @@ const HomePage = () => {
                             {isLoading ? (
                                 <Loader />
                             ) : (
-                                data &&
-                                data?.data &&
-                                data?.data.map((product: IProduct) => {
-                                    return <ProductItem key={product.id} />;
+                                data?.data.adverts &&
+                                data?.data.adverts.length !== 0 &&
+                                data?.data.adverts.map((product: IProduct) => {
+                                    return (
+                                        <ProductItem
+                                            key={product.id}
+                                            id={product.id}
+                                            images={product.photos}
+                                            title={product.name}
+                                            pricePerNight={product.pricePerNight}
+                                        />
+                                    );
                                 })
                             )}
                         </div>
-                        <Pagination
-                            pageCount={10}
-                            activePage={activePage}
-                            setActivePage={setActivePage}
-                        />
+                        {data?.data.pageCount && data?.data.pageCount > 0 && (
+                            <Pagination
+                                pageCount={data?.data.pageCount}
+                                activePage={activePage}
+                                setActivePage={setActivePage}
+                            />
+                        )}
                     </div>
                 </div>
             </section>

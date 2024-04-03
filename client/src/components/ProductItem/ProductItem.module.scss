@@ -114,4 +114,8 @@
             margin: auto 0;
         }
     }
+    &__item_link {
+        text-decoration: none;
+        color: $text-color;
+    }
 }

@@ -1,6 +1,5 @@
 import s from "./SinglePage.module.scss";
 import { IoStar } from "react-icons/io5";
-import img from "@/shared/assets/img/slide1.webp";
 import user from "@/shared/assets/img/user.png";
 import ReserveForm from "@/components/ReserveForm/ReserveForm";
 import { CgMenuGridO } from "react-icons/cg";
@@ -24,31 +23,42 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 import { IoMdHeart } from "react-icons/io";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import ProductsService from "@/services/ProductsService";
+import Loader from "@/components/Loader/Loader";
+import DOMPurify from "dompurify";
 
 const SinglePage = () => {
+    const { id } = useParams();
+    const idStr = id || "";
+
     const [showMore, setShowMore] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
+
+    const { isLoading, data } = useQuery(["product", idStr], () =>
+        ProductsService.getProductById(idStr),
+    );
+
+    const cleanContent = DOMPurify.sanitize(data?.data.description || "");
+
+    if (isLoading) {
+        <Loader />;
+    }
 
     return (
         <div className={s.rooms}>
             <div className="container">
                 <div className={s.rooms__inner}>
                     <div className={s.rooms__gallery}>
-                        <div className={s.rooms__gallery_item}>
-                            <img className={s.rooms__gallery_img} src={img} alt="img" />
-                        </div>
-                        <div className={s.rooms__gallery_item}>
-                            <img className={s.rooms__gallery_img} src={img} alt="img" />
-                        </div>
-                        <div className={s.rooms__gallery_item}>
-                            <img className={s.rooms__gallery_img} src={img} alt="img" />
-                        </div>
-                        <div className={s.rooms__gallery_item}>
-                            <img className={s.rooms__gallery_img} src={img} alt="img" />
-                        </div>
-                        <div className={s.rooms__gallery_item}>
-                            <img className={s.rooms__gallery_img} src={img} alt="img" />
-                        </div>
+                        {data?.data.photos.map((img: string, index: number) => {
+                            return (
+                                <div key={index} className={s.rooms__gallery_item}>
+                                    <img className={s.rooms__gallery_img} src={img} alt="img" />
+                                </div>
+                            );
+                        })}
+
                         <button className={s.rooms__imgs_btn} onClick={() => setOpen(true)}>
                             <CgMenuGridO />
                             Show all photos
@@ -57,18 +67,15 @@ const SinglePage = () => {
                             open={open}
                             plugins={[Thumbnails, Zoom]}
                             close={() => setOpen(false)}
-                            // slides={strGallery.map((item) => {
-                            //     return { src: item };
-                            // })}
-                            slides={[{ src: img }, { src: img }, { src: img }]}
+                            slides={data?.data.photos.map((item: string) => {
+                                return { src: item };
+                            })}
                         />
                     </div>
                     <div className={s.rooms__row}>
                         <div className={s.rooms__columns}>
                             <div className={s.rooms__box}>
-                                <h2 className={s.rooms__title}>
-                                    Treehouse in Ģibuļi Parish, Latvia
-                                </h2>
+                                <h2 className={s.rooms__title}>{data?.data.name}</h2>
                                 <button className={s.rooms__like}>
                                     <IoMdHeart />
                                 </button>
@@ -78,33 +85,30 @@ const SinglePage = () => {
                             </div>
                             <div className={s.rooms__line}></div>
                             <div className={s.rooms__user}>
-                                <img className={s.rooms__user_img} src={user} alt="user" />
-                                <h3 className={s.rooms__user_name}>Ostapenko Maxim</h3>
+                                {data?.data.owner.avatar !== "" ? (
+                                    <img
+                                        className={s.rooms__user_img}
+                                        src={data?.data.owner.avatar}
+                                        alt="user"
+                                    />
+                                ) : (
+                                    <img className={s.rooms__user_img} src={user} alt="user" />
+                                )}
+
+                                <h3 className={s.rooms__user_name}>{data?.data.owner.name}</h3>
                             </div>
                             <div className={s.rooms__line}></div>
                             <div className={s.rooms__description}>
-                                <p
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: cleanContent,
+                                    }}
                                     className={
                                         showMore
                                             ? `${s.rooms__description_text} ${s.rooms__description_text_active}`
                                             : `${s.rooms__description_text}`
                                     }
-                                >
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eius
-                                    quis illum ab voluptate maiores, non recusandae error earum
-                                    nihil eos eaque quod eum nesciunt perspiciatis neque tenetur
-                                    totam dignissimos perferendis! Quod eveniet rerum sunt accusamus
-                                    quibusdam harum repudiandae ratione qui reiciendis fugit, culpa
-                                    aliquam expedita vero doloribus saepe quae voluptatem mollitia
-                                    est ea facere officia enim deserunt. Eum, itaque et. Lorem
-                                    ipsum, dolor sit amet consectetur adipisicing elit. Eius quis
-                                    illum ab voluptate maiores, non recusandae error earum nihil eos
-                                    eaque quod eum nesciunt perspiciatis neque tenetur totam
-                                    dignissimos perferendis! Quod eveniet rerum sunt accusamus
-                                    quibusdam harum repudiandae ratione qui reiciendis fugit, culpa
-                                    aliquam expedita vero doloribus saepe quae voluptatem mollitia
-                                    est ea facere officia enim deserunt. Eum, itaque et.
-                                </p>
+                                />
                                 <button
                                     onClick={() => setShowMore(!showMore)}
                                     className={s.rooms__description_more}
@@ -119,22 +123,30 @@ const SinglePage = () => {
                                     <div className={s.rooms__amounts_item}>
                                         <LuBedSingle />
                                         <span>:</span>
-                                        <p className={s.rooms__amounts_item_title}>1</p>
+                                        <p className={s.rooms__amounts_item_title}>
+                                            {data?.data.numberOfSingleBeds}
+                                        </p>
                                     </div>
                                     <div className={s.rooms__amounts_item}>
                                         <LuBedDouble />
                                         <span>:</span>
-                                        <p className={s.rooms__amounts_item_title}>1</p>
+                                        <p className={s.rooms__amounts_item_title}>
+                                            {data?.data.numberOfDoubleBeds}
+                                        </p>
                                     </div>
                                     <div className={s.rooms__amounts_item}>
                                         <BiSolidBath />
                                         <span>:</span>
-                                        <p className={s.rooms__amounts_item_title}>1</p>
+                                        <p className={s.rooms__amounts_item_title}>
+                                            {data?.data.numberOfBathrooms}
+                                        </p>
                                     </div>
                                     <div className={s.rooms__amounts_item}>
                                         <IoPeopleSharp />
                                         <span>:</span>
-                                        <p className={s.rooms__amounts_item_title}>3</p>
+                                        <p className={s.rooms__amounts_item_title}>
+                                            {data?.data.maxPeople}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -144,40 +156,96 @@ const SinglePage = () => {
                                 <div className={s.rooms__amenities_items}>
                                     <div className={s.rooms__amenities_item}>
                                         <FaWifi />
-                                        <p className={s.rooms__amenities_item_title}>Fast wifi</p>
+                                        <p
+                                            className={
+                                                data?.data.amenities.wifi
+                                                    ? `${s.rooms__amenities_item_title}`
+                                                    : `${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`
+                                            }
+                                        >
+                                            Fast wifi
+                                        </p>
                                     </div>
                                     <div className={s.rooms__amenities_item}>
                                         <TbToolsKitchen3 />
-                                        <p className={s.rooms__amenities_item_title}>Kitchen</p>
+                                        <p
+                                            className={
+                                                data?.data.amenities.kitchen
+                                                    ? `${s.rooms__amenities_item_title}`
+                                                    : `${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`
+                                            }
+                                        >
+                                            Kitchen
+                                        </p>
                                     </div>
                                     <div className={s.rooms__amenities_item}>
                                         <MdOutlinePets />
-                                        <p className={s.rooms__amenities_item_title}>
+                                        <p
+                                            className={
+                                                data?.data.amenities.petsAllowed
+                                                    ? `${s.rooms__amenities_item_title}`
+                                                    : `${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`
+                                            }
+                                        >
                                             Pets allowed
                                         </p>
                                     </div>
                                     <div className={s.rooms__amenities_item}>
                                         <BiSolidWasher />
-                                        <p className={s.rooms__amenities_item_title}>Washer</p>
+                                        <p
+                                            className={
+                                                data?.data.amenities.washer
+                                                    ? `${s.rooms__amenities_item_title}`
+                                                    : `${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`
+                                            }
+                                        >
+                                            Washer
+                                        </p>
                                     </div>
                                     <div className={s.rooms__amenities_item}>
                                         <PiTelevisionSimpleBold />
-                                        <p className={s.rooms__amenities_item_title}>TV</p>
+                                        <p
+                                            className={
+                                                data?.data.amenities.tv
+                                                    ? `${s.rooms__amenities_item_title}`
+                                                    : `${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`
+                                            }
+                                        >
+                                            TV
+                                        </p>
                                     </div>
                                     <div className={s.rooms__amenities_item}>
                                         <FaThermometerThreeQuarters />
-                                        <p className={s.rooms__amenities_item_title}>Heating</p>
+                                        <p
+                                            className={
+                                                data?.data.amenities.heating
+                                                    ? `${s.rooms__amenities_item_title}`
+                                                    : `${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`
+                                            }
+                                        >
+                                            Heating
+                                        </p>
                                     </div>
                                     <div className={s.rooms__amenities_item}>
                                         <LuRefrigerator />
-                                        <p className={s.rooms__amenities_item_title}>
+                                        <p
+                                            className={
+                                                data?.data.amenities.refrigerator
+                                                    ? `${s.rooms__amenities_item_title}`
+                                                    : `${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`
+                                            }
+                                        >
                                             Refrigerator
                                         </p>
                                     </div>
                                     <div className={s.rooms__amenities_item}>
                                         <BiSolidDryer />
                                         <p
-                                            className={`${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`}
+                                            className={
+                                                data?.data.amenities.dryer
+                                                    ? `${s.rooms__amenities_item_title}`
+                                                    : `${s.rooms__amenities_item_title} ${s.rooms__amenities_item_title_disable}`
+                                            }
                                         >
                                             Dryer
                                         </p>
@@ -272,7 +340,7 @@ const SinglePage = () => {
                             </div>
                         </div>
                         <div className={s.rooms__columns}>
-                            <ReserveForm price={100} />
+                            <ReserveForm price={data?.data.pricePerNight || 0} />
                         </div>
                     </div>
                 </div>

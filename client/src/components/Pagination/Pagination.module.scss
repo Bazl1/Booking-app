@@ -11,13 +11,13 @@
         justify-content: center;
         width: 40px;
         height: 40px;
-        border: 1px solid $border-color;
-        background: $bg-second-color;
+        border: none;
+        background: transparent;
         cursor: pointer;
         svg {
             width: 14px;
             height: 14px;
-            color: #fff;
+            color: $bg-color;
         }
     }
     &__items {
@@ -32,6 +32,7 @@
         width: 40px;
         height: 40px;
         border: 1px solid $bg-color;
+        border-radius: 4px;
         font-size: 16px;
         line-height: 40px;
         font-weight: 500;
