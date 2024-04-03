@@ -7,7 +7,7 @@ public class AdvertDto
     public string Description { get; set; }
     public UserDto? Owner { get; set; }
     public decimal PricePerNight { get; set; }
-    public int NumberOfRooms { get; set; }
+    public int NumberOfBathrooms { get; set; }
     public int NumberOfSingleBeds { get; set; }
     public int NumberOfDoubleBeds { get; set; }
     public Amenities Amenities { get; set; }
