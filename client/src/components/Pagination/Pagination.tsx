@@ -22,28 +22,32 @@ const Pagination = ({ pageCount, activePage, setActivePage }: PaginationProps) =
     };
 
     return (
-        <div className={s.pagination}>
-            <button className={s.pagination__btn} onClick={handlePrev}>
-                <FaChevronLeft />
-            </button>
-            <div className={s.pagination__items}>
-                {Array.from({ length: pageCount }, (_, index) => (
-                    <div
-                        key={index}
-                        className={
-                            activePage == index + 1
-                                ? `${s.pagination__item} ${s.pagination__item_active}`
-                                : `${s.pagination__item}`
-                        }
-                    >
-                        {index + 1}
+        <>
+            {pageCount > 1 && pageCount !== 0 ? (
+                <div className={s.pagination}>
+                    <button className={s.pagination__btn} onClick={handlePrev}>
+                        <FaChevronLeft />
+                    </button>
+                    <div className={s.pagination__items}>
+                        {Array.from({ length: pageCount }, (_, index) => (
+                            <div
+                                key={index}
+                                className={
+                                    activePage == index + 1
+                                        ? `${s.pagination__item} ${s.pagination__item_active}`
+                                        : `${s.pagination__item}`
+                                }
+                            >
+                                {index + 1}
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-            <button className={s.pagination__btn} onClick={handleNext}>
-                <FaChevronRight />
-            </button>
-        </div>
+                    <button className={s.pagination__btn} onClick={handleNext}>
+                        <FaChevronRight />
+                    </button>
+                </div>
+            ) : null}
+        </>
     );
 };
 

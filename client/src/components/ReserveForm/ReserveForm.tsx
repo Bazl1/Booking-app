@@ -1,3 +1,4 @@
+import SmallCalendar from "../SmallCalendar/SmallCalendar";
 import s from "./ReserveForm.module.scss";
 
 interface ReserveFormProps {
@@ -18,6 +19,7 @@ const ReserveForm = ({ price }: ReserveFormProps) => {
                     <span>Checkout</span>
                     4/26/2024
                 </div>
+                <SmallCalendar />
             </label>
             <p className={s.form__price}>
                 <span>$</span>

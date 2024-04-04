@@ -2,6 +2,7 @@ import AuthService from "@/services/AuthService";
 import { IUser } from "@/types/IUser";
 import { create } from "zustand";
 import { toast } from "react-hot-toast";
+import dayjs from "dayjs";
 
 interface IUseUserStore {
     user: IUser;
@@ -11,6 +12,11 @@ interface IUseUserStore {
     refresh: () => Promise<void>;
     logout: () => Promise<void>;
     setUser: (user: IUser) => void;
+}
+
+interface IUseCalendarStore {
+    currentMonth: number;
+    setMonth: (month: number) => void;
 }
 
 interface loginProps {
@@ -63,5 +69,12 @@ export const useUserStore = create<IUseUserStore>((set) => ({
         } catch (error) {
             console.log(error);
         }
+    },
+}));
+
+export const useCalendarStore = create<IUseCalendarStore>((set) => ({
+    currentMonth: dayjs().month(),
+    setMonth: (month: number) => {
+        set((state) => ({ ...state, currentMonth: month }));
     },
 }));

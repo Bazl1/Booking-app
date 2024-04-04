@@ -17,6 +17,7 @@
         border: 1px solid $border-color;
         border-radius: 8px;
         margin-bottom: 20px;
+        position: relative;
     }
     &__date_input + &__date_input {
         border-left: 1px solid $border-color;

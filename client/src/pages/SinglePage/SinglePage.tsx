@@ -51,7 +51,7 @@ const SinglePage = () => {
             <div className="container">
                 <div className={s.rooms__inner}>
                     <div className={s.rooms__gallery}>
-                        {data?.data.photos.map((img: string, index: number) => {
+                        {data?.data.photos.slice(0, 5).map((img: string, index: number) => {
                             return (
                                 <div key={index} className={s.rooms__gallery_item}>
                                     <img className={s.rooms__gallery_img} src={img} alt="img" />
