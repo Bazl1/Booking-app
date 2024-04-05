@@ -32,7 +32,7 @@ const SmallCalendar = ({ setStartDate, setEndDate }: SmallCalendarProps) => {
         return className;
     };
 
-    const getCurrentDay = (day: any) => {
+    const getBetweenDays = (day: any) => {
         if (day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")) {
             return `${s.calendar__day} ${s.calendar__day_current}`;
         } else {
