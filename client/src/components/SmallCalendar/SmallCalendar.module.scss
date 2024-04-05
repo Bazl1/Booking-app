@@ -92,4 +92,12 @@
     &__previous {
         color: rgba($text-gray, 0.2);
     }
+    &__active {
+        background: $bg-color;
+        color: #fff;
+    }
+    &__between {
+        background: rgba($bg-color, 0.2);
+        color: #fff;
+    }
 }

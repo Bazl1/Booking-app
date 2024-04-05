@@ -6,15 +6,17 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import dayjs from "dayjs";
 
 interface SmallCalendarProps {
-    setStartDate?: (value: number) => void;
-    setEndDate?: (value: number) => void;
+    setStartDate: (value: any) => void;
+    setEndDate: (value: any) => void;
+    startDate: any;
+    endDate: any;
 }
 
 const dayOfWeek = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
 const test = ["01/04/24", "07/04/24", "10/04/24"];
 
-const SmallCalendar = ({ setStartDate, setEndDate }: SmallCalendarProps) => {
+const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCalendarProps) => {
     const [month, setMonth] = useState(getMonth());
 
     const currentMonth = useCalendarStore((state) => state.currentMonth);
@@ -33,10 +35,20 @@ const SmallCalendar = ({ setStartDate, setEndDate }: SmallCalendarProps) => {
     };
 
     const getBetweenDays = (day: any) => {
-        if (day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")) {
-            return `${s.calendar__day} ${s.calendar__day_current}`;
-        } else {
-            return `${s.calendar__day}`;
+        if (startDate === "" || endDate === "") {
+            return "";
+        }
+        if (
+            day.format("DD-MM-YY") === startDate.format("DD-MM-YY") ||
+            day.format("DD-MM-YY") === endDate.format("DD-MM-YY")
+        ) {
+            return `${s.calendar__active}`;
+        }
+        if (
+            day.format("DD-MM-YY") > startDate.format("DD-MM-YY") &&
+            day.format("DD-MM-YY") < endDate.format("DD-MM-YY")
+        ) {
+            return `${s.calendar__between}`;
         }
     };
 
@@ -44,7 +56,32 @@ const SmallCalendar = ({ setStartDate, setEndDate }: SmallCalendarProps) => {
         if (test.some((item: string) => item === day.format("DD/MM/YY"))) {
             return `${s.calendar__close}`;
         }
-        return;
+        return "";
+    };
+
+    const handleSelectDayes = (day: any) => {
+        if (!day.isBefore(dayjs())) {
+            if (startDate === "") {
+                setStartDate(day);
+            } else {
+                if (
+                    test.some((item: string) => item === day.format("DD/MM/YY")) ||
+                    (test.some((item: string) => item > startDate.format("DD/MM/YY")) &&
+                        test.some((item: string) => item < day.format("DD/MM/YY")))
+                ) {
+                    return;
+                } else {
+                    if (startDate.format("DD-MM-YY") < day.format("DD-MM-YY")) {
+                        setEndDate(day);
+                    } else {
+                        setEndDate(startDate);
+                        setStartDate(day);
+                    }
+                }
+            }
+        } else {
+            return;
+        }
     };
 
     const handleNext = (e: any) => {
@@ -97,8 +134,8 @@ const SmallCalendar = ({ setStartDate, setEndDate }: SmallCalendarProps) => {
                             return (
                                 <div
                                     key={i}
-                                    className={`${getCurrentDay(day)} ${getPreviousDays(day)} ${getBooked(day)}`}
-                                    onClick={() => console.log("click")}
+                                    className={`${getBetweenDays(day)} ${getPreviousDays(day)} ${getBooked(day)} ${s.calendar__day}`}
+                                    onClick={() => handleSelectDayes(day)}
                                 >
                                     {day.format("D")}
                                 </div>
