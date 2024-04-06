@@ -71,15 +71,11 @@ public class QueriesHandler(
             );
 
         var reservations = unitOfWork.Reservations.GetByAdvertId(advertId: request.Id, start: startDate, end: endDate);
-        List<ReservedDateDto> dates = new();
+        List<DateOnly> dates = new();
         for (var curDate = startDate; curDate <= endDate; curDate.AddDays(1))
-        {
-            dates.Add(new()
-            {
-                Date = curDate,
-                Reserved = reservations.Any(r => r.StartDate <= curDate && curDate <= r.EndDate),
-            });
-        }
+            if (reservations.Any(r => r.StartDate <= curDate && curDate <= r.EndDate))
+                dates.Add(curDate);
+
         return new(dates);
     }
 }
