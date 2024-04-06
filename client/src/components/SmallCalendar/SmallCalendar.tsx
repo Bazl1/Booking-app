@@ -27,7 +27,11 @@ const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCa
         if (day.format("MM") !== dayjs(new Date(dayjs().year(), currentMonth)).format("MM")) {
             classNames.push(`${s.calendar__previous}`);
         }
-        if (day.isBefore(dayjs())) {
+
+        if (
+            (day.isBefore(dayjs(), "day") && day.month() === dayjs().month()) ||
+            (startDate !== "" && day.isBefore(startDate, "day"))
+        ) {
             classNames.push(`${s.calendar__close}`);
         }
         const className: string = classNames.join(" ");
@@ -35,21 +39,32 @@ const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCa
     };
 
     const getBetweenDays = (day: any) => {
-        if (startDate === "" || endDate === "") {
+        if (!startDate && !endDate) {
             return "";
+        } else if (startDate && !endDate) {
+            if (isSameDay(day, startDate)) {
+                return `${s.calendar__active}`;
+            }
+        } else {
+            if (isSameDay(day, startDate) || isSameDay(day, endDate)) {
+                return `${s.calendar__active}`;
+            }
+            if (isAfter(day, startDate) && isBefore(day, endDate)) {
+                return `${s.calendar__between}`;
+            }
         }
-        if (
-            day.format("DD-MM-YY") === startDate.format("DD-MM-YY") ||
-            day.format("DD-MM-YY") === endDate.format("DD-MM-YY")
-        ) {
-            return `${s.calendar__active}`;
-        }
-        if (
-            day.format("DD-MM-YY") > startDate.format("DD-MM-YY") &&
-            day.format("DD-MM-YY") < endDate.format("DD-MM-YY")
-        ) {
-            return `${s.calendar__between}`;
-        }
+    };
+
+    const isSameDay = (day1: any, day2: any) => {
+        return dayjs(day1).isSame(day2, "day");
+    };
+
+    const isAfter = (day1: any, day2: any) => {
+        return dayjs(day1).isAfter(day2, "day");
+    };
+
+    const isBefore = (day1: any, day2: any) => {
+        return dayjs(day1).isBefore(day2, "day");
     };
 
     const getBooked = (day: any) => {
@@ -64,18 +79,13 @@ const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCa
             if (startDate === "") {
                 setStartDate(day);
             } else {
-                if (
-                    test.some((item: string) => item === day.format("DD/MM/YY")) ||
-                    (test.some((item: string) => item > startDate.format("DD/MM/YY")) &&
-                        test.some((item: string) => item < day.format("DD/MM/YY")))
-                ) {
+                if (test.includes(day.format("DD/MM/YY")) && day.isAfter(startDate)) {
                     return;
                 } else {
-                    if (startDate.format("DD-MM-YY") < day.format("DD-MM-YY")) {
+                    if (day.isAfter(startDate)) {
                         setEndDate(day);
                     } else {
-                        setEndDate(startDate);
-                        setStartDate(day);
+                        return;
                     }
                 }
             }
