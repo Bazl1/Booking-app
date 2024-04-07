@@ -4,7 +4,7 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 interface CountItemProps {
     value: number;
     setValue: (value: any) => void;
-    img: React.ReactNode;
+    img?: React.ReactNode;
     text?: string | null;
 }
 
@@ -24,7 +24,7 @@ const CountItem = ({ value, setValue, img, text = null }: CountItemProps) => {
     return (
         <div className={s.count}>
             <div className={s.count__columns}>
-                <div className={s.count__img}>{img}</div>
+                {img && <div className={s.count__img}>{img}</div>}
                 {text && <h3 className={s.count__title}>{text}</h3>}
             </div>
             <div className={s.count__columns}>
