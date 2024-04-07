@@ -2,7 +2,7 @@ using Booking.Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/reviews")]
+[Route("api/v1/reviews")]
 public class ReviewsController : ControllerBase
 {
     private readonly List<ReviewDto> mockReviews;
