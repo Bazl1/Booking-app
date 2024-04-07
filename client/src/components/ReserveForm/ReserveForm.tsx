@@ -6,15 +6,18 @@ import CountItem from "../CountItem/CountItem";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import toast from "react-hot-toast";
+import BookingService from "@/services/BookingService";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 dayjs.extend(isBetween);
 
 interface ReserveFormProps {
     price: number;
+    productId: string;
 }
 
 const booked = ["01/04/24", "07/04/24", "10/04/24"];
 
-const ReserveForm = ({ price }: ReserveFormProps) => {
+const ReserveForm = ({ price, productId }: ReserveFormProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const [startDate, setStartDate] = useState<any>("");
     const [endDate, setEndDate] = useState<any>("");
@@ -22,6 +25,13 @@ const ReserveForm = ({ price }: ReserveFormProps) => {
     const [childrens, setChildrens] = useState<number>(0);
     const [pets, setPets] = useState<boolean>(false);
     const [cost, setCost] = useState<number>(price);
+
+    const queryClient = useQueryClient();
+    const mutation = useMutation((data: FormData) => BookingService.createBooking(data), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["products"]);
+        },
+    });
 
     useEffect(() => {
         if (startDate !== "" && endDate !== "") {
@@ -49,6 +59,14 @@ const ReserveForm = ({ price }: ReserveFormProps) => {
             //         throw new Error(`The date of ${booked[i]} is already booked`);
             //     }
             // }
+            const data = new FormData();
+            data.append("advertId", productId);
+            data.append("startDate", startDate);
+            data.append("endDate", endDate);
+            data.append("numberOfAdults", adults.toString());
+            data.append("numberOfChildren", childrens.toString());
+            data.append("endDate", pets.toString());
+            mutation.mutate(data);
         } else {
             toast.error("Select both dates");
             return;
