@@ -1,31 +1,14 @@
-﻿using AutoMapper;
 using Booking.Application.Dtos;
-using Booking.Application.Errors;
-using Booking.Core.Common;
-using Booking.Core.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Booking.Application.Actions.Adverts.Queries;
-
-public class QueriesHandler(
-    IUnitOfWork unitOfWork,
-    IMapper mapper,
-    IHttpContextAccessor httpContextAccessor
-) : IRequestHandler<GetById.Request, GetById.Response>,
-    IRequestHandler<GetAll.Request, GetAll.Response>,
-    IRequestHandler<GetReservationDates.Request, GetReservationDates.Response>
+[ApiController]
+[Route("api/reviews")]
+public class ReviewsController : ControllerBase
 {
-    public HttpContext? Context => httpContextAccessor.HttpContext;
+    private readonly List<ReviewDto> mockReviews;
 
-    public async Task<GetById.Response> Handle(GetById.Request request, CancellationToken cancellationToken)
+    public ReviewsController()
     {
-        if (unitOfWork.Adverts.GetById(request.Id) is not Advert advert)
-            throw new BookingError(
-                BookingErrorType.NOT_FOUND,
-                "Advert with given id is not found"
-            );
-
         var author = new UserDto
         {
             Id = Guid.NewGuid().ToString(),
@@ -35,7 +18,7 @@ public class QueriesHandler(
             Email = "cyril@morozov.com",
             PhoneNumber = "+380000000000"
         };
-        var reviews = new List<ReviewDto>
+        mockReviews = new List<ReviewDto>
         {
             new ReviewDto
             {
@@ -73,86 +56,13 @@ public class QueriesHandler(
                 Author = author
             },
         };
-
-        return new(
-            advert.Id,
-            advert.Name,
-            advert.Description,
-            mapper.Map<UserDto>(advert.Owner, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"),
-            advert.PricePerNight,
-            advert.NumberOfBathrooms,
-            advert.NumberOfSingleBeds,
-            advert.NumberOfDoubleBeds,
-            advert.MaxPeople,
-            new Amenities
-            {
-                Wifi = advert.Wifi,
-                PetsAllowed = advert.PetsAllowed,
-                TV = advert.TV,
-                Refrigerator = advert.Refrigerator,
-                Kitchen = advert.Kitchen,
-                Washer = advert.Washer,
-                Heating = advert.Heating,
-                Dryer = advert.Dryer
-            },
-            advert.Photos.Select(photo => $"{Context.Request.Scheme}://{Context.Request.Host}/{photo}").ToList(),
-            reviews,
-            mapper.Map<CategoryDto>(advert.Category),
-            0
-        );
     }
 
-    public async Task<GetAll.Response> Handle(GetAll.Request request, CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] string advertId
+    )
     {
-        if (request.Page < 1)
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "Page must be greater than 0"
-            );
-        if (request.Limit < 1)
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "Limit must be greater than 0"
-            );
-
-        var adverts = unitOfWork.Adverts.Search(request.Query, request.UserId).ToList();
-        return new(
-            mapper.Map<IEnumerable<AdvertDto>>(
-                adverts
-                    .Skip((request.Page - 1) * request.Limit)
-                    .Take(request.Limit),
-                opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"
-            ),
-            (int)Math.Ceiling((double)adverts.Count / (double)request.Limit)
-        );
-    }
-
-    public async Task<GetReservationDates.Response> Handle(GetReservationDates.Request request, CancellationToken cancellationToken)
-    {
-        if (!DateOnly.TryParse(request.StartDate, out DateOnly startDate))
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "Invalid start data"
-            );
-
-        if (!DateOnly.TryParse(request.EndDate, out DateOnly endDate))
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "Invalid end data"
-            );
-
-        if (endDate <= startDate)
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "The end date cannot be earlier than the start date"
-            );
-
-        var reservations = unitOfWork.Reservations.GetByAdvertId(advertId: request.Id, start: startDate, end: endDate);
-        List<string> dates = new();
-        for (var curDate = startDate; curDate <= endDate; curDate.AddDays(1))
-            if (reservations.Any(r => r.StartDate <= curDate && curDate <= r.EndDate))
-                dates.Add(curDate.ToString("dd/MM/yy"));
-
-        return new(dates);
+        return Ok(mockReviews);
     }
 }
