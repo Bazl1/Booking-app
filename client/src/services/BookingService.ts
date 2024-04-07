@@ -1,21 +1,15 @@
 import $Api from "@/shared/utils/axios";
+import { AxiosResponse } from "axios";
+
+interface IGetBooked {
+    dates: string[];
+}
 
 export default class BookingService {
-    static createBooking(
-        advertId: string,
-        startDate: string,
-        endDate: string,
-        numberOfAdults: number,
-        numberOfChildren: number,
-        pets: boolean,
-    ) {
-        return $Api.post("/reservations", {
-            advertId,
-            startDate,
-            endDate,
-            numberOfAdults,
-            numberOfChildren,
-            pets,
-        });
+    static createBooking(data: FormData) {
+        return $Api.post("/reservations", data);
+    }
+    static getBooked(id: string): Promise<AxiosResponse<IGetBooked>> {
+        return $Api.get<IGetBooked>(`adverts/${id}/reservation-dates`);
     }
 }

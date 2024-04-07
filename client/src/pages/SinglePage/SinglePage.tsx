@@ -28,6 +28,7 @@ import { useQuery } from "@tanstack/react-query";
 import ProductsService from "@/services/ProductsService";
 import Loader from "@/components/Loader/Loader";
 import DOMPurify from "dompurify";
+import { IReview } from "@/types/IReview";
 
 const SinglePage = () => {
     const { id } = useParams();
@@ -256,91 +257,46 @@ const SinglePage = () => {
                             <div className={s.rooms__reviews}>
                                 <h3 className={s.rooms__subtitle}>Reviews</h3>
                                 <div className={s.rooms__reviews_items}>
-                                    <div className={s.rooms__reviews_item}>
-                                        <div className={s.rooms__reviews_item_top}>
-                                            <img
-                                                className={s.rooms__reviews_item_img}
-                                                src={user}
-                                                alt="user"
-                                            />
-                                            <h3 className={s.rooms__reviews_item_name}>
-                                                Ostapenko Maxim
-                                            </h3>
-                                        </div>
-                                        <div className={s.rooms__reviews_stars}>
-                                            <IoStar /> <IoStar /> <IoStar /> <IoStar /> <IoStar />
-                                        </div>
-                                        <p className={s.rooms__reviews_text}>
-                                            Place made with love and a lot of thought has been put
-                                            into it. Its very friendly for children, and pets. Hats
-                                            off to the host. 👌🙏
-                                        </p>
-                                    </div>
-                                    <div className={s.rooms__reviews_item}>
-                                        <div className={s.rooms__reviews_item_top}>
-                                            <img
-                                                className={s.rooms__reviews_item_img}
-                                                src={user}
-                                                alt="user"
-                                            />
-                                            <h3 className={s.rooms__reviews_item_name}>
-                                                Ostapenko Maxim
-                                            </h3>
-                                        </div>
-                                        <div className={s.rooms__reviews_stars}>
-                                            <IoStar /> <IoStar /> <IoStar /> <IoStar /> <IoStar />
-                                        </div>
-                                        <p className={s.rooms__reviews_text}>
-                                            Place made with love and a lot of thought has been put
-                                            into it. Its very friendly for children, and pets. Hats
-                                            off to the host. 👌🙏
-                                        </p>
-                                    </div>
-                                    <div className={s.rooms__reviews_item}>
-                                        <div className={s.rooms__reviews_item_top}>
-                                            <img
-                                                className={s.rooms__reviews_item_img}
-                                                src={user}
-                                                alt="user"
-                                            />
-                                            <h3 className={s.rooms__reviews_item_name}>
-                                                Ostapenko Maxim
-                                            </h3>
-                                        </div>
-                                        <div className={s.rooms__reviews_stars}>
-                                            <IoStar /> <IoStar /> <IoStar /> <IoStar /> <IoStar />
-                                        </div>
-                                        <p className={s.rooms__reviews_text}>
-                                            Place made with love and a lot of thought has been put
-                                            into it. Its very friendly for children, and pets. Hats
-                                            off to the host. 👌🙏
-                                        </p>
-                                    </div>
-                                    <div className={s.rooms__reviews_item}>
-                                        <div className={s.rooms__reviews_item_top}>
-                                            <img
-                                                className={s.rooms__reviews_item_img}
-                                                src={user}
-                                                alt="user"
-                                            />
-                                            <h3 className={s.rooms__reviews_item_name}>
-                                                Ostapenko Maxim
-                                            </h3>
-                                        </div>
-                                        <div className={s.rooms__reviews_stars}>
-                                            <IoStar /> <IoStar /> <IoStar /> <IoStar /> <IoStar />
-                                        </div>
-                                        <p className={s.rooms__reviews_text}>
-                                            Place made with love and a lot of thought has been put
-                                            into it. Its very friendly for children, and pets. Hats
-                                            off to the host. 👌🙏
-                                        </p>
-                                    </div>
+                                    {data?.data.reviews.map((review: IReview) => {
+                                        return (
+                                            <div key={review.id} className={s.rooms__reviews_item}>
+                                                <div className={s.rooms__reviews_item_top}>
+                                                    {review.author.avatar !== "" ? (
+                                                        <img
+                                                            className={s.rooms__reviews_item_img}
+                                                            src={review.author.avatar}
+                                                            alt="user"
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            className={s.rooms__reviews_item_img}
+                                                            src={user}
+                                                            alt="user"
+                                                        />
+                                                    )}
+                                                    <h3 className={s.rooms__reviews_item_name}>
+                                                        {review.author.name}
+                                                    </h3>
+                                                </div>
+                                                <div className={s.rooms__reviews_stars}>
+                                                    {Array.from(
+                                                        { length: review.stars },
+                                                        (_, index) => (
+                                                            <IoStar key={index} />
+                                                        ),
+                                                    )}
+                                                </div>
+                                                <p className={s.rooms__reviews_text}>
+                                                    {review.description}
+                                                </p>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
                         <div className={s.rooms__columns}>
-                            <ReserveForm price={data?.data.pricePerNight || 0} />
+                            <ReserveForm productId={idStr} price={data?.data.pricePerNight || 0} />
                         </div>
                     </div>
                 </div>
