@@ -10,7 +10,7 @@ public class ReservationsController(
 {
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromBody] ReservationsCommands.Create.Request request
+        [FromForm] ReservationsCommands.Create.Request request
     )
     {
         await mediator.Send(request);
