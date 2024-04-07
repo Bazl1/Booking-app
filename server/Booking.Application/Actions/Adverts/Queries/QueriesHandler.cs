@@ -150,9 +150,8 @@ public class QueriesHandler(
         var reservations = unitOfWork.Reservations.GetByAdvertId(advertId: request.Id, start: startDate, end: endDate);
         List<string> dates = new();
         for (var curDate = startDate; curDate <= endDate; curDate.AddDays(1))
-        {
-            dates.Add(curDate.ToString("dd/MM/yy"));
-        }
+            if (reservations.Any(r => r.StartDate <= curDate && curDate <= r.EndDate))
+                dates.Add(curDate.ToString("dd/MM/yy"));
         return new(dates);
     }
 }
