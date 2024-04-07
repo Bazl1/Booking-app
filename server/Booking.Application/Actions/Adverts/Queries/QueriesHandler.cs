@@ -129,24 +129,8 @@ public class QueriesHandler(
 
     public async Task<GetReservationDates.Response> Handle(GetReservationDates.Request request, CancellationToken cancellationToken)
     {
-        if (!DateOnly.TryParse(request.StartDate, out DateOnly startDate))
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "Invalid start data"
-            );
-
-        if (!DateOnly.TryParse(request.EndDate, out DateOnly endDate))
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "Invalid end data"
-            );
-
-        if (endDate <= startDate)
-            throw new BookingError(
-                BookingErrorType.VALIDATION_ERROR,
-                "The end date cannot be earlier than the start date"
-            );
-
+        var startDate = new DateOnly(day: 0, month: request.Month, year: request.Year);
+        var endDate = new DateOnly(day: startDate.DayNumber, month: request.Month, year: request.Year);
         var reservations = unitOfWork.Reservations.GetByAdvertId(advertId: request.Id, start: startDate, end: endDate);
         List<string> dates = new();
         for (var curDate = startDate; curDate <= endDate; curDate.AddDays(1))

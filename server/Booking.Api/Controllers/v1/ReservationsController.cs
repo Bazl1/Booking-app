@@ -16,4 +16,16 @@ public class ReservationsController(
         await mediator.Send(request);
         return Ok();
     }
+
+    [HttpGet("dates")]
+    public async Task<IActionResult> GetReservationDates(
+        [FromQuery] string id,
+        [FromQuery] int month,
+        [FromQuery] int year
+    )
+    {
+        return Ok(await mediator.Send(
+            new Booking.Application.Actions.Adverts.Queries.GetReservationDates.Request(id, month, year))
+        );
+    }
 }
