@@ -10,13 +10,20 @@ interface SmallCalendarProps {
     setEndDate: (value: any) => void;
     startDate: any;
     endDate: any;
+    setOpen: (value: boolean) => void;
+    booked: string[];
 }
 
 const dayOfWeek = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
-const test = ["01/04/24", "07/04/24", "10/04/24"];
-
-const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCalendarProps) => {
+const SmallCalendar = ({
+    setStartDate,
+    setEndDate,
+    startDate,
+    endDate,
+    setOpen,
+    booked,
+}: SmallCalendarProps) => {
     const [month, setMonth] = useState(getMonth());
 
     const currentMonth = useCalendarStore((state) => state.currentMonth);
@@ -27,9 +34,9 @@ const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCa
         if (day.format("MM") !== dayjs(new Date(dayjs().year(), currentMonth)).format("MM")) {
             classNames.push(`${s.calendar__previous}`);
         }
-
         if (
             (day.isBefore(dayjs(), "day") && day.month() === dayjs().month()) ||
+            day.isBefore(dayjs(), "day") ||
             (startDate !== "" && day.isBefore(startDate, "day"))
         ) {
             classNames.push(`${s.calendar__close}`);
@@ -42,44 +49,32 @@ const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCa
         if (!startDate && !endDate) {
             return "";
         } else if (startDate && !endDate) {
-            if (isSameDay(day, startDate)) {
+            if (dayjs(day).isSame(startDate, "day")) {
                 return `${s.calendar__active}`;
             }
         } else {
-            if (isSameDay(day, startDate) || isSameDay(day, endDate)) {
+            if (dayjs(day).isSame(startDate, "day") || dayjs(day).isSame(endDate, "day")) {
                 return `${s.calendar__active}`;
             }
-            if (isAfter(day, startDate) && isBefore(day, endDate)) {
+            if (dayjs(day).isAfter(startDate, "day") && dayjs(day).isBefore(endDate, "day")) {
                 return `${s.calendar__between}`;
             }
         }
     };
 
-    const isSameDay = (day1: any, day2: any) => {
-        return dayjs(day1).isSame(day2, "day");
-    };
-
-    const isAfter = (day1: any, day2: any) => {
-        return dayjs(day1).isAfter(day2, "day");
-    };
-
-    const isBefore = (day1: any, day2: any) => {
-        return dayjs(day1).isBefore(day2, "day");
-    };
-
     const getBooked = (day: any) => {
-        if (test.some((item: string) => item === day.format("DD/MM/YY"))) {
+        if (booked.some((item: string) => item === day.format("DD/MM/YY"))) {
             return `${s.calendar__close}`;
         }
         return "";
     };
 
-    const handleSelectDayes = (day: any) => {
+    const handleSelectDayes = (e: any, day: any) => {
         if (!day.isBefore(dayjs())) {
             if (startDate === "") {
                 setStartDate(day);
             } else {
-                if (test.includes(day.format("DD/MM/YY")) && day.isAfter(startDate)) {
+                if (booked.includes(day.format("DD/MM/YY")) && day.isAfter(startDate)) {
                     return;
                 } else {
                     if (day.isAfter(startDate)) {
@@ -109,7 +104,12 @@ const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCa
     }, [currentMonth]);
 
     return (
-        <div className={s.calendar}>
+        <div
+            className={s.calendar}
+            onClick={(e) => {
+                e.stopPropagation();
+            }}
+        >
             <div className={s.calendar__box}>
                 <div className={s.calendar__text_box}>
                     <h3 className={s.calendar__title}>
@@ -145,7 +145,7 @@ const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCa
                                 <div
                                     key={i}
                                     className={`${getBetweenDays(day)} ${getPreviousDays(day)} ${getBooked(day)} ${s.calendar__day}`}
-                                    onClick={() => handleSelectDayes(day)}
+                                    onClick={(e) => handleSelectDayes(e, day)}
                                 >
                                     {day.format("D")}
                                 </div>
@@ -154,6 +154,27 @@ const SmallCalendar = ({ setStartDate, setEndDate, startDate, endDate }: SmallCa
                     </div>
                 );
             })}
+            <div className={s.calendar__bottom}>
+                <div
+                    className={s.calendar__bottom_clear}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setStartDate("");
+                        setEndDate("");
+                    }}
+                >
+                    Clear dates
+                </div>
+                <div
+                    className={s.calendar__bottom_close}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setOpen(false);
+                    }}
+                >
+                    Close
+                </div>
+            </div>
         </div>
     );
 };

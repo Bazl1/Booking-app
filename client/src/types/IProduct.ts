@@ -1,3 +1,5 @@
+import { IReview } from "./IReview";
+
 export interface IProduct {
     id: string;
     name: string;
@@ -31,4 +33,5 @@ export interface IProduct {
         name: string;
         icon: string;
     };
+    reviews: IReview[];
 }
