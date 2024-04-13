@@ -15,4 +15,12 @@ export default class ProductsService {
     static getProductById(id: string): Promise<AxiosResponse<IProduct>> {
         return $Api.get<IProduct>(`/adverts/${id}`);
     }
+
+    static toggleFavorite(id: string): Promise<AxiosResponse<boolean>> {
+        return $Api.post<boolean>(`/adverts/${id}/like`);
+    }
+
+    static getFavorites(): Promise<AxiosResponse<ProductsResponse>> {
+        return $Api.get<ProductsResponse>("/favorites");
+    }
 }

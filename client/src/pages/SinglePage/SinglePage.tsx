@@ -29,19 +29,31 @@ import ProductsService from "@/services/ProductsService";
 import Loader from "@/components/Loader/Loader";
 import DOMPurify from "dompurify";
 import { IReview } from "@/types/IReview";
+import useHandleFavorite from "@/shared/utils/useFavorite";
+import { IoIosHeartDislike } from "react-icons/io";
 
 const SinglePage = () => {
     const { id } = useParams();
     const idStr = id || "";
 
-    const [showMore, setShowMore] = useState<boolean>(false);
-    const [open, setOpen] = useState<boolean>(false);
-
     const { isLoading, data } = useQuery(["product", idStr], () =>
         ProductsService.getProductById(idStr),
     );
 
+    const [showMore, setShowMore] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false);
+    const [isLiked, setIsLiked] = useState<boolean>(false);
+
     const cleanContent = DOMPurify.sanitize(data?.data.description || "");
+
+    const handleFavorite = useHandleFavorite(idStr);
+
+    const handleToggleFavorite = async () => {
+        const like = await handleFavorite();
+        if (like !== undefined) {
+            setIsLiked(like);
+        }
+    };
 
     if (isLoading) {
         <Loader />;
@@ -77,8 +89,8 @@ const SinglePage = () => {
                         <div className={s.rooms__columns}>
                             <div className={s.rooms__box}>
                                 <h2 className={s.rooms__title}>{data?.data.name}</h2>
-                                <button className={s.rooms__like}>
-                                    <IoMdHeart />
+                                <button className={s.rooms__like} onClick={handleToggleFavorite}>
+                                    {isLiked ? <IoIosHeartDislike /> : <IoMdHeart />}
                                 </button>
                             </div>
                             <div className={s.rooms__rating}>
