@@ -129,8 +129,8 @@ public class QueriesHandler(
 
     public async Task<GetReservationDates.Response> Handle(GetReservationDates.Request request, CancellationToken cancellationToken)
     {
-        var startDate = new DateOnly(day: 0, month: request.Month, year: request.Year);
-        var endDate = new DateOnly(day: startDate.DayNumber, month: request.Month, year: request.Year);
+        var startDate = new DateOnly(year: request.Year, month: request.Month, day: 1);
+        var endDate = new DateOnly(year: request.Year, month: request.Month, day: startDate.DayNumber);
         var reservations = unitOfWork.Reservations.GetByAdvertId(advertId: request.Id, start: startDate, end: endDate);
         List<string> dates = new();
         for (var curDate = startDate; curDate <= endDate; curDate.AddDays(1))

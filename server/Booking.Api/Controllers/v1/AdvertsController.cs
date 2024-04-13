@@ -36,6 +36,14 @@ public class AdvertsController(
         return Ok(await mediator.Send(request));
     }
 
+    [HttpPut("{id}/like")]
+    public async Task<IActionResult> ToogleLike(
+        [FromRoute] string id
+    )
+    {
+        return Ok(await mediator.Send(new AdvertsCommands.Like.Request(id)));
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] int page,
