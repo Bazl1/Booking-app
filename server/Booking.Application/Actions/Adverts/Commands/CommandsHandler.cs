@@ -17,6 +17,7 @@ public class CommandsHandler(
     IMapper mapper
 ) : IRequestHandler<Create.Request, AdvertDto>,
     IRequestHandler<Delete.Request>,
+    IRequestHandler<Like.Request, Like.Response>,
     IRequestHandler<Update.Request, AdvertDto>
 {
     private HttpContext? Context => httpContextAccessor.HttpContext;
@@ -125,5 +126,27 @@ public class CommandsHandler(
         unitOfWork.SaveChanges();
 
         return mapper.Map<AdvertDto>(advert, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}");
+    }
+
+    public async Task<Like.Response> Handle(Like.Request request, CancellationToken cancellationToken)
+    {
+        var advert = unitOfWork.Adverts.GetById(request.Id)
+            ?? throw new BookingError(BookingErrorType.NOT_FOUND, "Booking with given id is not found");
+        var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = unitOfWork.Users.GetById(userId);
+        bool result;
+        if (user.Likes.Any(a => a.Id == request.Id))
+        {
+            user.Likes.Remove(advert);
+            result = false;
+        }
+        else
+        {
+            user.Likes.Add(advert);
+            result = true;
+        }
+        unitOfWork.SaveChanges();
+
+        return new(result);
     }
 }
