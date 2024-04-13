@@ -8,6 +8,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import toast from "react-hot-toast";
 import BookingService from "@/services/BookingService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCalendarStore } from "@/store";
 dayjs.extend(isBetween);
 
 interface ReserveFormProps {
@@ -15,10 +16,9 @@ interface ReserveFormProps {
     productId: string;
 }
 
-const booked = ["01/04/24", "07/04/24", "10/04/24"];
-
 const ReserveForm = ({ price, productId }: ReserveFormProps) => {
     const [open, setOpen] = useState<boolean>(false);
+    const [bookedArray, setBookedArray] = useState<string[]>([]);
     const [startDate, setStartDate] = useState<any>("");
     const [endDate, setEndDate] = useState<any>("");
     const [adults, setAdults] = useState<number>(0);
@@ -26,12 +26,45 @@ const ReserveForm = ({ price, productId }: ReserveFormProps) => {
     const [pets, setPets] = useState<boolean>(false);
     const [cost, setCost] = useState<number>(price);
 
+    const currentMonth = useCalendarStore((state) => state.currentMonth);
     const queryClient = useQueryClient();
     const mutation = useMutation((data: FormData) => BookingService.createBooking(data), {
         onSuccess: () => {
             queryClient.invalidateQueries(["products"]);
         },
     });
+
+    const Submit = (e: any) => {
+        e.preventDefault();
+        if (startDate !== "" && endDate !== "") {
+            for (let i = 0; i < bookedArray.length; i++) {
+                const date = dayjs(bookedArray[i], "DD/MM/YY");
+                if (
+                    date.isBetween(
+                        startDate.format("DD/MM/YY"),
+                        endDate.format("DD/MM/YY"),
+                        null,
+                        "[]",
+                    )
+                ) {
+                    toast.error(`The date of ${bookedArray[i]} is already booked`);
+                    throw new Error(`The date of ${bookedArray[i]} is already booked`);
+                }
+            }
+            const data = new FormData();
+            data.append("advertId", productId);
+            data.append("startDate", startDate.format("DD/MM/YY"));
+            data.append("endDate", endDate.format("DD/MM/YY"));
+            data.append("numberOfAdults", adults.toString());
+            data.append("numberOfChildren", childrens.toString());
+            data.append("endDate", pets.toString());
+            data.append("cost", cost.toString());
+            mutation.mutate(data);
+        } else {
+            toast.error("Select both dates");
+            return;
+        }
+    };
 
     useEffect(() => {
         if (startDate !== "" && endDate !== "") {
@@ -42,36 +75,10 @@ const ReserveForm = ({ price, productId }: ReserveFormProps) => {
         }
     }, [startDate, endDate]);
 
-    const Submit = (e: any) => {
-        e.preventDefault();
-        if (startDate !== "" && endDate !== "") {
-            // for (let i = 0; i < booked.length; i++) {
-            //     const date = dayjs(booked[i], "DD/MM/YY");
-            //     if (
-            //         date.isBetween(
-            //             startDate.format("DD/MM/YY"),
-            //             endDate.format("DD/MM/YY"),
-            //             null,
-            //             "[]",
-            //         )
-            //     ) {
-            //         toast.error(`The date of ${booked[i]} is already booked`);
-            //         throw new Error(`The date of ${booked[i]} is already booked`);
-            //     }
-            // }
-            const data = new FormData();
-            data.append("advertId", productId);
-            data.append("startDate", startDate);
-            data.append("endDate", endDate);
-            data.append("numberOfAdults", adults.toString());
-            data.append("numberOfChildren", childrens.toString());
-            data.append("endDate", pets.toString());
-            mutation.mutate(data);
-        } else {
-            toast.error("Select both dates");
-            return;
-        }
-    };
+    useEffect(() => {
+        BookingService.getBooked(productId, 3, 2024).then((res) => setBookedArray(res.data.dates));
+        console.log(currentMonth);
+    }, [currentMonth]);
 
     return (
         <form className={s.form} onSubmit={(e) => Submit(e)}>
@@ -92,7 +99,7 @@ const ReserveForm = ({ price, productId }: ReserveFormProps) => {
                         setStartDate={setStartDate}
                         setEndDate={setEndDate}
                         setOpen={setOpen}
-                        booked={booked}
+                        booked={bookedArray}
                     />
                 )}
             </label>

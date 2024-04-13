@@ -9,7 +9,7 @@ export default class BookingService {
     static createBooking(data: FormData) {
         return $Api.post("/reservations", data);
     }
-    static getBooked(id: string): Promise<AxiosResponse<IGetBooked>> {
-        return $Api.get<IGetBooked>(`adverts/${id}/reservation-dates`);
+    static getBooked(id: string, month: number, year: number): Promise<AxiosResponse<IGetBooked>> {
+        return $Api.get<IGetBooked>(`/reservations/dates/?id=${id}&month=${month}&year=${year}`);
     }
 }
