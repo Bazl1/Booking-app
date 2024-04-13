@@ -7,6 +7,9 @@
         position: relative;
     }
     &__item_like {
+        outline: none;
+        background: transparent;
+        border: none;
         position: absolute;
         display: flex;
         justify-content: center;
@@ -18,7 +21,7 @@
         z-index: 3;
         cursor: pointer;
         svg {
-            color: rgba(#fff, 0.6);
+            color: rgba(#fff, 0.8);
             width: 24px;
             height: 24px;
         }

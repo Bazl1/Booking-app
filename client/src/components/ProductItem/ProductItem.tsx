@@ -6,7 +6,10 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { IoStar } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward, IoMdHeart } from "react-icons/io";
+import { IoIosHeartDislike } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { memo, useState } from "react";
+import useHandleFavorite from "@/shared/utils/useFavorite";
 
 interface ProductItemProps {
     id: string;
@@ -16,6 +19,17 @@ interface ProductItemProps {
 }
 
 const ProductItem = ({ id, images, title, pricePerNight }: ProductItemProps) => {
+    const [isLiked, setIsLiked] = useState<boolean>(false);
+
+    const handleFavorite = useHandleFavorite(id);
+
+    const handleToggleFavorite = async () => {
+        const like = await handleFavorite();
+        if (like !== undefined) {
+            setIsLiked(like);
+        }
+    };
+
     return (
         <div className={s.catalog__item}>
             <Swiper
@@ -47,9 +61,9 @@ const ProductItem = ({ id, images, title, pricePerNight }: ProductItemProps) => 
                     <IoIosArrowForward />
                 </button>
             </Swiper>
-            <div className={s.catalog__item_like}>
-                <IoMdHeart />
-            </div>
+            <button className={s.catalog__item_like} onClick={handleToggleFavorite}>
+                {isLiked ? <IoIosHeartDislike /> : <IoMdHeart />}
+            </button>
             <Link to={`/rooms/${id}`} className={s.catalog__item_link}>
                 <div className={s.catalog__item_columns}>
                     <h3 className={s.catalog__item_title}>{title}</h3>
@@ -65,4 +79,4 @@ const ProductItem = ({ id, images, title, pricePerNight }: ProductItemProps) => 
     );
 };
 
-export default ProductItem;
+export default memo(ProductItem);

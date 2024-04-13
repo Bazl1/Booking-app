@@ -9,6 +9,7 @@ const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const SinglePage = lazy(() => import("./pages/SinglePage/SinglePage"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage/SettingsPage"));
 const CreateProductPage = lazy(() => import("./pages/CreateProductPage/CreateProductPage"));
+const FavoritePage = lazy(() => import("./pages/FavoritePage/FavoritePage"));
 
 function App() {
     const refresh = useUserStore((state) => state.refresh);
@@ -28,6 +29,14 @@ function App() {
                         element={
                             <MainLayout>
                                 <CreateProductPage />
+                            </MainLayout>
+                        }
+                    />
+                    <Route
+                        path="/favorite"
+                        element={
+                            <MainLayout>
+                                <FavoritePage />
                             </MainLayout>
                         }
                     />

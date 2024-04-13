@@ -9,7 +9,7 @@ const useHandleFavorite = (id: string) => {
         if (isAuth) {
             const response = await ProductsService.toggleFavorite(id);
             toast.success("The product has been successfully added to your favorites");
-            return response.data;
+            return response.data.result;
         } else {
             toast.error("Authorize to add the product to your favorites ");
             return;

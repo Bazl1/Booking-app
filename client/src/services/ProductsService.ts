@@ -16,8 +16,8 @@ export default class ProductsService {
         return $Api.get<IProduct>(`/adverts/${id}`);
     }
 
-    static toggleFavorite(id: string): Promise<AxiosResponse<boolean>> {
-        return $Api.post<boolean>(`/adverts/${id}/like`);
+    static toggleFavorite(id: string): Promise<AxiosResponse<{ result: boolean }>> {
+        return $Api.put<{ result: boolean }>(`/adverts/${id}/like`);
     }
 
     static getFavorites(): Promise<AxiosResponse<ProductsResponse>> {
