@@ -1,5 +1,6 @@
 using Booking.Core.Entities;
 using Booking.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Infrastructure.Persistence.Repositories;
 
@@ -19,21 +20,36 @@ public class UserRepository(
 
     public IEnumerable<User> GetAll()
     {
-        return bookingDbContext.Users;
+        return bookingDbContext.Users
+            .Include(u => u.Likes)
+            .Include(u => u.Adverts)
+            .Include(u => u.Reviews);
     }
 
     public User? GetByEmail(string email)
     {
-        return bookingDbContext.Users.SingleOrDefault(u => u.Email == email);
+        return bookingDbContext.Users
+            .Include(u => u.Likes)
+            .Include(u => u.Adverts)
+            .Include(u => u.Reviews)
+            .SingleOrDefault(u => u.Email == email);
     }
 
     public User? GetById(string id)
     {
-        return bookingDbContext.Users.SingleOrDefault(u => u.Id == id);
+        return bookingDbContext.Users
+            .Include(u => u.Likes)
+            .Include(u => u.Adverts)
+            .Include(u => u.Reviews)
+            .SingleOrDefault(u => u.Id == id);
     }
 
     public User? GetByToken(string token)
     {
-        return bookingDbContext.Users.SingleOrDefault(u => u.Token == token);
+        return bookingDbContext.Users
+            .Include(u => u.Likes)
+            .Include(u => u.Adverts)
+            .Include(u => u.Reviews)
+            .SingleOrDefault(u => u.Token == token);
     }
 }
