@@ -37,20 +37,20 @@ const ReserveForm = ({ price, productId }: ReserveFormProps) => {
     const Submit = (e: any) => {
         e.preventDefault();
         if (startDate !== "" && endDate !== "") {
-            for (let i = 0; i < bookedArray.length; i++) {
-                const date = dayjs(bookedArray[i], "DD/MM/YY");
-                if (
-                    date.isBetween(
-                        startDate.format("DD/MM/YY"),
-                        endDate.format("DD/MM/YY"),
-                        null,
-                        "[]",
-                    )
-                ) {
-                    toast.error(`The date of ${bookedArray[i]} is already booked`);
-                    throw new Error(`The date of ${bookedArray[i]} is already booked`);
-                }
-            }
+            // for (let i = 0; i < bookedArray.length; i++) {
+            //     const date = dayjs(bookedArray[i], "DD/MM/YY");
+            //     if (
+            //         date.isBetween(
+            //             startDate.format("DD/MM/YY"),
+            //             endDate.format("DD/MM/YY"),
+            //             null,
+            //             "[]",
+            //         )
+            //     ) {
+            //         toast.error(`The date of ${bookedArray[i]} is already booked`);
+            //         throw new Error(`The date of ${bookedArray[i]} is already booked`);
+            //     }
+            // }
             const data = new FormData();
             data.append("advertId", productId);
             data.append("startDate", startDate.format("DD/MM/YY"));
@@ -77,7 +77,6 @@ const ReserveForm = ({ price, productId }: ReserveFormProps) => {
 
     useEffect(() => {
         BookingService.getBooked(productId, 3, 2024).then((res) => setBookedArray(res.data.dates));
-        console.log(currentMonth);
     }, [currentMonth]);
 
     return (
