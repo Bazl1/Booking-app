@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Booking.Application.Dtos;
 using Booking.Application.Errors;
 using Booking.Core.Common;
@@ -25,6 +26,9 @@ public class QueriesHandler(
                 BookingErrorType.NOT_FOUND,
                 "Advert with given id is not found"
             );
+
+        var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = unitOfWork.Users.GetById(userId);
 
         var author = new UserDto
         {
@@ -98,7 +102,8 @@ public class QueriesHandler(
             advert.Photos.Select(photo => $"{Context.Request.Scheme}://{Context.Request.Host}/{photo}").ToList(),
             reviews,
             mapper.Map<CategoryDto>(advert.Category),
-            0
+            0,
+            user.Likes.Any(a => a.Id == advert.Id)
         );
     }
 
@@ -116,12 +121,20 @@ public class QueriesHandler(
             );
 
         var adverts = unitOfWork.Adverts.Search(request.Query, request.UserId).ToList();
+
+        var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = unitOfWork.Users.GetById(userId);
+
         return new(
             mapper.Map<IEnumerable<AdvertDto>>(
                 adverts
                     .Skip((request.Page - 1) * request.Limit)
                     .Take(request.Limit),
-                opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}"
+                opt =>
+                {
+                    opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}";
+                    opt.Items["USER_LIKES"] = user.Likes;
+                }
             ),
             (int)Math.Ceiling((double)adverts.Count / (double)request.Limit)
         );
@@ -129,11 +142,19 @@ public class QueriesHandler(
 
     public async Task<GetReservationDates.Response> Handle(GetReservationDates.Request request, CancellationToken cancellationToken)
     {
-        var startDate = new DateOnly(year: request.Year, month: request.Month, day: 1);
-        var endDate = new DateOnly(year: request.Year, month: request.Month, day: startDate.DayNumber);
+        var startDate = new DateOnly(
+            year: request.Year,
+            month: request.Month,
+            day: 1
+        );
+        var endDate = new DateOnly(
+            year: request.Year,
+            month: request.Month,
+            day: DateTime.DaysInMonth(request.Year, request.Month)
+        );
         var reservations = unitOfWork.Reservations.GetByAdvertId(advertId: request.Id, start: startDate, end: endDate);
         List<string> dates = new();
-        for (var curDate = startDate; curDate <= endDate; curDate.AddDays(1))
+        for (var curDate = startDate; curDate <= endDate; curDate = curDate.AddDays(1))
             if (reservations.Any(r => r.StartDate <= curDate && curDate <= r.EndDate))
                 dates.Add(curDate.ToString("dd/MM/yy"));
         return new(dates);

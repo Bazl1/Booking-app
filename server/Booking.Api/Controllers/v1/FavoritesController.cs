@@ -11,8 +11,11 @@ public class FavoritesController(
 ) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int page,
+        [FromQuery] int limit
+    )
     {
-        return Ok();
+        return Ok(await mediator.Send(new FavoritesQueries.GetAll.Request(limit, page)));
     }
 }

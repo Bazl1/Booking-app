@@ -17,5 +17,6 @@ public record Response(
     List<string> Photos,
     List<ReviewDto> Reviews,
     CategoryDto Category,
-    int Rating
+    int Rating,
+    bool Liked
 );

@@ -19,7 +19,19 @@ internal class CommandsHandler(
         var userId = Context?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = unitOfWork.Users.GetById(userId);
 
-        if (request.StartDate >= request.EndDate)
+        if (!DateOnly.TryParseExact(s: request.StartDate, format: "dd/MM/yyyy", result: out DateOnly startDate))
+            throw new BookingError(
+                BookingErrorType.VALIDATION_ERROR,
+                "Invalid start date"
+            );
+
+        if (!DateOnly.TryParseExact(s: request.EndDate, format: "dd/MM/yyyy", result: out DateOnly endDate))
+            throw new BookingError(
+                BookingErrorType.VALIDATION_ERROR,
+                "Invalid end date"
+            );
+
+        if (startDate >= endDate)
             throw new BookingError(
                 BookingErrorType.VALIDATION_ERROR,
                 "The start date cannot be earlier than the end date"
@@ -40,8 +52,8 @@ internal class CommandsHandler(
         var reservation = Reservation.Create(
             user,
             advert,
-            request.StartDate,
-            request.EndDate,
+            startDate,
+            endDate,
             request.NumberOfAdults,
             request.NumberOfChildren,
             request.Pets
