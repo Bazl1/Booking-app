@@ -28,8 +28,8 @@ export default class ProductsService {
         return $Api.delete(`adverts/${id}`);
     }
 
-    static changeProduct(id: string) {
-        return $Api.put(`adverts/${id}`);
+    static changeProduct(id: string, data: FormData) {
+        return $Api.put(`adverts/${id}`, data);
     }
 
     static toggleFavorite(id: string): Promise<AxiosResponse<{ result: boolean }>> {
