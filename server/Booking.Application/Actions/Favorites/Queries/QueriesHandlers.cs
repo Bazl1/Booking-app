@@ -37,6 +37,7 @@ public class QueriesHandlers(
                 opt =>
                 {
                     opt.Items["USER_LIKES"] = user.Likes;
+                    opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}";
                 }
             ),
             (int)Math.Ceiling((double)user.Likes.Count / (double)request.Limit)
