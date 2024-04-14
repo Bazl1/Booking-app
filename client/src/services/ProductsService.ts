@@ -12,6 +12,14 @@ export default class ProductsService {
         return $Api.get<ProductsResponse>(`/adverts?page=${page}&limit=${limit}`);
     }
 
+    static getMyProducts(
+        user: string,
+        page: number,
+        limit: number,
+    ): Promise<AxiosResponse<ProductsResponse>> {
+        return $Api.get<ProductsResponse>(`/adverts/?user=${user}&page=${page}&limit=${limit}`);
+    }
+
     static getProductById(id: string): Promise<AxiosResponse<IProduct>> {
         return $Api.get<IProduct>(`/adverts/${id}`);
     }
@@ -20,7 +28,7 @@ export default class ProductsService {
         return $Api.put<{ result: boolean }>(`/adverts/${id}/like`);
     }
 
-    static getFavorites(): Promise<AxiosResponse<ProductsResponse>> {
-        return $Api.get<ProductsResponse>("/favorites");
+    static getFavorites(page: number, limit: number): Promise<AxiosResponse<ProductsResponse>> {
+        return $Api.get<ProductsResponse>(`/favorites?page=${page}&limit=${limit}`);
     }
 }

@@ -16,10 +16,11 @@ interface ProductItemProps {
     images: string[];
     title: string;
     pricePerNight: number;
+    liked: boolean;
 }
 
-const ProductItem = ({ id, images, title, pricePerNight }: ProductItemProps) => {
-    const [isLiked, setIsLiked] = useState<boolean>(false);
+const ProductItem = ({ id, images, title, pricePerNight, liked }: ProductItemProps) => {
+    const [isLiked, setIsLiked] = useState<boolean>(liked);
 
     const handleFavorite = useHandleFavorite(id);
 
