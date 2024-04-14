@@ -17,6 +17,7 @@ export interface IProduct {
     numberOfDoubleBeds: number;
     numberOfBathrooms: number;
     maxPeople: number;
+    liked: boolean;
     amenities: {
         wifi: boolean;
         petsAllowed: boolean;

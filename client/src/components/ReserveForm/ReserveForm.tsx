@@ -57,7 +57,7 @@ const ReserveForm = ({ price, productId }: ReserveFormProps) => {
             data.append("endDate", endDate.format("DD/MM/YY"));
             data.append("numberOfAdults", adults.toString());
             data.append("numberOfChildren", childrens.toString());
-            data.append("endDate", pets.toString());
+            data.append("pets", pets.toString());
             data.append("cost", cost.toString());
             mutation.mutate(data);
         } else {

@@ -39,7 +39,7 @@ const HeaderUserBox = () => {
                         <ul className={s.user__list}>
                             <li className={s.user__list_item}>
                                 <Link
-                                    to={"/"}
+                                    to={"/my-apartments"}
                                     className={s.user__item_link}
                                     onClick={() => setMenu(false)}
                                 >

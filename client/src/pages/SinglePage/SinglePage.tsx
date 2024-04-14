@@ -12,7 +12,7 @@ import { PiTelevisionSimpleBold } from "react-icons/pi";
 import { FaThermometerThreeQuarters } from "react-icons/fa";
 import { LuRefrigerator } from "react-icons/lu";
 import { BiSolidDryer } from "react-icons/bi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuBedSingle } from "react-icons/lu";
 import { LuBedDouble } from "react-icons/lu";
 import { BiSolidBath } from "react-icons/bi";
@@ -58,6 +58,10 @@ const SinglePage = () => {
     if (isLoading) {
         <Loader />;
     }
+
+    useEffect(() => {
+        setIsLiked(data?.data.liked || false);
+    }, [data]);
 
     return (
         <div className={s.rooms}>

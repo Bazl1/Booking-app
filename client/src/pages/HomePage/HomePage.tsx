@@ -61,6 +61,7 @@ const HomePage = () => {
                                             images={product.photos}
                                             title={product.name}
                                             pricePerNight={product.pricePerNight}
+                                            liked={product.liked}
                                         />
                                     );
                                 })

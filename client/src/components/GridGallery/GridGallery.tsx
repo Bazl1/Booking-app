@@ -58,6 +58,7 @@ const GridGallery = ({ gallery, setGallery }: GridGalleryProps) => {
         e.preventDefault();
         const newGallery = gallery.filter((_: File, index: number) => index !== id);
         const newStrGallery = strGallery.filter((_: string, index: number) => index !== id);
+        //old str gallery
         setGallery(newGallery);
         setStrGallery(newStrGallery);
     };
