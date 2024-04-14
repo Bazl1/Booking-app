@@ -24,6 +24,14 @@ export default class ProductsService {
         return $Api.get<IProduct>(`/adverts/${id}`);
     }
 
+    static deleteProduct(id: string) {
+        return $Api.delete(`adverts/${id}`);
+    }
+
+    static changeProduct(id: string) {
+        return $Api.put(`adverts/${id}`);
+    }
+
     static toggleFavorite(id: string): Promise<AxiosResponse<{ result: boolean }>> {
         return $Api.put<{ result: boolean }>(`/adverts/${id}/like`);
     }
