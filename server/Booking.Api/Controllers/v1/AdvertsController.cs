@@ -18,7 +18,7 @@ public class AdvertsController(
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Create(
+    public async Task<IActionResult> Delete(
         [FromRoute] string id
     )
     {

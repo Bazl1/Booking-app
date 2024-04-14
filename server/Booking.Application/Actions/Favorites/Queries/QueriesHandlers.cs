@@ -32,10 +32,13 @@ public class QueriesHandlers(
         var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = unitOfWork.Users.GetById(userId);
         return new(
-            mapper.Map<IEnumerable<AdvertDto>>(user.Likes, opt =>
-            {
-                opt.Items["USER_LIKES"] = user.Likes;
-            }),
+            mapper.Map<IEnumerable<AdvertDto>>(
+                user.Likes.Skip((request.Page - 1) * request.Limit).Take(request.Limit),
+                opt =>
+                {
+                    opt.Items["USER_LIKES"] = user.Likes;
+                }
+            ),
             (int)Math.Ceiling((double)user.Likes.Count / (double)request.Limit)
         );
     }
