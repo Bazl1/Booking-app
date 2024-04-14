@@ -47,7 +47,11 @@ public class CommandsHandler(
         unitOfWork.Adverts.Create(advert);
         unitOfWork.SaveChanges();
 
-        return mapper.Map<AdvertDto>(advert, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}");
+        return mapper.Map<AdvertDto>(advert, opt =>
+        {
+            opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}";
+            opt.Items["USER_LIKES"] = user.Likes;
+        });
     }
 
     public async Task Handle(Delete.Request request, CancellationToken cancellationToken)
@@ -73,6 +77,7 @@ public class CommandsHandler(
     public async Task<AdvertDto> Handle(Update.Request request, CancellationToken cancellationToken)
     {
         var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = unitOfWork.Users.GetById(userId);
 
         if (unitOfWork.Adverts.GetById(request.Id) is not Advert advert)
             throw new BookingError(
@@ -125,7 +130,11 @@ public class CommandsHandler(
 
         unitOfWork.SaveChanges();
 
-        return mapper.Map<AdvertDto>(advert, opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}");
+        return mapper.Map<AdvertDto>(advert, opt =>
+        {
+            opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}";
+            opt.Items["USER_LIKES"] = user.Likes;
+        });
     }
 
     public async Task<Like.Response> Handle(Like.Request request, CancellationToken cancellationToken)

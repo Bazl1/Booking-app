@@ -15,6 +15,7 @@ public class AdvertDto
     public List<string> Photos { get; set; } = new();
     public CategoryDto Category { get; set; }
     public int Rating { get; set; } = 0;
+    public bool Liked { get; set; } = false;
 }
 
 public class Amenities

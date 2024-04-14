@@ -2,6 +2,9 @@ using Booking.Api.Middlewares;
 using Booking.Application;
 using Booking.Infrastructure;
 using Booking.Infrastructure.Persistence.Seeds;
+using System.Globalization;
+
+CultureInfo.CurrentCulture = new CultureInfo("en-GB");
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -10,6 +10,7 @@ public class AdvertProfile : Profile
     {
         CreateMap<Advert, AdvertDto>()
             .ForMember(dest => dest.Photos, opt => opt.MapFrom((src, dest, destMember, context) => src.Photos.Select(photo => $"{context.Items["BASE_URL"]}/{photo}")))
+            .ForMember(dest => dest.Liked, opt => opt.MapFrom((src, dest, destMember, context) => (context.Items["USER_LIKES"] as IEnumerable<Advert> ?? new List<Advert>()).Any(a => a.Id == src.Id)))
             .ForMember(dest => dest.Amenities, opt => opt.MapFrom(src => new Amenities
             {
                 Wifi = src.Wifi,
