@@ -116,7 +116,7 @@ public class CommandsHandler(
         {
             foreach (var photo in request.Urls)
             {
-                var photoFileName = photo.Substring(photo.LastIndexOf("/"));
+                var photoFileName = photo.Substring(photo.LastIndexOf("/") + 1);
                 if (!advert.Photos.Contains(photoFileName))
                 {
                     imageService.Remove(photoFileName);
