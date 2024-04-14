@@ -18,9 +18,16 @@ import getMaximumCapacity from "@/shared/utils/getMaximumCapacity";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import ProductsService from "@/services/ProductsService";
+import { useParams } from "react-router-dom";
+import { IProduct } from "@/types/IProduct";
 
 const ChangeProductPage = () => {
+    const { id } = useParams();
+    const idStr = id || "";
+
+    const [oldData, setOldData] = useState<IProduct>({} as IProduct);
     const [gallery, setGallery] = useState<File[]>([]);
+    const [oldGallery, setOldGallery] = useState<string[]>([]);
     const [productTitle, setProductTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
     const [price, setPrice] = useState<number>(0);
@@ -40,11 +47,11 @@ const ChangeProductPage = () => {
     });
 
     const queryClient = useQueryClient();
-    const mutation = useMutation((data: FormData) => ProductsService.createProduct(data), {
-        onSuccess: () => {
-            queryClient.invalidateQueries(["products"]);
-        },
-    });
+    // const mutation = useMutation((data: FormData) => ProductsService.createProduct(data), {
+    //     onSuccess: () => {
+    //         queryClient.invalidateQueries(["products"]);
+    //     },
+    // });
 
     const handleEditorChange = (content: any) => {
         setContent(content);
@@ -83,7 +90,7 @@ const ChangeProductPage = () => {
                             return data.append("Photos", image);
                         });
 
-                        mutation.mutate(data);
+                        // mutation.mutate(data);
                         toast.success("Successfully created");
                     } catch (error) {
                         console.log(error);
@@ -105,7 +112,18 @@ const ChangeProductPage = () => {
 
     useEffect(() => {
         CategoriesService.getCategories().then((res) => setCategories(res.data));
+        ProductsService.getProductById(idStr).then((res) => setOldData(res.data));
     }, []);
+
+    useEffect(() => {
+        setOldGallery(oldData.photos);
+        setProductTitle(oldData.name);
+        setContent(oldData.description);
+        setPrice(oldData.pricePerNight);
+        setCountBed(oldData.numberOfSingleBeds);
+        setCountBedDouble(oldData.numberOfDoubleBeds);
+        setCountBathrooms(oldData.numberOfBathrooms);
+    }, [oldData]);
 
     return (
         <section className={s.product}>

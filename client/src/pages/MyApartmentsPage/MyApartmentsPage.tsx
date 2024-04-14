@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import s from "./MyApartmentsPage.module.scss";
 import { FaTrash } from "react-icons/fa6";
 import { FaPencilAlt } from "react-icons/fa";
@@ -8,6 +8,8 @@ import ProductsService from "@/services/ProductsService";
 import Loader from "@/components/Loader/Loader";
 import { useUserStore } from "@/store";
 import { IProduct } from "@/types/IProduct";
+import toast from "react-hot-toast";
+import Pagination from "@/components/Pagination/Pagination";
 
 const MyApartmentsPage = () => {
     const [activePage, setActivePage] = useState<number>(1);
@@ -17,6 +19,17 @@ const MyApartmentsPage = () => {
     const { isLoading, data } = useQuery(["MyProducts", activePage], () =>
         ProductsService.getMyProducts(userId, activePage, 12),
     );
+
+    const navigate = useNavigate();
+
+    const handleDeleteProduct = async (id: string) => {
+        try {
+            await ProductsService.deleteProduct(id);
+            toast.success("The product has been successfully removed");
+        } catch (error: any) {
+            throw Error(error.message);
+        }
+    };
 
     if (isLoading) {
         <Loader />;
@@ -50,10 +63,18 @@ const MyApartmentsPage = () => {
                                             </p>
                                         </Link>
                                         <div className={s.apartments__btns}>
-                                            <button className={s.apartments__btn}>
+                                            <button
+                                                className={s.apartments__btn}
+                                                onClick={() =>
+                                                    navigate(`/change-product/${product.id}`)
+                                                }
+                                            >
                                                 <FaPencilAlt />
                                             </button>
-                                            <button className={s.apartments__btn}>
+                                            <button
+                                                className={s.apartments__btn}
+                                                onClick={() => handleDeleteProduct(product.id)}
+                                            >
                                                 <FaTrash />
                                             </button>
                                         </div>
@@ -61,6 +82,11 @@ const MyApartmentsPage = () => {
                                 );
                             })}
                     </div>
+                    <Pagination
+                        activePage={activePage}
+                        setActivePage={setActivePage}
+                        pageCount={data?.data.pageCount || 0}
+                    />
                 </div>
             </div>
         </section>
