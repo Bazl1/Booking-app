@@ -114,7 +114,7 @@ internal class CommandsHandler(
                 "Reservation has already been canceled"
             );
 
-        reservation.Status = Core.Enums.ReservationStatus.Accepted;
+        reservation.Status = Core.Enums.ReservationStatus.Rejected;
         unitOfWork.SaveChanges();
 
         return Task.CompletedTask;
