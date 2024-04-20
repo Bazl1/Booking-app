@@ -51,6 +51,12 @@ internal class CommandsHandler(
                 "Adver with given id is not found"
             );
 
+        if (unitOfWork.Reservations.GetByAdvertId(advert.Id, start: startDate, end: endDate).Any())
+            throw new BookingError(
+                BookingErrorType.NOT_FOUND,
+                $"Date has already been booked"
+            );
+
         var reservation = Reservation.Create(
             user,
             advert,
