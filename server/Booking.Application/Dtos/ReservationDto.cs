@@ -5,6 +5,7 @@
 public class ReservationDto
 {
     public string Id { get; set; }
+    public string AdvertId { get; set; }
     public string Title { get; set; }
     public string Poster { get; set; }
     public UserDto Author { get; set; }
