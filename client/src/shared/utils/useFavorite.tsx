@@ -12,6 +12,7 @@ const useHandleFavorite = (id: string) => {
         if (isAuth) {
             const response = await ProductsService.toggleFavorite(id);
             queryClient.invalidateQueries(["products"]);
+            queryClient.invalidateQueries(["favorites"]);
             toast.success("The product has been successfully added to your favorites");
             return response.data.result;
         } else {

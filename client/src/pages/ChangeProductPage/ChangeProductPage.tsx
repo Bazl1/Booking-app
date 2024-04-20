@@ -1,10 +1,9 @@
-import s from "./CreateProductPage.module.scss";
+import s from "./ChangeProductPage.module.scss";
 import { useEffect, useMemo, useState } from "react";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 import TextInput from "@/components/TextInput/TextInput";
 import { useForm } from "react-hook-form";
-import GridGallery from "@/components/GridGallery/GridGallery";
 import { Editor } from "@tinymce/tinymce-react";
 import CategoriesService from "@/services/CategoriesService";
 import { ICategory } from "@/types/ICategory";
@@ -20,6 +19,7 @@ import toast from "react-hot-toast";
 import ProductsService from "@/services/ProductsService";
 import { useParams } from "react-router-dom";
 import { IProduct } from "@/types/IProduct";
+import GridChangeGallery from "@/components/GridChangeGallery/GridChangeGallery";
 
 const ChangeProductPage = () => {
     const { id } = useParams();
@@ -41,17 +41,19 @@ const ChangeProductPage = () => {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm({
         mode: "onBlur",
     });
 
     const queryClient = useQueryClient();
-    // const mutation = useMutation((data: FormData) => ProductsService.createProduct(data), {
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries(["products"]);
-    //     },
-    // });
+    const mutation = useMutation((data: FormData) => ProductsService.changeProduct(idStr, data), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["products"]);
+            queryClient.invalidateQueries(["product", idStr]);
+        },
+    });
 
     const handleEditorChange = (content: any) => {
         setContent(content);
@@ -69,7 +71,7 @@ const ChangeProductPage = () => {
     };
 
     const Submit = () => {
-        if (gallery.length >= 4) {
+        if (gallery.length + oldGallery.length >= 4) {
             if (activeCategory !== "") {
                 if (countBed > 0 || countBedDouble > 0) {
                     try {
@@ -86,12 +88,15 @@ const ChangeProductPage = () => {
                         amenities.forEach((item: IAmenities) => {
                             return data.append(item.name, item.value.toString());
                         });
+                        oldGallery.forEach((image: string) => {
+                            return data.append("Urls", image);
+                        });
                         gallery.forEach((image: File) => {
                             return data.append("Photos", image);
                         });
 
-                        // mutation.mutate(data);
-                        toast.success("Successfully created");
+                        mutation.mutate(data);
+                        toast.success("Successful change");
                     } catch (error) {
                         console.log(error);
                     }
@@ -116,13 +121,18 @@ const ChangeProductPage = () => {
     }, []);
 
     useEffect(() => {
-        setOldGallery(oldData.photos);
-        setProductTitle(oldData.name);
-        setContent(oldData.description);
-        setPrice(oldData.pricePerNight);
-        setCountBed(oldData.numberOfSingleBeds);
-        setCountBedDouble(oldData.numberOfDoubleBeds);
-        setCountBathrooms(oldData.numberOfBathrooms);
+        if (oldData) {
+            setOldGallery(oldData.photos || []);
+            setProductTitle(oldData.name);
+            setContent(oldData.description);
+            setPrice(oldData.pricePerNight);
+            setCountBed(oldData.numberOfSingleBeds);
+            setCountBedDouble(oldData.numberOfDoubleBeds);
+            setCountBathrooms(oldData.numberOfBathrooms);
+
+            setValue("productTitle", oldData.name, { shouldDirty: true });
+            setValue("price", oldData.name, { shouldDirty: true });
+        }
     }, [oldData]);
 
     return (
@@ -157,6 +167,7 @@ const ChangeProductPage = () => {
                                 menubar: false,
                             }}
                             onEditorChange={handleEditorChange}
+                            value={content}
                         />
                         <div className={s.product__line}></div>
                         <h3 className={s.product__subtitle}>
@@ -250,7 +261,12 @@ const ChangeProductPage = () => {
                         </div>
                         <div className={s.product__line}></div>
                         <h3 className={s.product__subtitle}>Add images to the gallery</h3>
-                        <GridGallery gallery={gallery} setGallery={setGallery} />
+                        <GridChangeGallery
+                            gallery={gallery}
+                            setGallery={setGallery}
+                            oldGallery={oldGallery}
+                            setOldGallery={setOldGallery}
+                        />
                         <button className={s.product__btn} type="submit">
                             Change
                         </button>

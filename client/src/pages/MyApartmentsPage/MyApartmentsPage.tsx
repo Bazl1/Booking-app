@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import s from "./MyApartmentsPage.module.scss";
 import { FaTrash } from "react-icons/fa6";
 import { FaPencilAlt } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import ProductsService from "@/services/ProductsService";
 import Loader from "@/components/Loader/Loader";
@@ -16,6 +16,7 @@ const MyApartmentsPage = () => {
 
     const userId = useUserStore((state) => state.user.id);
 
+    const queryClient = useQueryClient();
     const { isLoading, data } = useQuery(["MyProducts", activePage], () =>
         ProductsService.getMyProducts(userId, activePage, 12),
     );
@@ -25,6 +26,7 @@ const MyApartmentsPage = () => {
     const handleDeleteProduct = async (id: string) => {
         try {
             await ProductsService.deleteProduct(id);
+            queryClient.invalidateQueries(["MyProducts", activePage]);
             toast.success("The product has been successfully removed");
         } catch (error: any) {
             throw Error(error.message);

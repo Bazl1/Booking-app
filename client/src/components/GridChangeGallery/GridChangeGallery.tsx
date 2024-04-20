@@ -1,4 +1,4 @@
-import s from "./GridGallery.module.scss";
+import s from "./GridChangeGallery.module.scss";
 import toast from "react-hot-toast";
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -78,7 +78,8 @@ const GridChangeGallery = ({
 
     return (
         <div className={s.product__gallery}>
-            {strGallery.length > 0 &&
+            {strGallery &&
+                strGallery.length > 0 &&
                 strGallery.map((item, index) => {
                     return (
                         <div
@@ -97,7 +98,8 @@ const GridChangeGallery = ({
                     );
                 })}
 
-            {oldGallery.length > 0 &&
+            {oldGallery &&
+                oldGallery.length > 0 &&
                 oldGallery.map((item, index) => {
                     return (
                         <div
