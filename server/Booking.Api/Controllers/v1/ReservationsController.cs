@@ -19,7 +19,7 @@ public class ReservationsController(
     )
     {
         await mediator.Send(request);
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet]
@@ -28,21 +28,23 @@ public class ReservationsController(
         [FromQuery] ReservationStatus? status = null
     )
     {
-        return Ok(new ReservationsQueries.GetAll.Request(type, status));
+        return Ok(await mediator.Send(new ReservationsQueries.GetAll.Request(type, status)));
     }
 
     [HttpPut("{id}/reject")]
     public async Task<IActionResult> Reject(
         [FromRoute] string id)
     {
-        return Ok(new ReservationsCommands.Reject.Request(id));
+        await mediator.Send(new ReservationsCommands.Reject.Request(id));
+        return NoContent();
     }
 
     [HttpPut("{id}/accept")]
     public async Task<IActionResult> Accept(
         [FromRoute] string id)
     {
-        return Ok(new ReservationsCommands.Accept.Request(id));
+        await mediator.Send(new ReservationsCommands.Accept.Request(id));
+        return NoContent();
     }
 
     [HttpGet("dates")]

@@ -36,6 +36,7 @@ public class ReservationRepository(
             .Include(r => r.Author)
             .Include(r => r.Advert)
             .Where(r => r.AdvertId == advertId &&
+                r.Status == ReservationStatus.Accepted &&
                 (start == null || r.StartDate >= start) &&
                 (end == null || r.EndDate <= end)
             );
