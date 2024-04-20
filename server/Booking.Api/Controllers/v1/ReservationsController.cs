@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationsCommands = Booking.Application.Actions.Reservations.Commands;
 using ReservationsQueries = Booking.Application.Actions.Reservations.Queries;
-//test
 
 [ApiController]
 [Authorize]
