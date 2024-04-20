@@ -5,5 +5,5 @@ namespace Booking.Core.Repositories;
 
 public interface IReviewRepository : IRepository<Review>
 {
-
+    IEnumerable<Review> GetByAdvertId(string advertId);
 }
