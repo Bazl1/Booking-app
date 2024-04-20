@@ -28,8 +28,10 @@ public class QueriesHandler(
             );
 
         var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var user = unitOfWork.Users.GetById(userId);
-
+        User? user = null;
+        if (userId != null)
+            user = unitOfWork.Users.GetById(userId);
+        
         var author = new UserDto
         {
             Id = Guid.NewGuid().ToString(),
@@ -103,7 +105,7 @@ public class QueriesHandler(
             reviews,
             mapper.Map<CategoryDto>(advert.Category),
             0,
-            user.Likes.Any(a => a.Id == advert.Id)
+            user != null ? user.Likes.Any(a => a.Id == advert.Id) : false
         );
     }
 
@@ -123,7 +125,6 @@ public class QueriesHandler(
         var adverts = unitOfWork.Adverts.Search(request.Query, request.UserId).ToList();
 
         var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var user = unitOfWork.Users.GetById(userId);
 
         return new(
             mapper.Map<IEnumerable<AdvertDto>>(
@@ -133,7 +134,11 @@ public class QueriesHandler(
                 opt =>
                 {
                     opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}";
-                    opt.Items["USER_LIKES"] = user.Likes;
+                    if (userId != null)
+                    {
+                        var user = unitOfWork.Users.GetById(userId);
+                        opt.Items["USER_LIKES"] = user.Likes;
+                    }
                 }
             ),
             (int)Math.Ceiling((double)adverts.Count / (double)request.Limit)
