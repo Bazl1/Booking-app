@@ -41,6 +41,7 @@ const ChangeProductPage = () => {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm({
         mode: "onBlur",
@@ -95,7 +96,7 @@ const ChangeProductPage = () => {
                         });
 
                         mutation.mutate(data);
-                        toast.success("Successfully created");
+                        toast.success("Successful change");
                     } catch (error) {
                         console.log(error);
                     }
@@ -128,6 +129,9 @@ const ChangeProductPage = () => {
             setCountBed(oldData.numberOfSingleBeds);
             setCountBedDouble(oldData.numberOfDoubleBeds);
             setCountBathrooms(oldData.numberOfBathrooms);
+
+            setValue("productTitle", oldData.name, { shouldDirty: true });
+            setValue("price", oldData.name, { shouldDirty: true });
         }
     }, [oldData]);
 
