@@ -7,9 +7,6 @@ using Booking.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-// tetst
-
-
 namespace Booking.Application.Actions.Adverts.Queries;
 
 public class QueriesHandler(
