@@ -13,4 +13,5 @@ public class ReservationDto
     public int NumberOfDays { get; set; }
     public float Cost { get; set; }
     public int NumberOfPeople { get; set; }
+    public string Status { get; set; }
 }
