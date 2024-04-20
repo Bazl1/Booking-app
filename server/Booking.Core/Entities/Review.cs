@@ -8,15 +8,19 @@ public class Review : EntityBase
     public int Stars { get; set; }
     public string AuthorId { get; set; }
     public User? Author { get; set; }
+    public string AdvertId { get; set; }
+    public Advert? Advert { get; set; }
 
-    public static Review Create(string description, int stars, User author)
+    public static Review Create(string description, int stars, User author, Advert advert)
     {
         return new Review
         {
             Description = description,
             Stars = stars,
             AuthorId = author.Id,
-            Author = author
+            Author = author,
+            AdvertId = advert.Id,
+            Advert = advert
         };
     }
 }
