@@ -53,7 +53,7 @@ internal class CommandsHandler(
 
         if (unitOfWork.Reservations.GetByAdvertId(advert.Id, start: startDate, end: endDate).Any())
             throw new BookingError(
-                BookingErrorType.NOT_FOUND,
+                BookingErrorType.VALIDATION_ERROR,
                 $"Date has already been booked"
             );
 
