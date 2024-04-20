@@ -39,4 +39,8 @@ export default class ProductsService {
     static getFavorites(page: number, limit: number): Promise<AxiosResponse<ProductsResponse>> {
         return $Api.get<ProductsResponse>(`/favorites?page=${page}&limit=${limit}`);
     }
+
+    static createReview(data: FormData): Promise<void> {
+        return $Api.post("/reviews", data);
+    }
 }

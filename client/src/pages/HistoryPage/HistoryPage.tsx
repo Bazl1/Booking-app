@@ -5,9 +5,13 @@ import BookingService from "@/services/BookingService";
 import Loader from "@/components/Loader/Loader";
 import { MdOutlineRateReview } from "react-icons/md";
 import styles from "./HistoryPage.module.scss";
+import PopupReviews from "@/components/PopupReviews/PopupReviews";
+import { createPortal } from "react-dom";
 
 const HistoryPage = () => {
     const [data, setData] = useState<IOrderProduct[]>();
+    const [open, setOpen] = useState<boolean>(false);
+    const [productId, setProductId] = useState<string>("");
 
     const { isLoading, data: historyData } = useQuery(["products"], () =>
         BookingService.getMyHistory(),
@@ -32,44 +36,55 @@ const HistoryPage = () => {
     }
 
     return (
-        <section className={styles.history}>
-            <div className="container">
-                <div className={styles.history__inner}>
-                    <h2 className={styles.history__title}>My history</h2>
-                    <div className={styles.history__items}>
-                        {data &&
-                            data.length > 0 &&
-                            data.map((item: IOrderProduct) => {
-                                return (
-                                    <div key={item.id} className={styles.history__item}>
-                                        <img
-                                            className={styles.history__poster}
-                                            src={item.poster}
-                                            alt="poster"
-                                        />
-                                        <div className={styles.history__columns}>
-                                            <h3 className={styles.history__item_title}>
-                                                {item.title}
-                                            </h3>
-                                            <div className={styles.history__cost}>${item.cost}</div>
-                                        </div>
-                                        <div className={styles.history__row}>
-                                            {item.status === "Accepted" && (
-                                                <button className={styles.history__review_btn}>
-                                                    <MdOutlineRateReview />
-                                                </button>
-                                            )}
-                                            <div className={`${handleStatus(item.status)}`}>
-                                                {item.status}
+        <>
+            <section className={styles.history}>
+                <div className="container">
+                    <div className={styles.history__inner}>
+                        <h2 className={styles.history__title}>My history</h2>
+                        <div className={styles.history__items}>
+                            {data &&
+                                data.length > 0 &&
+                                data.map((item: IOrderProduct) => {
+                                    return (
+                                        <div key={item.id} className={styles.history__item}>
+                                            <img
+                                                className={styles.history__poster}
+                                                src={item.poster}
+                                                alt="poster"
+                                            />
+                                            <div className={styles.history__columns}>
+                                                <h3 className={styles.history__item_title}>
+                                                    {item.title}
+                                                </h3>
+                                                <div className={styles.history__cost}>
+                                                    ${item.cost}
+                                                </div>
+                                            </div>
+                                            <div className={styles.history__row}>
+                                                {item.status === "Accepted" && (
+                                                    <button
+                                                        className={styles.history__review_btn}
+                                                        onClick={() => {
+                                                            setProductId(item.advertId);
+                                                            setOpen(true);
+                                                        }}
+                                                    >
+                                                        <MdOutlineRateReview />
+                                                    </button>
+                                                )}
+                                                <div className={`${handleStatus(item.status)}`}>
+                                                    {item.status}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+            {open && createPortal(<PopupReviews setOpen={setOpen} id={productId} />, document.body)}
+        </>
     );
 };
 
