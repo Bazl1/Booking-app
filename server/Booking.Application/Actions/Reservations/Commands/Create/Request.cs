@@ -8,6 +8,7 @@ public record Request(
     string EndDate,
     int NumberOfAdults,
     int NumberOfChildren,
+    float Cost,
     bool Pets
 ) : IRequest
 {

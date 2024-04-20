@@ -1,4 +1,5 @@
 using Booking.Core.Common;
+using Booking.Core.Enums;
 
 namespace Booking.Core.Entities;
 
@@ -13,8 +14,10 @@ public class Reservation : EntityBase
     public int NumberOfAdults { get; set; }
     public int NumberOfChildren { get; set; }
     public bool Pets { get; set; }
+    public ReservationStatus Status { get; set; }
+    public float Cost { get; set; }
 
-    public static Reservation Create(User author, Advert advert, DateOnly startDate, DateOnly endDate, int numberOfAdults, int numberOfChildren, bool pets)
+    public static Reservation Create(User author, Advert advert, DateOnly startDate, DateOnly endDate, int numberOfAdults, int numberOfChildren, bool pets, float cost)
     {
         return new Reservation
         {
@@ -27,6 +30,8 @@ public class Reservation : EntityBase
             NumberOfAdults = numberOfAdults,
             NumberOfChildren = numberOfChildren,
             Pets = pets,
+            Status = ReservationStatus.Waiting,
+            Cost = cost
         };
     }
 }
