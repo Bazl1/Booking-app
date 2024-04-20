@@ -133,7 +133,7 @@ public class QueriesHandler(
         List<string> dates = new();
         for (var curDate = startDate; curDate <= endDate; curDate = curDate.AddDays(1))
             if (reservations.Any(r => r.StartDate <= curDate && curDate <= r.EndDate))
-                dates.Add(curDate.ToString("dd'/MM'/yy"));
+                dates.Add(curDate.ToString(@"dd/MM/yy"));
         return new(dates);
     }
 }
