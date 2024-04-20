@@ -26,4 +26,8 @@ export default class BookingService {
     static rejectOrder(id: string): Promise<void> {
         return $Api.put(`/reservations/${id}/reject `);
     }
+
+    static getMyHistory(): Promise<AxiosResponse<OrdersResponse>> {
+        return $Api.get<OrdersResponse>("/reservations?type=history");
+    }
 }

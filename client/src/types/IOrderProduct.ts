@@ -10,4 +10,5 @@ export interface IOrderProduct {
     numberOfDays: number;
     cost: number;
     numberOfPeople: number;
+    status: string;
 }

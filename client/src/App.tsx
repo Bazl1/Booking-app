@@ -13,6 +13,7 @@ const FavoritePage = lazy(() => import("./pages/FavoritePage/FavoritePage"));
 const MyApartmentsPage = lazy(() => import("./pages/MyApartmentsPage/MyApartmentsPage"));
 const ChangeProductPage = lazy(() => import("./pages/ChangeProductPage/ChangeProductPage"));
 const MyOrderPage = lazy(() => import("./pages/MyOrdersPage/MyOrdersPage"));
+const HistoryPage = lazy(() => import("./pages/HistoryPage/HistoryPage"));
 
 function App() {
     const refresh = useUserStore((state) => state.refresh);
@@ -43,7 +44,14 @@ function App() {
                             </MainLayout>
                         }
                     />
-
+                    <Route
+                        path="/history"
+                        element={
+                            <MainLayout>
+                                <HistoryPage />
+                            </MainLayout>
+                        }
+                    />
                     <Route
                         path="/my-orders"
                         element={
