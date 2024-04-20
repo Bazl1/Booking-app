@@ -33,18 +33,21 @@ const ReserveForm = ({ price, productId, maxPeoples, petsAllowed }: ReserveFormP
     const mutation = useMutation((data: FormData) => BookingService.createBooking(data), {
         onSuccess: () => {
             queryClient.invalidateQueries(["products"]);
+            toast.success("You have sent a reservation request");
+        },
+        onError: (error: any) => {
+            toast.error(error.response.data.error.message);
         },
     });
 
     const Submit = async (e: any) => {
         e.preventDefault();
         if (startDate !== "" && endDate !== "") {
-            for (let i = 0; i < bookedArray.length; i++) {
-                const date = dayjs(bookedArray[i], "DD/MM/YY");
-                if (date > startDate.format("DD/MM/YY") && date < endDate.format("DD/MM/YY")) {
-                    toast.error(`The date of ${bookedArray[i]} is already booked`);
-                    throw new Error(`The date of ${bookedArray[i]} is already booked`);
-                }
+            if (childrens > 0 && adults <= 0) {
+                return toast.error("Children must be in the presence of adults");
+            }
+            if (adults <= 0) {
+                return toast.error("The number of people can't be zero");
             }
             if (adults + childrens > maxPeoples) {
                 return toast.error("You've exceeded the maximum number of people");
@@ -61,7 +64,6 @@ const ReserveForm = ({ price, productId, maxPeoples, petsAllowed }: ReserveFormP
             data.append("pets", pets.toString());
             data.append("cost", cost.toString());
             await mutation.mutate(data);
-            toast.success("You have sent a reservation request");
         } else {
             toast.error("Select both dates");
             return;

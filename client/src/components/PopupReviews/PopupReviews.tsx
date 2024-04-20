@@ -27,12 +27,13 @@ const PopupReviews = ({ setOpen, id }: PopupReviewsProps) => {
         try {
             const data = new FormData();
 
-            data.append("advertId ", id);
-            data.append("stars", stars.toString());
-            data.append("description", text);
+            data.append("AdvertId", id);
+            data.append("Description", text);
+            data.append("Stars", stars.toString());
 
             await ProductsService.createReview(data);
             toast.success("Testimonial created");
+            setOpen(false);
         } catch (error) {
             toast.error("Error creating a review ");
         }
@@ -48,7 +49,7 @@ const PopupReviews = ({ setOpen, id }: PopupReviewsProps) => {
                             <IoClose />
                         </button>
                     </div>
-                    <form className={styles.review__form} onSubmit={() => handleSubmit(onSubmit)}>
+                    <form className={styles.review__form} onSubmit={handleSubmit(onSubmit)}>
                         <TextInput
                             type="number"
                             register={register}
@@ -59,11 +60,11 @@ const PopupReviews = ({ setOpen, id }: PopupReviewsProps) => {
                             errors={errors}
                             validationOptions={{
                                 required: "Required field",
-                                minLength: {
+                                min: {
                                     value: 1,
                                     message: "Minimum 1 star",
                                 },
-                                maxLength: {
+                                max: {
                                     value: 5,
                                     message: "Maximum 5 stars",
                                 },
@@ -79,6 +80,14 @@ const PopupReviews = ({ setOpen, id }: PopupReviewsProps) => {
                             errors={errors}
                             validationOptions={{
                                 required: "Required field",
+                                minLength: {
+                                    value: 10,
+                                    message: "The minimum length of a review is 10 characters",
+                                },
+                                maxLength: {
+                                    value: 300,
+                                    message: "The maximum length of a review is 300 characters",
+                                },
                             }}
                         />
                         <button className={styles.review__btn}>Create a review</button>
