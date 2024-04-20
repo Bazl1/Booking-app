@@ -1,5 +1,5 @@
-using System.ComponentModel;
 using Booking.Core.Entities;
+using Booking.Core.Enums;
 using Booking.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +38,26 @@ public class ReservationRepository(
             .Where(r => r.AdvertId == advertId &&
                 (start == null || r.StartDate >= start) &&
                 (end == null || r.EndDate <= end)
+            );
+    }
+
+    public IEnumerable<Reservation> GetHistory(string userId, ReservationStatus? status = null)
+    {
+        return bookingDbContext.Reservations
+            .Include(r => r.Author)
+            .Include(r => r.Advert)
+            .Where(r => r.AuthorId == userId &&
+                (status == null || r.Status == status)
+            );
+    }
+
+    public IEnumerable<Reservation> GetOrders(string userId, ReservationStatus? status = null)
+    {
+        return bookingDbContext.Reservations
+            .Include(r => r.Author)
+            .Include(r => r.Advert)
+            .Where(r => r.Advert.OwnerId == userId &&
+                (status == null || r.Status == status)
             );
     }
 }

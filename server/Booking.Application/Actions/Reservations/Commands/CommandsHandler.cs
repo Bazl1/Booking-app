@@ -10,11 +10,13 @@ namespace Booking.Application.Actions.Reservations.Commands;
 internal class CommandsHandler(
     IUnitOfWork unitOfWork,
     IHttpContextAccessor httpContextAccessor
-) : IRequestHandler<Create.Request>
+) : IRequestHandler<Create.Request>,
+    IRequestHandler<Accept.Request>,
+    IRequestHandler<Reject.Request>
 {
     private HttpContext? Context => httpContextAccessor.HttpContext;
 
-    public async Task Handle(Create.Request request, CancellationToken cancellationToken)
+    public Task Handle(Create.Request request, CancellationToken cancellationToken)
     {
         var userId = Context?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = unitOfWork.Users.GetById(userId);
@@ -56,10 +58,65 @@ internal class CommandsHandler(
             endDate,
             request.NumberOfAdults,
             request.NumberOfChildren,
-            request.Pets
+            request.Pets,
+            request.Cost
         );
 
         unitOfWork.Reservations.Create(reservation);
         unitOfWork.SaveChanges();
+
+        return Task.CompletedTask;
+    }
+
+    public Task Handle(Accept.Request request, CancellationToken cancellationToken)
+    {
+        if (unitOfWork.Reservations.GetById(request.id) is not Reservation reservation)
+            throw new BookingError(
+                BookingErrorType.NOT_FOUND,
+                "Reservation request with given id is not found"
+            );
+
+        if (reservation.Status == Core.Enums.ReservationStatus.Accepted)
+            throw new BookingError(
+                BookingErrorType.VALIDATION_ERROR,
+                "Reservation has already been confirmed"
+            );
+
+        if (reservation.Status == Core.Enums.ReservationStatus.Rejected)
+            throw new BookingError(
+                BookingErrorType.VALIDATION_ERROR,
+                "Reservation has already been canceled"
+            );
+
+        reservation.Status = Core.Enums.ReservationStatus.Accepted;
+        unitOfWork.SaveChanges();
+
+        return Task.CompletedTask;
+    }
+
+    public Task Handle(Reject.Request request, CancellationToken cancellationToken)
+    {
+        if (unitOfWork.Reservations.GetById(request.id) is not Reservation reservation)
+            throw new BookingError(
+                BookingErrorType.NOT_FOUND,
+                "Reservation request with given id is not found"
+            );
+
+        if (reservation.Status == Core.Enums.ReservationStatus.Accepted)
+            throw new BookingError(
+                BookingErrorType.VALIDATION_ERROR,
+                "Reservation has already been confirmed"
+            );
+
+        if (reservation.Status == Core.Enums.ReservationStatus.Rejected)
+            throw new BookingError(
+                BookingErrorType.VALIDATION_ERROR,
+                "Reservation has already been canceled"
+            );
+
+        reservation.Status = Core.Enums.ReservationStatus.Accepted;
+        unitOfWork.SaveChanges();
+
+        return Task.CompletedTask;
     }
 }
