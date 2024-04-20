@@ -139,6 +139,10 @@ public class QueriesHandler(
                         var user = unitOfWork.Users.GetById(userId);
                         opt.Items["USER_LIKES"] = user.Likes;
                     }
+                    else
+                    {
+                        opt.Items["USER_LIKES"] = new List<Advert>();
+                    }
                 }
             ),
             (int)Math.Ceiling((double)adverts.Count / (double)request.Limit)
