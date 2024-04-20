@@ -57,6 +57,15 @@ const HeaderUserBox = () => {
                             </li>
                             <li className={s.user__list_item}>
                                 <Link
+                                    to={"/history"}
+                                    className={s.user__item_link}
+                                    onClick={() => setMenu(false)}
+                                >
+                                    History
+                                </Link>
+                            </li>
+                            <li className={s.user__list_item}>
+                                <Link
                                     to={"/favorite"}
                                     className={s.user__item_link}
                                     onClick={() => setMenu(false)}
