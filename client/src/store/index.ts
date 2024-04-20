@@ -66,6 +66,7 @@ export const useUserStore = create<IUseUserStore>((set) => ({
         try {
             await AuthService.logout();
             set((state) => ({ ...state, isAuth: false, user: {} as IUser }));
+            localStorage.removeItem("token");
         } catch (error) {
             console.log(error);
         }

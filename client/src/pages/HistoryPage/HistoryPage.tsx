@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import styles from "./HistoryPage.module.scss";
-import user from "@/shared/assets/img/user.png";
 import { IOrderProduct } from "@/types/IOrderProduct";
 import { useQuery } from "@tanstack/react-query";
 import BookingService from "@/services/BookingService";
 import Loader from "@/components/Loader/Loader";
+import { MdOutlineRateReview } from "react-icons/md";
+import styles from "./HistoryPage.module.scss";
 
 const HistoryPage = () => {
     const [data, setData] = useState<IOrderProduct[]>();
@@ -53,8 +53,15 @@ const HistoryPage = () => {
                                             </h3>
                                             <div className={styles.history__cost}>${item.cost}</div>
                                         </div>
-                                        <div className={`${handleStatus(item.status)}`}>
-                                            {item.status}
+                                        <div className={styles.history__row}>
+                                            {item.status === "Accepted" && (
+                                                <button className={styles.history__review_btn}>
+                                                    <MdOutlineRateReview />
+                                                </button>
+                                            )}
+                                            <div className={`${handleStatus(item.status)}`}>
+                                                {item.status}
+                                            </div>
                                         </div>
                                     </div>
                                 );

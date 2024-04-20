@@ -14,9 +14,11 @@ dayjs.extend(isBetween);
 interface ReserveFormProps {
     price: number;
     productId: string;
+    maxPeoples: number;
+    petsAllowed: boolean;
 }
 
-const ReserveForm = ({ price, productId }: ReserveFormProps) => {
+const ReserveForm = ({ price, productId, maxPeoples, petsAllowed }: ReserveFormProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const [bookedArray, setBookedArray] = useState<string[]>([]);
     const [startDate, setStartDate] = useState<any>("");
@@ -34,32 +36,32 @@ const ReserveForm = ({ price, productId }: ReserveFormProps) => {
         },
     });
 
-    const Submit = (e: any) => {
+    const Submit = async (e: any) => {
         e.preventDefault();
         if (startDate !== "" && endDate !== "") {
-            // for (let i = 0; i < bookedArray.length; i++) {
-            //     const date = dayjs(bookedArray[i], "DD/MM/YY");
-            //     if (
-            //         date.isBetween(
-            //             startDate.format("DD/MM/YY"),
-            //             endDate.format("DD/MM/YY"),
-            //             null,
-            //             "[]",
-            //         )
-            //     ) {
-            //         toast.error(`The date of ${bookedArray[i]} is already booked`);
-            //         throw new Error(`The date of ${bookedArray[i]} is already booked`);
-            //     }
-            // }
+            for (let i = 0; i < bookedArray.length; i++) {
+                const date = dayjs(bookedArray[i], "DD/MM/YY");
+                if (date > startDate.format("DD/MM/YY") && date < endDate.format("DD/MM/YY")) {
+                    toast.error(`The date of ${bookedArray[i]} is already booked`);
+                    throw new Error(`The date of ${bookedArray[i]} is already booked`);
+                }
+            }
+            if (adults + childrens > maxPeoples) {
+                return toast.error("You've exceeded the maximum number of people");
+            } else if (!petsAllowed && pets) {
+                return toast.error("Pets are not allowed in this apartment");
+            }
+
             const data = new FormData();
             data.append("advertId", productId);
-            data.append("startDate", startDate.format("DD/MM/YY"));
-            data.append("endDate", endDate.format("DD/MM/YY"));
+            data.append("startDate", startDate.format("DD/MM/YYYY"));
+            data.append("endDate", endDate.format("DD/MM/YYYY"));
             data.append("numberOfAdults", adults.toString());
             data.append("numberOfChildren", childrens.toString());
             data.append("pets", pets.toString());
             data.append("cost", cost.toString());
-            mutation.mutate(data);
+            await mutation.mutate(data);
+            toast.success("You have sent a reservation request");
         } else {
             toast.error("Select both dates");
             return;
@@ -76,7 +78,9 @@ const ReserveForm = ({ price, productId }: ReserveFormProps) => {
     }, [startDate, endDate]);
 
     useEffect(() => {
-        BookingService.getBooked(productId, 3, 2024).then((res) => setBookedArray(res.data.dates));
+        BookingService.getBooked(productId, currentMonth + 1, 2024).then((res) =>
+            setBookedArray(res.data.dates),
+        );
     }, [currentMonth]);
 
     return (

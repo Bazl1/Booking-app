@@ -2,9 +2,10 @@ import { IUser } from "./IUser";
 
 export interface IOrderProduct {
     id: string;
+    advertId: string;
     title: string;
     poster: string;
-    user: IUser;
+    author: IUser;
     startDate: string;
     endDate: string;
     numberOfDays: number;

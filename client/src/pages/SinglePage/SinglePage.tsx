@@ -312,7 +312,12 @@ const SinglePage = () => {
                             </div>
                         </div>
                         <div className={s.rooms__columns}>
-                            <ReserveForm productId={idStr} price={data?.data.pricePerNight || 0} />
+                            <ReserveForm
+                                productId={idStr}
+                                price={data?.data.pricePerNight || 0}
+                                maxPeoples={data?.data.maxPeople || 0}
+                                petsAllowed={data?.data.amenities.petsAllowed || false}
+                            />
                         </div>
                     </div>
                 </div>

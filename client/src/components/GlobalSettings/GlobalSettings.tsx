@@ -83,7 +83,7 @@ const GlobalSettings = () => {
                     <img
                         ref={refImg}
                         className={s.settings__avatar_img}
-                        src={imgUrl}
+                        src={user.avatar}
                         alt="avatar"
                     />
                 ) : (

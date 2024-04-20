@@ -7,7 +7,7 @@ import { TbBrandDaysCounter } from "react-icons/tb";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import styles from "./MyOrdersPage.module.scss";
 import BookingService from "@/services/BookingService";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { IOrderProduct } from "@/types/IOrderProduct";
 import Loader from "@/components/Loader/Loader";
@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 const MyOrdersPage = () => {
     const [data, setData] = useState<IOrderProduct[]>();
 
+    const queryClient = useQueryClient();
     const { isLoading, data: responseData } = useQuery(["products"], () =>
         BookingService.getMyOrders(),
     );
@@ -23,6 +24,7 @@ const MyOrdersPage = () => {
     const handleAccept = async (id: string) => {
         try {
             await BookingService.acceptOrder(id);
+            queryClient.invalidateQueries(["products"]);
         } catch (error) {
             toast.error("Acceptance error");
         }
@@ -31,6 +33,7 @@ const MyOrdersPage = () => {
     const handleReject = async (id: string) => {
         try {
             await BookingService.rejectOrder(id);
+            queryClient.invalidateQueries(["products"]);
         } catch (error) {
             toast.error("Rejected error");
         }
@@ -64,15 +67,18 @@ const MyOrdersPage = () => {
                                             <h3 className={styles.order__item_title}>
                                                 {item.title}
                                             </h3>
-                                            <Link className={styles.order__link} to={"/"}>
+                                            <Link
+                                                className={styles.order__link}
+                                                to={`/rooms/${item.advertId}`}
+                                            >
                                                 <FaExternalLinkAlt />
                                             </Link>
                                         </div>
                                         <div className={styles.order__bottom}>
-                                            {item.user.avatar !== "" ? (
+                                            {item.author?.avatar !== "" ? (
                                                 <img
                                                     className={styles.order__user_img}
-                                                    src={item.user?.avatar}
+                                                    src={item.author?.avatar}
                                                     alt="img"
                                                 />
                                             ) : (
@@ -85,10 +91,10 @@ const MyOrdersPage = () => {
 
                                             <div className={styles.order__user_box}>
                                                 <h4 className={styles.order__user_title}>
-                                                    {item.user.name}
+                                                    {item.author.name}
                                                 </h4>
                                                 <div className={styles.order__number}>
-                                                    {item.user.phoneNumber}
+                                                    {item.author.phoneNumber}
                                                 </div>
                                             </div>
                                             <div className={styles.order__columns}>
