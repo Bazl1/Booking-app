@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using AutoMapper;
 using Booking.Application.Dtos;
 using Booking.Application.Errors;
@@ -80,26 +81,30 @@ public class QueriesHandler(
 
     public async Task<GetAll.Response> Handle(GetAll.Request request, CancellationToken cancellationToken)
     {
-        if (request.Page < 1)
+        if (request.Page != null && request.Page < 1)
             throw new BookingError(
                 BookingErrorType.VALIDATION_ERROR,
                 "Page must be greater than 0"
             );
-        if (request.Limit < 1)
+        if (request.Page != null && request.Limit < 1)
             throw new BookingError(
                 BookingErrorType.VALIDATION_ERROR,
                 "Limit must be greater than 0"
             );
 
-        var adverts = unitOfWork.Adverts.Search(request.Query, request.UserId).ToList();
+        List<Advert> adverts = unitOfWork.Adverts.Search(request.Query, request.UserId).ToList();
+        if (request.Page != null && request.Limit != null) {
+            adverts = adverts
+                .Skip(((int)(request.Page) - 1) * (int)(request.Limit))
+                .Take((int)request.Limit)
+                .ToList();
+        }
 
         var userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         return new(
             mapper.Map<IEnumerable<AdvertDto>>(
-                adverts
-                    .Skip((request.Page - 1) * request.Limit)
-                    .Take(request.Limit),
+                adverts,
                 opt =>
                 {
                     opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}";
