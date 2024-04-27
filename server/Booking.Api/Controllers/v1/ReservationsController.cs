@@ -59,4 +59,17 @@ public class ReservationsController(
             new Booking.Application.Actions.Adverts.Queries.GetReservationDates.Request(id, month, year))
         );
     }
+
+    [HttpGet("dates/details")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetReservationDatesDetails(
+        [FromQuery] string id,
+        [FromQuery] int month,
+        [FromQuery] int year
+    )
+    {
+        return Ok(await mediator.Send(
+            new Booking.Application.Actions.Adverts.Queries.GetReservationDatesDetails.Request(id, month, year))
+        );
+    }
 }
