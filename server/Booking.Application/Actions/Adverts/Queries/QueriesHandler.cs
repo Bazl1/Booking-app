@@ -15,7 +15,8 @@ public class QueriesHandler(
     IHttpContextAccessor httpContextAccessor
 ) : IRequestHandler<GetById.Request, GetById.Response>,
     IRequestHandler<GetAll.Request, GetAll.Response>,
-    IRequestHandler<GetReservationDates.Request, GetReservationDates.Response>
+    IRequestHandler<GetReservationDates.Request, GetReservationDates.Response>,
+    IRequestHandler<GetReservationDatesDetails.Request, GetReservationDatesDetails.Response>
 {
     public HttpContext? Context => httpContextAccessor.HttpContext;
 
@@ -134,6 +135,31 @@ public class QueriesHandler(
         for (var curDate = startDate; curDate <= endDate; curDate = curDate.AddDays(1))
             if (reservations.Any(r => r.StartDate <= curDate && curDate <= r.EndDate))
                 dates.Add(curDate.ToString("dd'/'MM'/'yy"));
+        return new(dates);
+    }
+
+    public async Task<GetReservationDatesDetails.Response> Handle(GetReservationDatesDetails.Request request, CancellationToken cancellationToken)
+    {
+        var startDate = new DateOnly(
+            year: request.Year + (int)(request.Month / 12),
+            month: request.Month % 12,
+            day: 1
+        );
+        var endDate = new DateOnly(
+            year: request.Year + (int)(request.Month / 12),
+            month: request.Month % 12,
+            day: DateTime.DaysInMonth(request.Year, request.Month)
+        );
+        var reservations = unitOfWork.Reservations.GetByAdvertId(advertId: request.Id, start: startDate, end: endDate);
+        List<ReservationDateDto> dates = new();
+        for (var curDate = startDate; curDate <= endDate; curDate = curDate.AddDays(1))
+            if (reservations.FirstOrDefault(r => r.StartDate <= curDate && curDate <= r.EndDate) is Reservation reservation)
+                dates.Add(new ReservationDateDto {
+                    Date = curDate.ToString("dd'/'MM'/'yy"),
+                    User = mapper.Map<UserDto>(
+                        reservation.Author,
+                        opt => opt.Items["BASE_URL"] = $"{Context.Request.Scheme}://{Context.Request.Host}")
+                });
         return new(dates);
     }
 }
