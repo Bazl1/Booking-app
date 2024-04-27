@@ -14,6 +14,7 @@ const MyApartmentsPage = lazy(() => import("./pages/MyApartmentsPage/MyApartment
 const ChangeProductPage = lazy(() => import("./pages/ChangeProductPage/ChangeProductPage"));
 const MyOrderPage = lazy(() => import("./pages/MyOrdersPage/MyOrdersPage"));
 const HistoryPage = lazy(() => import("./pages/HistoryPage/HistoryPage"));
+const BookingCalendarPage = lazy(() => import("./pages/BookingCalendarPage/BookingCalendarPage"));
 
 function App() {
     const refresh = useUserStore((state) => state.refresh);
@@ -49,6 +50,14 @@ function App() {
                         element={
                             <MainLayout>
                                 <HistoryPage />
+                            </MainLayout>
+                        }
+                    />
+                    <Route
+                        path="/calendar"
+                        element={
+                            <MainLayout>
+                                <BookingCalendarPage />
                             </MainLayout>
                         }
                     />

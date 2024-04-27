@@ -20,6 +20,10 @@ export default class ProductsService {
         return $Api.get<ProductsResponse>(`/adverts/?user=${user}&page=${page}&limit=${limit}`);
     }
 
+    static getMyProductsList(user: string): Promise<AxiosResponse<ProductsResponse>> {
+        return $Api.get<ProductsResponse>(`/adverts/?user=${user}`);
+    }
+
     static getProductById(id: string): Promise<AxiosResponse<IProduct>> {
         return $Api.get<IProduct>(`/adverts/${id}`);
     }

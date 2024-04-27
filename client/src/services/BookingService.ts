@@ -1,4 +1,5 @@
 import $Api from "@/shared/utils/axios";
+import { BookedDateResponse } from "@/types/response/BookedDateResponse";
 import { OrdersResponse } from "@/types/response/OrdersResponse";
 import { AxiosResponse } from "axios";
 
@@ -13,6 +14,16 @@ export default class BookingService {
 
     static getBooked(id: string, month: number, year: number): Promise<AxiosResponse<IGetBooked>> {
         return $Api.get<IGetBooked>(`/reservations/dates/?id=${id}&month=${month}&year=${year}`);
+    }
+
+    static getCalendarBooked(
+        id: string,
+        month: number,
+        year: number,
+    ): Promise<AxiosResponse<BookedDateResponse>> {
+        return $Api.get<BookedDateResponse>(
+            `/reservations/dates/details/?id=${id}&month=${month}&year=${year}`,
+        );
     }
 
     static getMyOrders(): Promise<AxiosResponse<OrdersResponse>> {

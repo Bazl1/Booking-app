@@ -1,0 +1,50 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.day {
+    width: 100%;
+    min-height: 120px;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+    border-right: 1px solid $border-color;
+    border-left: 1px solid $border-color;
+
+    &__number {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 500;
+        width: 30px;
+        height: 30px;
+        background: rgba($bg-color, 0.1);
+        border-radius: 100%;
+    }
+
+    &__event {
+        width: 100%;
+        padding: 4px 8px;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 500;
+        background: $bg-second-color;
+        border-radius: 4px;
+    }
+
+    &__current {
+        background: $bg-second-color;
+        color: #fff;
+    }
+
+    &__previous {
+        text-decoration: line-through;
+        color: $text-gray;
+    }
+}
+
+.day + .day {
+    border-left: none;
+}

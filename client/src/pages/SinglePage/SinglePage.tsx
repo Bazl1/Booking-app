@@ -273,41 +273,52 @@ const SinglePage = () => {
                             <div className={s.rooms__reviews}>
                                 <h3 className={s.rooms__subtitle}>Reviews</h3>
                                 <div className={s.rooms__reviews_items}>
-                                    {data?.data.reviews.map((review: IReview) => {
-                                        return (
-                                            <div key={review.id} className={s.rooms__reviews_item}>
-                                                <div className={s.rooms__reviews_item_top}>
-                                                    {review.author.avatar !== "" ? (
-                                                        <img
-                                                            className={s.rooms__reviews_item_img}
-                                                            src={review.author.avatar}
-                                                            alt="user"
-                                                        />
-                                                    ) : (
-                                                        <img
-                                                            className={s.rooms__reviews_item_img}
-                                                            src={user}
-                                                            alt="user"
-                                                        />
-                                                    )}
-                                                    <h3 className={s.rooms__reviews_item_name}>
-                                                        {review.author.name}
-                                                    </h3>
+                                    {data?.data.reviews.length > 0 ? (
+                                        data?.data.reviews.map((review: IReview) => {
+                                            return (
+                                                <div
+                                                    key={review.id}
+                                                    className={s.rooms__reviews_item}
+                                                >
+                                                    <div className={s.rooms__reviews_item_top}>
+                                                        {review.author.avatar !== "" ? (
+                                                            <img
+                                                                className={
+                                                                    s.rooms__reviews_item_img
+                                                                }
+                                                                src={review.author.avatar}
+                                                                alt="user"
+                                                            />
+                                                        ) : (
+                                                            <img
+                                                                className={
+                                                                    s.rooms__reviews_item_img
+                                                                }
+                                                                src={user}
+                                                                alt="user"
+                                                            />
+                                                        )}
+                                                        <h3 className={s.rooms__reviews_item_name}>
+                                                            {review.author.name}
+                                                        </h3>
+                                                    </div>
+                                                    <div className={s.rooms__reviews_stars}>
+                                                        {Array.from(
+                                                            { length: review.stars },
+                                                            (_, index) => (
+                                                                <IoStar key={index} />
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                    <p className={s.rooms__reviews_text}>
+                                                        {review.description}
+                                                    </p>
                                                 </div>
-                                                <div className={s.rooms__reviews_stars}>
-                                                    {Array.from(
-                                                        { length: review.stars },
-                                                        (_, index) => (
-                                                            <IoStar key={index} />
-                                                        ),
-                                                    )}
-                                                </div>
-                                                <p className={s.rooms__reviews_text}>
-                                                    {review.description}
-                                                </p>
-                                            </div>
-                                        );
-                                    })}
+                                            );
+                                        })
+                                    ) : (
+                                        <h3>There are no reviews here yet </h3>
+                                    )}
                                 </div>
                             </div>
                         </div>

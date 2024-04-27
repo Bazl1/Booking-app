@@ -59,6 +59,13 @@ input {
     margin: 0 auto;
 }
 
+.container-fluid {
+    max-width: 1960px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
 .loader {
     display: flex;
     justify-content: center;

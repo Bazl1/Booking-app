@@ -79,3 +79,10 @@ export const useCalendarStore = create<IUseCalendarStore>((set) => ({
         set((state) => ({ ...state, currentMonth: month }));
     },
 }));
+
+export const useBigCalendarStore = create<IUseCalendarStore>((set) => ({
+    currentMonth: dayjs().month(),
+    setMonth: (month: number) => {
+        set((state) => ({ ...state, currentMonth: month }));
+    },
+}));
