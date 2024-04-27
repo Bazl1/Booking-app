@@ -120,13 +120,13 @@ public class QueriesHandler(
     public async Task<GetReservationDates.Response> Handle(GetReservationDates.Request request, CancellationToken cancellationToken)
     {
         var startDate = new DateOnly(
-            year: request.Year,
-            month: request.Month,
+            year: request.Year + (int)(request.Month / 12),
+            month: request.Month % 12,
             day: 1
         );
         var endDate = new DateOnly(
-            year: request.Year,
-            month: request.Month,
+            year: request.Year + (int)(request.Month / 12),
+            month: request.Month % 12,
             day: DateTime.DaysInMonth(request.Year, request.Month)
         );
         var reservations = unitOfWork.Reservations.GetByAdvertId(advertId: request.Id, start: startDate, end: endDate);
