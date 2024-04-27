@@ -119,7 +119,7 @@ public class QueriesHandler(
                     }
                 }
             ),
-            (int)Math.Ceiling((double)adverts.Count / (double)request.Limit)
+            request.Limit != null ? (int)Math.Ceiling((double)adverts.Count / (double)request.Limit) : 0
         );
     }
 
