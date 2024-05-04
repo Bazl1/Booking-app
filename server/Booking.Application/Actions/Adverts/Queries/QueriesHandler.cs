@@ -90,13 +90,13 @@ public class QueriesHandler(
                 BookingErrorType.VALIDATION_ERROR,
                 "Limit must be greater than 0"
             );
-        DateOnly startDate = default;
+        DateOnly? startDate = null;
         if (request.StartDate != null && !DateOnly.TryParseExact(request.StartDate, "dd'/'MM'/'yyyy", out startDate))
             throw new BookingError(
                 BookingErrorType.VALIDATION_ERROR,
                 "Invalid start date query param"
             );
-        DateOnly endDate = default;
+        DateOnly? endDate = null;
         if (request.EndDate != null && !DateOnly.TryParseExact(request.EndDate, "dd'/'MM'/'yyyy", out endDate))
             throw new BookingError(
                 BookingErrorType.VALIDATION_ERROR,
