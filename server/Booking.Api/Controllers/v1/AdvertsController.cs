@@ -57,14 +57,14 @@ public class AdvertsController(
         [FromQuery] int? maxCost = null,
         [FromQuery] int? singleBeds = null,
         [FromQuery] int? doubleBeds = null,
-        [FromQuery] bool? wifi = null,
-        [FromQuery] bool? pets = null,
-        [FromQuery] bool? tv = null,
-        [FromQuery] bool? refrigerator = null,
-        [FromQuery] bool? kitchen = null,
-        [FromQuery] bool? washer = null,
-        [FromQuery] bool? heating = null,
-        [FromQuery] bool? dryer = null
+        [FromQuery] bool? Wifi = null,
+        [FromQuery] bool? PetsAllowed = null,
+        [FromQuery] bool? TV = null,
+        [FromQuery] bool? Refrigerator = null,
+        [FromQuery] bool? Kitchen = null,
+        [FromQuery] bool? Washer = null,
+        [FromQuery] bool? Heating = null,
+        [FromQuery] bool? Dryer = null
     )
     {
         return Ok(await mediator.Send(new AdvertsQueries.GetAll.Request(
@@ -79,14 +79,14 @@ public class AdvertsController(
             maxCost,
             singleBeds,
             doubleBeds,
-            wifi,
-            pets,
-            tv,
-            refrigerator,
-            kitchen,
-            washer,
-            heating,
-            dryer
+            Wifi,
+            PetsAllowed,
+            TV,
+            Refrigerator,
+            Kitchen,
+            Washer,
+            Heating,
+            Dryer
         )));
     }
 
