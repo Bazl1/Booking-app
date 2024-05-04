@@ -48,12 +48,46 @@ public class AdvertsController(
     public async Task<IActionResult> GetAll(
         [FromQuery] int? page = null,
         [FromQuery] int? limit = null,
-        [FromQuery] string? query = null,
         [FromQuery] string? user = null,
-        [FromQuery] string? category = null
+        [FromQuery] string? category = null,
+        [FromQuery] string? query = null,
+        [FromQuery] string? startDate = null,
+        [FromQuery] string? endDate = null,
+        [FromQuery] int? minCost = null,
+        [FromQuery] int? maxCost = null,
+        [FromQuery] int? singleBeds = null,
+        [FromQuery] int? doubleBeds = null,
+        [FromQuery] bool? wifi = null,
+        [FromQuery] bool? pets = null,
+        [FromQuery] bool? tv = null,
+        [FromQuery] bool? refrigerator = null,
+        [FromQuery] bool? kitchen = null,
+        [FromQuery] bool? washer = null,
+        [FromQuery] bool? heating = null,
+        [FromQuery] bool? dryer = null
     )
     {
-        return Ok(await mediator.Send(new AdvertsQueries.GetAll.Request(page, limit, query, user, category)));
+        return Ok(await mediator.Send(new AdvertsQueries.GetAll.Request(
+            page,
+            limit,
+            user,
+            category,
+            query,
+            startDate,
+            endDate,
+            minCost,
+            maxCost,
+            singleBeds,
+            doubleBeds,
+            wifi,
+            pets,
+            tv,
+            refrigerator,
+            kitchen,
+            washer,
+            heating,
+            dryer
+        )));
     }
 
     [HttpGet("{id}")]
