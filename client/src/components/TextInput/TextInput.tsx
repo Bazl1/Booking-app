@@ -1,9 +1,10 @@
+import { InputHTMLAttributes } from "react";
 import s from "./TextInput.module.scss";
 
-interface TextInputProps {
+interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
     value: any;
     setValue: (value: any) => void;
-    placeholder: string;
+    placeholder?: string;
     type: string;
     register: any;
     registerName: string;
@@ -20,6 +21,7 @@ const TextInput = ({
     registerName,
     errors,
     validationOptions,
+    ...props
 }: TextInputProps) => {
     return (
         <label className={s.input__columns}>
@@ -30,6 +32,7 @@ const TextInput = ({
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder={placeholder}
+                {...props}
             />
             {errors[registerName] && (
                 <p className={s.input__error}>{errors[registerName]?.message}</p>

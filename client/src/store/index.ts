@@ -3,6 +3,8 @@ import { IUser } from "@/types/IUser";
 import { create } from "zustand";
 import { toast } from "react-hot-toast";
 import dayjs from "dayjs";
+import { IAmenities } from "@/shared/utils/amenitiesState";
+import ProductsService from "@/services/ProductsService";
 
 interface IUseUserStore {
     user: IUser;
@@ -27,6 +29,28 @@ interface loginProps {
 interface registrationProps extends loginProps {
     name: string;
     phoneNumber: string;
+}
+
+interface IuseFilterStore {
+    query: string | null;
+    startDate: string | null;
+    endDate: string | null;
+    category: string | null;
+    minCost: number | null;
+    maxCost: number | null;
+    singleBeds: number | null;
+    doubleBeds: number | null;
+    amenities: IAmenities[] | null;
+    setQuery: (value: string) => void;
+    setStartDate: (value: string | null) => void;
+    setEndDate: (value: string | null) => void;
+    setCategory: (value: string | null) => void;
+    setMinCost: (value: number | null) => void;
+    setMaxCost: (value: number | null) => void;
+    setSingleBeds: (value: number | null) => void;
+    setDoubleBeds: (value: number | null) => void;
+    setAmenities: (value: IAmenities[] | null) => void;
+    search: () => any;
 }
 
 export const useUserStore = create<IUseUserStore>((set) => ({
@@ -84,5 +108,70 @@ export const useBigCalendarStore = create<IUseCalendarStore>((set) => ({
     currentMonth: dayjs().month(),
     setMonth: (month: number) => {
         set((state) => ({ ...state, currentMonth: month }));
+    },
+}));
+
+export const useFilterStore = create<IuseFilterStore>((set, get) => ({
+    query: null,
+    startDate: null,
+    endDate: null,
+    category: "Cabins",
+    minCost: null,
+    maxCost: null,
+    singleBeds: null,
+    doubleBeds: null,
+    amenities: null,
+    setQuery: (value) => {
+        set((state) => ({ ...state, query: value }));
+    },
+    setStartDate: (value) => {
+        set((state) => ({ ...state, startDate: value }));
+    },
+    setEndDate: (value) => {
+        set((state) => ({ ...state, endDate: value }));
+    },
+    setCategory: (value) => {
+        set((state) => ({ ...state, category: value }));
+    },
+    setMinCost: (value) => {
+        set((state) => ({ ...state, minCost: value }));
+    },
+    setMaxCost: (value) => {
+        set((state) => ({ ...state, maxCost: value }));
+    },
+    setSingleBeds: (value) => {
+        set((state) => ({ ...state, singleBeds: value }));
+    },
+    setDoubleBeds: (value) => {
+        set((state) => ({ ...state, doubleBeds: value }));
+    },
+    setAmenities: (value) => {
+        set((state) => ({ ...state, amenities: value }));
+    },
+    search: async () => {
+        try {
+            const state = get();
+            const params = new Map<string, any>();
+
+            Object.entries(state).forEach(([key, value]) => {
+                if (typeof value !== "function" && value !== null && key !== "amenities") {
+                    console.log(key, value);
+                    params.set(key, value.toString());
+                }
+            });
+
+            if (state.amenities) {
+                state.amenities.forEach((amenity) => {
+                    if (amenity.value === true) {
+                        params.set(amenity.name, "true");
+                    }
+                });
+            }
+
+            const response = await ProductsService.getFilteredProduct(params);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
     },
 }));

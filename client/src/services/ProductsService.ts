@@ -47,4 +47,17 @@ export default class ProductsService {
     static createReview(data: FormData): Promise<void> {
         return $Api.post("/reviews", data);
     }
+
+    static getFilteredProduct(data: Map<string, string>): Promise<AxiosResponse<ProductsResponse>> {
+        let queryString = "";
+
+        data.forEach((value, key) => {
+            if (queryString.length > 0) {
+                queryString += "&";
+            }
+            queryString += `${key}=${value}`;
+        });
+
+        return $Api.get<ProductsResponse>(`/adverts/?${queryString}`);
+    }
 }

@@ -273,7 +273,7 @@ const SinglePage = () => {
                             <div className={s.rooms__reviews}>
                                 <h3 className={s.rooms__subtitle}>Reviews</h3>
                                 <div className={s.rooms__reviews_items}>
-                                    {data?.data.reviews.length > 0 ? (
+                                    {data?.data.reviews && data?.data.reviews.length > 0 ? (
                                         data?.data.reviews.map((review: IReview) => {
                                             return (
                                                 <div

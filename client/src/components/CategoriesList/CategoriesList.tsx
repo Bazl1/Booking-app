@@ -8,18 +8,23 @@ import amazingpools from "@/shared/assets/img/incons/amazingpools.jpg";
 import countryside from "@/shared/assets/img/incons/countryside.jpg";
 import s from "./CategoriesList.module.scss";
 import CategoryItem from "../CategoryItem/CategoryItem";
+import { ProductsResponse } from "@/types/response/ProductsResponse";
 
-const CategoriesList = () => {
+interface CategoriesListProps {
+    setProducts: (value: ProductsResponse) => void;
+}
+
+const CategoriesList = ({ setProducts }: CategoriesListProps) => {
     return (
         <div className={s.catalog__categories}>
-            <CategoryItem text="Cabins" icon={cabins} active={true} />
-            <CategoryItem text="Treehouses" icon={treehouses} />
-            <CategoryItem text="Beachfront" icon={beachfront} />
-            <CategoryItem text="Tiny homes" icon={tinyhomes} />
-            <CategoryItem text="Castles" icon={castles} />
-            <CategoryItem text="Farms" icon={farms} />
-            <CategoryItem text="Amazing pools" icon={amazingpools} />
-            <CategoryItem text="Countryside" icon={countryside} />
+            <CategoryItem text="Cabins" icon={cabins} setProducts={setProducts} />
+            <CategoryItem text="Treehouses" icon={treehouses} setProducts={setProducts} />
+            <CategoryItem text="Beachfront" icon={beachfront} setProducts={setProducts} />
+            <CategoryItem text="Tiny homes" icon={tinyhomes} setProducts={setProducts} />
+            <CategoryItem text="Castles" icon={castles} setProducts={setProducts} />
+            <CategoryItem text="Farms" icon={farms} setProducts={setProducts} />
+            <CategoryItem text="Amazing pools" icon={amazingpools} setProducts={setProducts} />
+            <CategoryItem text="Countryside" icon={countryside} setProducts={setProducts} />
         </div>
     );
 };

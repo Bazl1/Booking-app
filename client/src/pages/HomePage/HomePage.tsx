@@ -12,10 +12,12 @@ import Loader from "@/components/Loader/Loader";
 import { IProduct } from "@/types/IProduct";
 import Pagination from "@/components/Pagination/Pagination";
 import { getMonth } from "@/shared/utils/getMonth";
+import { ProductsResponse } from "@/types/response/ProductsResponse";
 
 const HomePage = () => {
     const [activePage, setActivePage] = useState<number>(1);
     const [isFilter, setIsFilter] = useState<boolean>(false);
+    const [products, setProducts] = useState<ProductsResponse>();
 
     const { isLoading, data } = useQuery(["products", activePage], () =>
         ProductsService.getProducts(activePage, 16),
@@ -25,12 +27,16 @@ const HomePage = () => {
         getMonth(4);
     }, []);
 
+    useEffect(() => {
+        setProducts(data?.data);
+    }, [products]);
+
     return (
         <>
             <section className={s.search}>
                 <div className="container">
                     <div className={s.search__inner}>
-                        <Search />
+                        <Search setProducts={setProducts} />
                     </div>
                 </div>
             </section>
@@ -38,7 +44,7 @@ const HomePage = () => {
                 <div className="container">
                     <div className={s.catalog__inner}>
                         <div className={s.catalog__top}>
-                            <CategoriesList />
+                            <CategoriesList setProducts={setProducts} />
                             <button
                                 onClick={() => setIsFilter(true)}
                                 className={s.catalog__filtres}
@@ -51,9 +57,9 @@ const HomePage = () => {
                             {isLoading ? (
                                 <Loader />
                             ) : (
-                                data?.data.adverts &&
-                                data?.data.adverts.length !== 0 &&
-                                data?.data.adverts.map((product: IProduct) => {
+                                products?.adverts &&
+                                products?.adverts.length !== 0 &&
+                                products?.adverts.map((product: IProduct) => {
                                     return (
                                         <ProductItem
                                             key={product.id}
@@ -67,9 +73,9 @@ const HomePage = () => {
                                 })
                             )}
                         </div>
-                        {data?.data.pageCount && data?.data.pageCount > 0 && (
+                        {products?.pageCount && products?.pageCount > 0 && (
                             <Pagination
-                                pageCount={data?.data.pageCount}
+                                pageCount={products?.pageCount}
                                 activePage={activePage}
                                 setActivePage={setActivePage}
                             />
@@ -77,7 +83,11 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
-            {isFilter && createPortal(<PopupFilter setOpen={setIsFilter} />, document.body)}
+            {isFilter &&
+                createPortal(
+                    <PopupFilter setOpen={setIsFilter} setProducts={setProducts} />,
+                    document.body,
+                )}
         </>
     );
 };
