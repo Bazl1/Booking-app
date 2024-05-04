@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using AutoMapper;
 using Booking.Application.Dtos;
 using Booking.Application.Errors;
@@ -91,8 +90,38 @@ public class QueriesHandler(
                 BookingErrorType.VALIDATION_ERROR,
                 "Limit must be greater than 0"
             );
+        DateOnly startDate = default;
+        if (request.StartDate != null && !DateOnly.TryParseExact(request.StartDate, "dd'/'MM'/'yyyy", out startDate))
+            throw new BookingError(
+                BookingErrorType.VALIDATION_ERROR,
+                "Invalid start date query param"
+            );
+        DateOnly endDate = default;
+        if (request.EndDate != null && !DateOnly.TryParseExact(request.EndDate, "dd'/'MM'/'yyyy", out endDate))
+            throw new BookingError(
+                BookingErrorType.VALIDATION_ERROR,
+                "Invalid start date query param"
+            );
 
-        List<Advert> adverts = unitOfWork.Adverts.Search(request.Query, request.UserId).ToList();
+        List<Advert> adverts = unitOfWork.Adverts.Search(
+            request.Query,
+            request.UserId,
+            request.CategoryId,
+            startDate,
+            endDate,
+            request.MinCost,
+            request.MaxCost,
+            request.SingleBeds,
+            request.DoubleBeds,
+            request.Wifi,
+            request.PetsAllowed,
+            request.TV,
+            request.Refrigerator,
+            request.Kitchen,
+            request.Washer,
+            request.Heating,
+            request.Dryer
+        ).ToList();
         if (request.Page != null && request.Limit != null) {
             adverts = adverts
                 .Skip(((int)(request.Page) - 1) * (int)(request.Limit))
