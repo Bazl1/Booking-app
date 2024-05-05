@@ -3,6 +3,8 @@ import s from "./Search.module.scss";
 import { IoIosSearch } from "react-icons/io";
 import { useFilterStore } from "@/store";
 import { useState } from "react";
+import DatePicker from "../DatePicker/DatePicker";
+import toast from "react-hot-toast";
 
 interface SearchProps {
     setProducts: (value: ProductsResponse) => void;
@@ -10,14 +12,35 @@ interface SearchProps {
 
 const Search = ({ setProducts }: SearchProps) => {
     const [queryInput, setQueryInput] = useState<string>("");
+    const [startDate, setStartDate] = useState<string>("");
+    const [endDate, setEndDate] = useState<string>("");
+    const [startDateOpen, setStartDateOpen] = useState<boolean>(false);
+    const [endDateOpen, setEndDateOpen] = useState<boolean>(false);
 
     const setQuery = useFilterStore((state) => state.setQuery);
-    const setStartDate = useFilterStore((state) => state.setStartDate);
-    const setEndDate = useFilterStore((state) => state.setEndDate);
+    const setStartDateForm = useFilterStore((state) => state.setStartDate);
+    const setEndDateForm = useFilterStore((state) => state.setEndDate);
     const search = useFilterStore((state) => state.search);
+
+    const handleStartDateOpen = (e: any) => {
+        e.preventDefault();
+        setStartDateOpen((current) => !current);
+    };
+
+    const handleEndDateOpen = (e: any) => {
+        e.preventDefault();
+        setEndDateOpen((current) => !current);
+    };
 
     const Submit = async (e: any) => {
         e.preventDefault();
+        if ((startDate === "" && endDate !== "") || (startDate !== "" && endDate === "")) {
+            toast.error("Select both dates ");
+        } else {
+            await setStartDateForm(startDate);
+            await setEndDateForm(endDate);
+        }
+
         await setQuery(queryInput);
         await search().then((res: ProductsResponse) => setProducts(res));
     };
@@ -34,13 +57,25 @@ const Search = ({ setProducts }: SearchProps) => {
                     onChange={(e) => setQueryInput(e.target.value)}
                 />
             </label>
-            <label className={s.search__columns}>
+            <label className={s.search__columns} onClick={handleStartDateOpen}>
                 <span>Check in</span>
-                <div className={s.search__datapicker}>add dates</div>
+                <div className={s.search__datapicker}>
+                    {startDate !== "" ? startDate : "add dates"}
+                </div>
+                {startDateOpen && (
+                    <DatePicker
+                        value={startDate}
+                        onChange={setStartDate}
+                        setOpen={setStartDateOpen}
+                    />
+                )}
             </label>
-            <label className={s.search__columns}>
+            <label className={s.search__columns} onClick={handleEndDateOpen}>
                 <span>Check out</span>
-                <div className={s.search__datapicker}>add dates</div>
+                <div className={s.search__datapicker}>{endDate !== "" ? endDate : "add dates"}</div>
+                {endDateOpen && (
+                    <DatePicker value={endDate} onChange={setEndDate} setOpen={setEndDateOpen} />
+                )}
             </label>
             <button className={s.search__btn} type="submit">
                 <IoIosSearch />
