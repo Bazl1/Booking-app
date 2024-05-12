@@ -155,7 +155,6 @@ export const useFilterStore = create<IuseFilterStore>((set, get) => ({
 
             Object.entries(state).forEach(([key, value]) => {
                 if (typeof value !== "function" && value !== null && key !== "amenities") {
-                    console.log(key, value);
                     params.set(key, value.toString());
                 }
             });

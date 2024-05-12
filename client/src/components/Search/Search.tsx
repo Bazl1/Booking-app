@@ -37,8 +37,10 @@ const Search = ({ setProducts }: SearchProps) => {
         if ((startDate === "" && endDate !== "") || (startDate !== "" && endDate === "")) {
             toast.error("Select both dates ");
         } else {
-            await setStartDateForm(startDate);
-            await setEndDateForm(endDate);
+            if (startDate !== "" && endDate !== "") {
+                await setStartDateForm(startDate);
+                await setEndDateForm(endDate);
+            }
         }
 
         await setQuery(queryInput);

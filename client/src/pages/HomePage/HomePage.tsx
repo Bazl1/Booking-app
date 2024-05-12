@@ -29,7 +29,11 @@ const HomePage = () => {
 
     useEffect(() => {
         setProducts(data?.data);
-    }, [products]);
+    }, [isLoading]);
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>
@@ -73,13 +77,13 @@ const HomePage = () => {
                                 })
                             )}
                         </div>
-                        {products?.pageCount && products?.pageCount > 0 && (
+                        {products?.pageCount && products?.pageCount > 0 ? (
                             <Pagination
                                 pageCount={products?.pageCount}
                                 activePage={activePage}
                                 setActivePage={setActivePage}
                             />
-                        )}
+                        ) : null}
                     </div>
                 </div>
             </section>

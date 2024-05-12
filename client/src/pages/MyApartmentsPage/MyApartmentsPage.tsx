@@ -27,6 +27,7 @@ const MyApartmentsPage = () => {
         try {
             await ProductsService.deleteProduct(id);
             queryClient.invalidateQueries(["MyProducts", activePage]);
+            queryClient.invalidateQueries(["products"]);
             toast.success("The product has been successfully removed");
         } catch (error: any) {
             throw Error(error.message);
