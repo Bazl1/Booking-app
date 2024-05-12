@@ -33,10 +33,6 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    // Seeds
-    using var scope = app.Services.CreateScope();
-    CategorySeed.Seed(scope.ServiceProvider);
-
     app.UseSwagger();
     app.UseSwaggerUI();
 }
