@@ -35,7 +35,7 @@ public class CommandsHandler(
 
         var advert = Advert.Create(
             request.Name, request.Description, user,
-            (decimal)request.PricePerNight, request.NumberOfBathrooms, request.NumberOfSingleBeds, request.NumberOfDoubleBeds, request.MaxPeople,
+            request.PricePerNight, request.NumberOfBathrooms, request.NumberOfSingleBeds, request.NumberOfDoubleBeds, request.MaxPeople,
             request.Wifi, request.PetsAllowed, request.TV, request.Refrigerator, request.Kitchen,
             request.Washer, request.Heating, request.Dryer,
             category
@@ -93,7 +93,7 @@ public class CommandsHandler(
 
         advert.Name = request.Name;
         advert.Description = request.Description;
-        advert.PricePerNight = (decimal)request.PricePerNight;
+        advert.PricePerNight = request.PricePerNight;
         advert.NumberOfBathrooms = request.NumberOfBathrooms;
         advert.NumberOfSingleBeds = request.NumberOfSingleBeds;
         advert.NumberOfDoubleBeds = request.NumberOfDoubleBeds;

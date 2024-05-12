@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Booking.Core.Entities;
 using Booking.Application.Services;
-using Booking.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Booking.Infrastructure.Options;
 
 namespace Booking.Infrastructure.Services;
 
