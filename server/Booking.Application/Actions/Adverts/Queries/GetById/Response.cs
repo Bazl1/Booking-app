@@ -8,7 +8,7 @@ public record Response(
     string Name,
     string Description,
     UserDto? Owner,
-    decimal PricePerNight,
+    float PricePerNight,
     int NumberOfBathrooms,
     int NumberOfSingleBeds,
     int NumberOfDoubleBeds,

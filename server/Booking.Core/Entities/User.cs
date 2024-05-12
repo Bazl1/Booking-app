@@ -11,6 +11,7 @@ public class User : EntityBase
     public string PhoneNumber { get; set; }
     public string? Token { get; set; }
     public DateTime ExpiryIn { get; set; }
+    public List<Reservation> Reservations { get; set; } = new();
     public List<Advert> Adverts { get; set; } = new();
     public List<Advert> Likes { get; set; } = new();
     public List<Review> Reviews { get; set; } = new();

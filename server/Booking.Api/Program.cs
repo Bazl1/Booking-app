@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen(options =>
 // Add Layers
 builder.Services
     .AddApplication()
-    .AddInfrastructure(builder.Configuration);
+    .AddInfrastructure(builder.Configuration, builder.Environment);
 
 builder.Services
     .AddHttpContextAccessor()

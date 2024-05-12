@@ -33,15 +33,6 @@ public class QueriesHandler(
         if (userId != null)
             user = unitOfWork.Users.GetById(userId);
         
-        var author = new UserDto
-        {
-            Id = Guid.NewGuid().ToString(),
-            Avatar = "",
-            Name = "Cyril",
-            Initials = "Cy",
-            Email = "cyril@morozov.com",
-            PhoneNumber = "+380000000000"
-        };
         var reviews = unitOfWork.Reviews.GetByAdvertId(advert.Id);
         return new(
             advert.Id,

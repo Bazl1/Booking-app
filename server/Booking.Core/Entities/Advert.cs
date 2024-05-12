@@ -8,7 +8,7 @@ public class Advert : EntityBase
     public string Description { get; set; }
     public string OwnerId { get; set; }
     public User? Owner { get; set; }
-    public decimal PricePerNight { get; set; }
+    public float PricePerNight { get; set; }
     public int NumberOfBathrooms { get; set; }
     public int NumberOfSingleBeds { get; set; }
     public int NumberOfDoubleBeds { get; set; }
@@ -25,9 +25,11 @@ public class Advert : EntityBase
     public Category Category { get; set; }
     public List<string> Photos { get; set; } = new();
     public List<Reservation> Reservations { get; set; } = new();
+    public List<User> LikedByUsers { get; set; } = new();
+    public List<Review> Reviews { get; set; } = new();
 
     public static Advert Create(
-        string name, string description, User owner, decimal pricePerNight,
+        string name, string description, User owner, float pricePerNight,
         int numberOfBathrooms, int numberOfSingleBeds, int numberOfDoubleBeds, int maxPeople,
         bool wifi, bool petsAllowed, bool tv, bool refrigerator, bool kitchen, bool washer, bool heating, bool dryer,
         Category category
