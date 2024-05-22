@@ -60,8 +60,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
-        //services.AddDbContext<BookingDbContext>(opt => opt.UseInMemoryDatabase("Booking.DB"));
-        services.AddDbContext<BookingDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("SQL_SERVER_DB")));
+        services.AddDbContext<BookingDbContext>(opt => opt.UseInMemoryDatabase("Booking.DB"));
+        // services.AddDbContext<BookingDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("SQL_SERVER_DB")));
         return services;
     }
 }
