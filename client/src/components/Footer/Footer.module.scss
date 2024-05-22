@@ -1,0 +1,12 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.footer {
+    padding: 30px;
+    background: $bg-second-color;
+    box-shadow: 0 0 10px 2px $bg-second-color;
+    &__copywriting {
+        font-size: 14px;
+        text-align: center;
+        color: #fff;
+    }
+}

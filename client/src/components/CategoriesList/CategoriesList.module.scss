@@ -1,0 +1,9 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.catalog {
+    &__categories {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+    }
+}

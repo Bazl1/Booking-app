@@ -1,0 +1,56 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.search {
+    padding: 60px 0;
+    border-bottom: 1px solid $border-color;
+    &__inner {
+        display: flex;
+        justify-content: center;
+    }
+}
+.catalog {
+    margin: 30px 0 50px;
+    &__top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    &__filtres {
+        outline: none;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 14px 20px;
+        background: transparent;
+        border: 1px solid $border-color;
+        border-radius: 50px;
+        cursor: pointer;
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    &__items {
+        display: grid;
+        grid-template-columns: repeat(4, 275px);
+        grid-gap: 30px;
+        margin-bottom: 50px;
+    }
+    &__more {
+        display: flex;
+        outline: none;
+        background: $bg-second-color;
+        font-size: 16px;
+        font-weight: 500;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 14px 32px;
+        cursor: pointer;
+        margin: 0 auto;
+    }
+}

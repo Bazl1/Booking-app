@@ -1,0 +1,126 @@
+@import url("../../../../node_modules/reset-css/reset.css");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import "./vars.scss";
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Inter" !important;
+    font-size: 16px;
+    line-height: normal;
+    font-weight: 400;
+    color: $text-color;
+}
+
+a,
+button,
+input {
+    font-family: "Inter";
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex: 0 0 auto;
+}
+
+.container {
+    max-width: 1240px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.container-fluid {
+    max-width: 1960px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.main .loader {
+    height: auto;
+}
+
+.swiper-button-disabled {
+    background: rgba($bg-color, 0.5) !important;
+}
+
+.swiper-pagination-bullet {
+    background: rgba(#fff, 0.6) !important;
+    opacity: 1 !important;
+    width: 6px !important;
+    height: 6px !important;
+    margin: 0 3px !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: #fff !important;
+}
+
+.yarl__thumbnails_container,
+.yarl__container {
+    background: $bg-second-color !important;
+}
+.yarl__thumbnails_vignette {
+    opacity: 0 !important;
+}
+.yarl__flex_center .yarl__thumbnails_thumbnail {
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 2px solid rgba(#fff, 0.5) !important;
+    border-radius: 8px !important;
+    img {
+        width: 100% !important;
+        object-fit: cover;
+    }
+}
+.tox-statusbar__branding {
+    display: none;
+}
+.tox-tinymce {
+    border: 1px solid $border-color !important;
+}
+.tox-edit-focus {
+    outline: none !important;
+}
+.tox .tox-edit-area::before {
+    border: 2px solid $bg-second-color !important;
+    border-radius: 0 !important;
+}

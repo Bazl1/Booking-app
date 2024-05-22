@@ -1,0 +1,124 @@
+@import "../../shared/assets/styles/vars.scss";
+
+.catalog {
+    &__item {
+        max-width: 275px;
+        width: 100%;
+        position: relative;
+    }
+    &__item_like {
+        outline: none;
+        background: transparent;
+        border: none;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+        top: 20px;
+        right: 20px;
+        z-index: 3;
+        cursor: pointer;
+        svg {
+            color: rgba(#fff, 0.8);
+            width: 24px;
+            height: 24px;
+        }
+    }
+    &__slider {
+        max-width: 275px;
+        width: 100%;
+        max-height: 275px;
+        height: 100vh;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        &:hover {
+            .catalog__item_arrow {
+                opacity: 1;
+            }
+        }
+    }
+    &__slide {
+        img {
+            max-width: 275px;
+            width: 100%;
+            max-height: 275px;
+            height: 100vh;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+    }
+    &__item_columns {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 10px;
+    }
+    &__item_title {
+        width: 100%;
+        font-weight: 500;
+        font-size: 16px;
+    }
+    &__rating {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        span {
+            font-weight: 500;
+            font-size: 16px;
+        }
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+    &__price {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 15px;
+        span {
+            font-weight: 700;
+        }
+    }
+    &__item_arrow {
+        opacity: 0;
+        outline: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        background: #fff;
+        border: 1px solid $border-color;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        z-index: 2;
+        svg {
+            width: 16px;
+            height: 16px;
+            color: $text-color;
+        }
+        &_left {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 10px;
+            margin: auto 0;
+        }
+        &_right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 10px;
+            margin: auto 0;
+        }
+    }
+    &__item_link {
+        text-decoration: none;
+        color: $text-color;
+    }
+}

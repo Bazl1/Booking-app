@@ -1,0 +1,11 @@
+# Build files & directories
+bin/
+obj/
+node_modules/
+
+# Others
+notes/
+*.note
+.vs/
+.vscode/
+wwwroot/
